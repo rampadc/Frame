@@ -27,7 +27,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string></string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string></string>
+	<string>Need the network for things</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string></string>
 	<key>UIApplicationSceneManifest</key>

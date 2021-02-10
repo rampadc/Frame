@@ -1,6 +1,5 @@
 import UIKit
 import AVFoundation
-import GCDWebServer
 
 class ViewController: UIViewController {
   
@@ -17,6 +16,8 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    NDIControlsWebServer.initialize()
+  
     ndiWrapper = NDIWrapper()
     
     //captureSession.sessionPreset = .hd1280x720
