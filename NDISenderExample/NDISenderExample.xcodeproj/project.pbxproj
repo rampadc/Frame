@@ -316,7 +316,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 247V527KAQ;
+				DEVELOPMENT_TEAM = LQME8JUVXB;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = NDISenderExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -326,7 +326,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = tokyo.shmdevelopment.NDISenderExample;
+				PRODUCT_BUNDLE_IDENTIFIER = rampadc.NDISenderExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -343,7 +343,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 247V527KAQ;
+				DEVELOPMENT_TEAM = LQME8JUVXB;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = NDISenderExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -352,7 +352,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = tokyo.shmdevelopment.NDISenderExample;
+				PRODUCT_BUNDLE_IDENTIFIER = rampadc.NDISenderExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
