@@ -2,10 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:NDIWrapper/NDIWrapper.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:NDISenderExample/NDISenderExample.xcodeproj">
+      location = "group:NDISenderExample.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

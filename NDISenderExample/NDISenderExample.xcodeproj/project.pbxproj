@@ -16,9 +16,12 @@
 		AB05457C2544386600D770A4 /* libNDIWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB05457B2544386600D770A4 /* libNDIWrapper.a */; };
 		AB054596254448B700D770A4 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054595254448B700D770A4 /* libresolv.9.tbd */; };
 		AB054599254448CE00D770A4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054598254448CE00D770A4 /* libc++.tbd */; };
+		D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
+		997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.debug.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NDISenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,6 +34,7 @@
 		AB05457B2544386600D770A4 /* libNDIWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libNDIWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB054595254448B700D770A4 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		AB054598254448CE00D770A4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NDISenderExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,18 +45,30 @@
 				AB054599254448CE00D770A4 /* libc++.tbd in Frameworks */,
 				AB054596254448B700D770A4 /* libresolv.9.tbd in Frameworks */,
 				AB05457C2544386600D770A4 /* libNDIWrapper.a in Frameworks */,
+				D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E0B2688859A01E5205864AD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */,
+				46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
 		AB0544A22541D0BA00D770A4 = {
 			isa = PBXGroup;
 			children = (
 				AB0544AD2541D0BA00D770A4 /* NDISenderExample */,
 				AB0544AC2541D0BA00D770A4 /* Products */,
 				AB0544D62541D4EA00D770A4 /* Frameworks */,
+				5E0B2688859A01E5205864AD /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +101,7 @@
 				AB054598254448CE00D770A4 /* libc++.tbd */,
 				AB054595254448B700D770A4 /* libresolv.9.tbd */,
 				AB05457B2544386600D770A4 /* libNDIWrapper.a */,
+				ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -96,17 +113,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AB0544BF2541D0BB00D770A4 /* Build configuration list for PBXNativeTarget "NDISenderExample" */;
 			buildPhases = (
+				A5A9F0E893D8AFE190BB370C /* [CP] Check Pods Manifest.lock */,
 				AB0544A72541D0BA00D770A4 /* Sources */,
 				AB0544A82541D0BA00D770A4 /* Frameworks */,
 				AB0544A92541D0BA00D770A4 /* Resources */,
+				40FCBE45D8968CDE3D6F71CE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = NDISenderExample;
-			packageProductDependencies = (
-			);
 			productName = NDISenderExample;
 			productReference = AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */;
 			productType = "com.apple.product-type.application";
@@ -135,8 +152,6 @@
 				Base,
 			);
 			mainGroup = AB0544A22541D0BA00D770A4;
-			packageReferences = (
-			);
 			productRefGroup = AB0544AC2541D0BA00D770A4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -158,6 +173,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		40FCBE45D8968CDE3D6F71CE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A5A9F0E893D8AFE190BB370C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NDISenderExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AB0544A72541D0BA00D770A4 /* Sources */ = {
@@ -310,6 +367,7 @@
 		};
 		AB0544C02541D0BB00D770A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -337,6 +395,7 @@
 		};
 		AB0544C12541D0BB00D770A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
