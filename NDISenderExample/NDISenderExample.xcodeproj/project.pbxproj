@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		924D2CCA25D41C4B000F8D80 /* NDIControlsWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControlsWebServer.swift */; };
+		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
 		AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */; };
 		AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */; };
-		AB0544B32541D0BA00D770A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B22541D0BA00D770A4 /* ViewController.swift */; };
+		AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B22541D0BA00D770A4 /* CameraViewController.swift */; };
 		AB0544B62541D0BA00D770A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB0544B42541D0BA00D770A4 /* Main.storyboard */; };
 		AB0544B82541D0BB00D770A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB0544B72541D0BB00D770A4 /* Assets.xcassets */; };
 		AB0544BB2541D0BB00D770A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB0544B92541D0BB00D770A4 /* LaunchScreen.storyboard */; };
@@ -22,12 +22,12 @@
 
 /* Begin PBXFileReference section */
 		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
-		924D2CC925D41C4B000F8D80 /* NDIControlsWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControlsWebServer.swift; sourceTree = "<group>"; };
+		924D2CC925D41C4B000F8D80 /* NDIControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControls.swift; sourceTree = "<group>"; };
 		997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.debug.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NDISenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		AB0544B22541D0BA00D770A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AB0544B22541D0BA00D770A4 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		AB0544B52541D0BA00D770A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AB0544B72541D0BB00D770A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB0544BA2541D0BB00D770A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -87,13 +87,13 @@
 			children = (
 				AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */,
 				AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */,
-				AB0544B22541D0BA00D770A4 /* ViewController.swift */,
+				AB0544B22541D0BA00D770A4 /* CameraViewController.swift */,
 				AB0544B42541D0BA00D770A4 /* Main.storyboard */,
 				AB0544B72541D0BB00D770A4 /* Assets.xcassets */,
 				AB0544B92541D0BB00D770A4 /* LaunchScreen.storyboard */,
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
 				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
-				924D2CC925D41C4B000F8D80 /* NDIControlsWebServer.swift */,
+				924D2CC925D41C4B000F8D80 /* NDIControls.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -224,10 +224,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB0544B32541D0BA00D770A4 /* ViewController.swift in Sources */,
+				AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */,
 				AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
-				924D2CCA25D41C4B000F8D80 /* NDIControlsWebServer.swift in Sources */,
+				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,12 +8,12 @@
 import Foundation
 import GCDWebServer
 
-class NDIControlsWebServer {
+class NDIControls {
   static let webServer = GCDWebServer()
-  static func initialize() {
+  static func startWebServer() {
     webServer.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
       return GCDWebServerDataResponse(html:"<html><body><p>Hello World</p></body></html>")
     })
-    webServer.start(withPort: 8081, bonjourName: "Name")
+    webServer.start(withPort: 8080, bonjourName: UIDevice.current.name)
   }
 }

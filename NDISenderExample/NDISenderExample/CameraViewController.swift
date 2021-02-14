@@ -1,7 +1,8 @@
 import UIKit
 import AVFoundation
+import GCDWebServer
 
-class ViewController: UIViewController {
+class CameraViewController: UIViewController, GCDWebServerDelegate {
   
   private var ndiWrapper: NDIWrapper?
   private var captureSession = AVCaptureSession()
@@ -11,12 +12,17 @@ class ViewController: UIViewController {
   private var isSending: Bool = false
   
   private var previewLayer: AVCaptureVideoPreviewLayer!
-  private var sendButton: UIButton!
+
+  // MARK: Properties
+  @IBOutlet weak var remoteControlsLabel: UILabel!
+  @IBOutlet weak var sendStreamButton: UIButton!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    NDIControlsWebServer.initialize()
+    // Disable UI, only enable if NDI is initialised and session starts running
+    NDIControls.startWebServer()
+    NDIControls.webServer.delegate = self
   
     ndiWrapper = NDIWrapper()
     
@@ -46,14 +52,12 @@ class ViewController: UIViewController {
     previewLayer.frame = view.frame
     view.layer.insertSublayer(previewLayer, at: 0)
     
-    sendButton = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
-    sendButton.backgroundColor = .gray
-    sendButton.layer.masksToBounds = true
-    sendButton.setTitle("Send", for: .normal)
-    sendButton.layer.cornerRadius = 18
-    sendButton.layer.position = CGPoint(x: view.bounds.width / 2, y: view.bounds.height - 60)
-    sendButton.addTarget(self, action: #selector(sendButton_action(sender:)), for: .touchUpInside)
-    view.addSubview(sendButton)
+    sendStreamButton.backgroundColor = .gray
+    sendStreamButton.layer.masksToBounds = true
+    sendStreamButton.setTitle("Send", for: .normal)
+    sendStreamButton.layer.cornerRadius = 18
+    sendStreamButton.layer.position = CGPoint(x: view.bounds.width / 2, y: view.bounds.height - 60)
+    sendStreamButton.addTarget(self, action: #selector(sendStreamButton_action(sender:)), for: .touchUpInside)
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -76,22 +80,26 @@ class ViewController: UIViewController {
     ndiWrapper.stop()
   }
   
-  @objc private func sendButton_action(sender: UIButton!) {
+  @objc private func sendStreamButton_action(sender: UIButton!) {
     if !isSending {
       startSending()
       isSending = true
-      sendButton.setTitle("Sending...", for: .normal)
-      sendButton.backgroundColor = .blue
+      sendStreamButton.setTitle("Sending...", for: .normal)
+      sendStreamButton.backgroundColor = .blue
     } else {
       isSending = false
-      sendButton.setTitle("Send", for: .normal)
-      sendButton.backgroundColor = .gray
+      sendStreamButton.setTitle("Send", for: .normal)
+      sendStreamButton.backgroundColor = .gray
       stopSending()
     }
   }
+  
+  func webServerDidStart(_ server: GCDWebServer) {
+    remoteControlsLabel.text = "Control: \(server.serverURL?.absoluteString ?? "Unknown")"
+  }
 }
 
-extension ViewController : AVCaptureVideoDataOutputSampleBufferDelegate {
+extension CameraViewController : AVCaptureVideoDataOutputSampleBufferDelegate {
   
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let ndiWrapper = self.ndiWrapper, isSending else { return }
