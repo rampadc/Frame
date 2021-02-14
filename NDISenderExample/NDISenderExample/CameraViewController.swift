@@ -122,7 +122,12 @@ extension CameraViewController : AVCaptureVideoDataOutputSampleBufferDelegate {
     // create a sample buffer from processed finalVideoPixelBuffer
     var timing = CMSampleTimingInfo()
     var copiedSampleBuffer: CMSampleBuffer?
-    CMSampleBufferCreateReadyWithImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: finalVideoPixelBuffer, formatDescription: formatDescription, sampleTiming: &timing, sampleBufferOut: &copiedSampleBuffer)
+    CMSampleBufferCreateReadyWithImageBuffer(
+      allocator: kCFAllocatorDefault,
+      imageBuffer: finalVideoPixelBuffer,
+      formatDescription: formatDescription,
+      sampleTiming: &timing,
+      sampleBufferOut: &copiedSampleBuffer)
     return copiedSampleBuffer!
   }
 }
