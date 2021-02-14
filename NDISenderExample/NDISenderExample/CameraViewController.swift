@@ -12,7 +12,7 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
   private var isSending: Bool = false
   
   private var previewLayer: AVCaptureVideoPreviewLayer!
-
+  
   // MARK: Properties
   @IBOutlet weak var remoteControlsLabel: UILabel!
   @IBOutlet weak var sendStreamButton: UIButton!
@@ -23,7 +23,7 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
     // Disable UI, only enable if NDI is initialised and session starts running
     NDIControls.startWebServer()
     NDIControls.webServer.delegate = self
-  
+    
     ndiWrapper = NDIWrapper()
     
     //captureSession.sessionPreset = .hd1280x720
@@ -102,7 +102,27 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
 extension CameraViewController : AVCaptureVideoDataOutputSampleBufferDelegate {
   
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    
+    let processedFrame = processVideo(sampleBuffer)
     guard let ndiWrapper = self.ndiWrapper, isSending else { return }
-    ndiWrapper.send(sampleBuffer)
+    ndiWrapper.send(processedFrame)
+  }
+  
+  func processVideo(_ sampleBuffer: CMSampleBuffer) -> CMSampleBuffer {
+    guard let videoPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+          let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else {
+      return sampleBuffer
+    }
+    
+    // use `var` when start to modify finalVideoPixelBuffer, using let` to suppress warnings for now
+    let finalVideoPixelBuffer = videoPixelBuffer
+    
+    // TODO: apply various filter transformations on videoPixelBuffer
+    
+    // create a sample buffer from processed finalVideoPixelBuffer
+    var timing = CMSampleTimingInfo()
+    var copiedSampleBuffer: CMSampleBuffer?
+    CMSampleBufferCreateReadyWithImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: finalVideoPixelBuffer, formatDescription: formatDescription, sampleTiming: &timing, sampleBufferOut: &copiedSampleBuffer)
+    return copiedSampleBuffer!
   }
 }
