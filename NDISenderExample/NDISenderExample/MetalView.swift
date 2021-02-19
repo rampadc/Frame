@@ -1,5 +1,6 @@
 import MetalKit
 import CoreImage
+import UIKit
 
 class MetalView: MTKView {
   var image: CIImage? {
@@ -30,7 +31,27 @@ class MetalView: MTKView {
       return self.currentDrawable!.texture
     }
     
-    try! ciContext?.startTask(toRender: image, to: destination)
+    let imageWidth = CGFloat(image.extent.width)
+    let imageHeight = CGFloat(image.extent.height)
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    
+    print("image: \(imageWidth) x \(imageHeight)")
+    print("screen: \(screenWidth) x \(screenHeight)")
+
+    var scaleX = imageWidth / screenWidth
+    var scaleY = imageHeight / screenHeight
+    
+    if scaleX > scaleY {
+      scaleY = scaleX / scaleY
+      scaleX = 1.0
+    } else {
+      scaleX = scaleY / scaleX
+      scaleY = 1.0
+    }
+    
+    try! ciContext?.startTask(
+      toRender: image.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY)), to: destination)
     commandBuffer?.present(currentDrawable!)
     commandBuffer?.commit()
     draw()
