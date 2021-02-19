@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F5FD625D908DF00AE7266 /* MetalView.swift */; };
 		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
+		9288397125DFC4E80032692A /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288397025DFC4E80032692A /* CameraCapture.swift */; };
 		AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */; };
 		AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */; };
 		AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B22541D0BA00D770A4 /* CameraViewController.swift */; };
@@ -22,7 +24,9 @@
 
 /* Begin PBXFileReference section */
 		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
+		922F5FD625D908DF00AE7266 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		924D2CC925D41C4B000F8D80 /* NDIControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControls.swift; sourceTree = "<group>"; };
+		9288397025DFC4E80032692A /* CameraCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCapture.swift; sourceTree = "<group>"; };
 		997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.debug.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NDISenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +68,13 @@
 			path = ../Pods;
 			sourceTree = "<group>";
 		};
+		9288396F25DFC3470032692A /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
 		AB0544A22541D0BA00D770A4 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +96,7 @@
 		AB0544AD2541D0BA00D770A4 /* NDISenderExample */ = {
 			isa = PBXGroup;
 			children = (
+				9288396F25DFC3470032692A /* Shaders */,
 				AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */,
 				AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */,
 				AB0544B22541D0BA00D770A4 /* CameraViewController.swift */,
@@ -94,6 +106,8 @@
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
 				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
 				924D2CC925D41C4B000F8D80 /* NDIControls.swift */,
+				922F5FD625D908DF00AE7266 /* MetalView.swift */,
+				9288397025DFC4E80032692A /* CameraCapture.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -225,7 +239,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */,
+				9288397125DFC4E80032692A /* CameraCapture.swift in Sources */,
 				AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */,
+				922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
 			);

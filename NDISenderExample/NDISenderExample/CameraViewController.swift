@@ -3,19 +3,12 @@ import AVFoundation
 import GCDWebServer
 
 class CameraViewController: UIViewController, GCDWebServerDelegate {
-  
-  private var ndiWrapper: NDIWrapper?
-  private var captureSession = AVCaptureSession()
-  private var captureDeviceInput: AVCaptureDeviceInput!
-  private var videoDataOutput: AVCaptureVideoDataOutput!
-  private var device: AVCaptureDevice!
-  private var isSending: Bool = false
-  
-  private var previewLayer: AVCaptureVideoPreviewLayer!
-  
   // MARK: Properties
   @IBOutlet weak var remoteControlsLabel: UILabel!
   @IBOutlet weak var sendStreamButton: UIButton!
+  
+  private var previewLayer: AVCaptureVideoPreviewLayer!
+  private var cameraCapture: CameraCapture?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,30 +16,14 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
     // Disable UI, only enable if NDI is initialised and session starts running
     NDIControls.startWebServer()
     NDIControls.webServer.delegate = self
+        
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
+      guard let image = image else { return }
+
+    })
     
-    ndiWrapper = NDIWrapper()
-    
-    //captureSession.sessionPreset = .hd1280x720
-    //captureSession.sessionPreset = .iFrame960x540
-    captureSession.sessionPreset = .hd1920x1080
-    
-    device = AVCaptureDevice.default(for: .video)
-    device.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 30)
-    
-    captureDeviceInput = try! AVCaptureDeviceInput(device: device)
-    if captureSession.canAddInput(captureDeviceInput) {
-      captureSession.addInput(captureDeviceInput)
-    }
-    
-    videoDataOutput = AVCaptureVideoDataOutput()
-    videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey :  kCVPixelFormatType_32BGRA] as [String : Any]
-    videoDataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
-    videoDataOutput.alwaysDiscardsLateVideoFrames = true
-    if captureSession.canAddOutput(videoDataOutput) {
-      captureSession.addOutput(videoDataOutput)
-    }
-    
-    previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+    guard let session = cameraCapture?.session else { fatalError("Cannot create a preview") }
+    previewLayer = AVCaptureVideoPreviewLayer(session: session)
     previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     previewLayer.connection?.videoOrientation = .landscapeRight
     previewLayer.frame = view.frame
@@ -62,72 +39,29 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    captureSession.startRunning()
+    cameraCapture?.startCapture()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    captureSession.stopRunning()
-  }
-  
-  private func startSending() {
-    guard let ndiWrapper = self.ndiWrapper else { return }
-    ndiWrapper.start(UIDevice.current.name)
-  }
-  
-  private func stopSending() {
-    guard let ndiWrapper = self.ndiWrapper else { return }
-    ndiWrapper.stop()
+    cameraCapture?.stopCapture()
   }
   
   @objc private func sendStreamButton_action(sender: UIButton!) {
+    let isSending = self.cameraCapture?.isSending ?? false
+    
     if !isSending {
-      startSending()
-      isSending = true
+      cameraCapture?.startNDIStream()
       sendStreamButton.setTitle("Sending...", for: .normal)
       sendStreamButton.backgroundColor = .blue
     } else {
-      isSending = false
       sendStreamButton.setTitle("Send", for: .normal)
       sendStreamButton.backgroundColor = .gray
-      stopSending()
+      cameraCapture?.stopNDIStream()
     }
   }
   
   func webServerDidStart(_ server: GCDWebServer) {
     remoteControlsLabel.text = "Control: \(server.serverURL?.absoluteString ?? "Unknown")"
-  }
-}
-
-extension CameraViewController : AVCaptureVideoDataOutputSampleBufferDelegate {
-  
-  func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    
-    let processedFrame = processVideo(sampleBuffer)
-    guard let ndiWrapper = self.ndiWrapper, isSending else { return }
-    ndiWrapper.send(processedFrame)
-  }
-  
-  func processVideo(_ sampleBuffer: CMSampleBuffer) -> CMSampleBuffer {
-    guard let videoPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
-          let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else {
-      return sampleBuffer
-    }
-    
-    // use `var` when start to modify finalVideoPixelBuffer, using let` to suppress warnings for now
-    let finalVideoPixelBuffer = videoPixelBuffer
-    
-    // TODO: apply various filter transformations on videoPixelBuffer
-    
-    // create a sample buffer from processed finalVideoPixelBuffer
-    var timing = CMSampleTimingInfo()
-    var copiedSampleBuffer: CMSampleBuffer?
-    CMSampleBufferCreateReadyWithImageBuffer(
-      allocator: kCFAllocatorDefault,
-      imageBuffer: finalVideoPixelBuffer,
-      formatDescription: formatDescription,
-      sampleTiming: &timing,
-      sampleBufferOut: &copiedSampleBuffer)
-    return copiedSampleBuffer!
   }
 }
