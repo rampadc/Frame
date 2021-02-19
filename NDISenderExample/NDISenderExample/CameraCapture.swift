@@ -12,17 +12,13 @@ class CameraCapture: NSObject {
   private(set) var session = AVCaptureSession()
   private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
   
-  private(set) var ndiWrapper: NDIWrapper?
-  private(set) var isSending: Bool = false
+
   
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
     self.processingCallback = processingCallback
     
     super.init()
-    
-    ndiWrapper = NDIWrapper()
-    
     prepareSession()
   }
   
@@ -32,16 +28,6 @@ class CameraCapture: NSObject {
   
   func stopCapture() {
     session.stopRunning()
-  }
-  
-  func startNDIStream() {
-    self.isSending = true
-    self.ndiWrapper?.start(UIDevice.current.name)
-  }
-  
-  func stopNDIStream() {
-    self.isSending = false
-    self.ndiWrapper?.stop()
   }
   
   private func prepareSession() {
@@ -80,18 +66,19 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
       let image = CIImage(cvImageBuffer: imageBuffer)
       self.processingCallback(image)
       
-      // create a sample buffer from processed finalVideoPixelBuffer
-      var timing = CMSampleTimingInfo()
-      var copiedSampleBuffer: CMSampleBuffer?
-      CMSampleBufferCreateReadyWithImageBuffer(
-        allocator: kCFAllocatorDefault,
-        imageBuffer: finalVideoPixelBuffer,
-        formatDescription: formatDescription,
-        sampleTiming: &timing,
-        sampleBufferOut: &copiedSampleBuffer)
-      
-      guard let ndiWrapper = self.ndiWrapper, self.isSending else { return }
-      ndiWrapper.send(copiedSampleBuffer)
+      NDIControls.instance.send(sampleBuffer: sampleBuffer)
+//      // create a sample buffer from processed finalVideoPixelBuffer
+//      var timing = CMSampleTimingInfo()
+//      var copiedSampleBuffer: CMSampleBuffer?
+//      CMSampleBufferCreateReadyWithImageBuffer(
+//        allocator: kCFAllocatorDefault,
+//        imageBuffer: finalVideoPixelBuffer,
+//        formatDescription: formatDescription,
+//        sampleTiming: &timing,
+//        sampleBufferOut: &copiedSampleBuffer)
+//
+//      guard let ndiWrapper = self.ndiWrapper, self.isSending else { return }
+//      ndiWrapper.send(copiedSampleBuffer)
     }
   }
 }

@@ -20,8 +20,9 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
     })
     
     // Disable UI, only enable if NDI is initialised and session starts running
-    NDIControls.startWebServer()
-    NDIControls.webServer.delegate = self
+    NDIControls.instance.startWebServer()
+    // TODO: Expose notifications for webserver
+//    NDIControls.webServer.delegate = self
     
 //    guard let session = cameraCapture?.session else { fatalError("Cannot create a preview") }
 //    previewLayer = AVCaptureVideoPreviewLayer(session: session)
@@ -49,16 +50,16 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
   }
   
   @objc private func sendStreamButton_action(sender: UIButton!) {
-    let isSending = self.cameraCapture?.isSending ?? false
+    let isSending = NDIControls.instance.isSending
     
     if !isSending {
-      cameraCapture?.startNDIStream()
+      NDIControls.instance.start()
       sendStreamButton.setTitle("Sending...", for: .normal)
       sendStreamButton.backgroundColor = .blue
     } else {
       sendStreamButton.setTitle("Send", for: .normal)
       sendStreamButton.backgroundColor = .gray
-      cameraCapture?.stopNDIStream()
+      NDIControls.instance.stop()
     }
   }
   
