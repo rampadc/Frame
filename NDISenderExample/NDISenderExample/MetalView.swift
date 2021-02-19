@@ -35,13 +35,11 @@ class MetalView: MTKView {
     let imageHeight = CGFloat(image.extent.height)
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    
-    print("image: \(imageWidth) x \(imageHeight)")
-    print("screen: \(screenWidth) x \(screenHeight)")
 
     var scaleX = imageWidth / screenWidth
     var scaleY = imageHeight / screenHeight
     
+    // TODO: Solve scaling issue
     if scaleX > scaleY {
       scaleY = scaleX / scaleY
       scaleX = 1.0
