@@ -33,12 +33,25 @@ class CameraCapture: NSObject {
   private func prepareSession() {
     session.sessionPreset = .hd1920x1080
     
-    let cameraDiscovery = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: cameraPosition)
+    let cameraDiscovery = AVCaptureDevice.DiscoverySession(
+      deviceTypes: [
+        .builtInDualCamera,
+        .builtInTripleCamera,
+        .builtInWideAngleCamera,
+        .builtInTelephotoCamera,
+        .builtInDualWideCamera,
+        .builtInUltraWideCamera,
+        .builtInDualWideCamera
+      ],
+      mediaType: .video,
+      position: cameraPosition)
+
+    NotificationCenter.default.post(name: .cameraDiscoveryCompleted, object: cameraDiscovery.devices)
+    
     guard let camera = cameraDiscovery.devices.first, let input = try? AVCaptureDeviceInput(device: camera) else { fatalError("Cannot use the camera") }
     if session.canAddInput(input) {
       session.addInput(input)
     }
-    
     
     let output = AVCaptureVideoDataOutput()
     output.videoSettings = [kCVPixelBufferPixelFormatTypeKey :  kCVPixelFormatType_32BGRA] as [String : Any]
@@ -47,14 +60,14 @@ class CameraCapture: NSObject {
     if session.canAddOutput(output) {
       session.addOutput(output)
     }
+    
+    NotificationCenter.default.post(name: .cameraSetupCompleted, object: cameraDiscovery.devices)
   }
 }
 
 extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-//    // test to see if ndi wrapper can send an image buffer - works!
-//    NDIControls.instance.ndiWrapper.send(imageBuffer)
     
     DispatchQueue.main.async {
       let image = CIImage(cvImageBuffer: imageBuffer)

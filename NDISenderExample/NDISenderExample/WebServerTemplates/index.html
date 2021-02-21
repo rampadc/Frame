@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NDI Camera Experience</title>
+  <link rel="stylesheet" href="default.css" type="text/css"> 
+  <script src="jquery.js" charset="utf-8"></script>
+  <script>
+  </script>
+</head>
+<body>
+  <div>
+    <label for="camerasList">Available cameras:</label>
+    <select name="camerasList" id="camerasList">
+      %var_cameras_options%
+    </select>
+    <button>Switch</button>
+  </div>
+  <div>
+    <label for="zoomSlider">Zoom</label>
+    <input type="range" min="1" max="100" value="50" id="zoomSlider" name="zoomSlider">
+  </div>
+</body>
+</html>

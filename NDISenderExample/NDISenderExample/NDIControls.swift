@@ -2,16 +2,38 @@ import Foundation
 import GCDWebServer
 
 class NDIControls: NSObject {
-   var ndiWrapper: NDIWrapper
+  private(set)var ndiWrapper: NDIWrapper
   private(set) var isSending: Bool = false
   private let webServer = GCDWebServer()
-  
   static let instance = NDIControls()
-    
+  
+  var cameras: [AVCaptureDevice]?
+  
   func startWebServer() {
-    webServer.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
-      return GCDWebServerDataResponse(html:"<html><body><p>Hello World</p></body></html>")
-    })
+    // Get the path to the website directory
+    let websiteTemplate = Bundle.main.path(forResource: "WebServerTemplates", ofType: nil)
+    
+    guard let templateDirectory = websiteTemplate,
+          let cameras = cameras
+    else { return }
+    
+    // Add a default handler to server static files (anything other than HTML files)
+    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: nil, cacheAge: 3600, allowRangeRequests: true)
+    
+    // Add an override handler for all requests to "*.html" URLs to do HTML templating
+    webServer.addHandler(forMethod: "GET", pathRegex: "/.*\\.html", request: GCDWebServerRequest.self) { (request) in
+      var var_cameras_options = ""
+      for (i, camera) in cameras.enumerated() {
+        var_cameras_options += "<option value='\(i)'>\(camera.localizedName)</option>\n"
+      }
+     
+      let variables = [
+        "var_cameras_options": var_cameras_options,
+      ]
+      print(request.path)
+      return GCDWebServerDataResponse(htmlTemplate: templateDirectory.appending(request.path), variables: variables)
+    }
+
     webServer.delegate = self
     webServer.start(withPort: 8080, bonjourName: UIDevice.current.name)
   }
@@ -126,7 +148,7 @@ class NDIControls: NSObject {
     ] as CFDictionary
     var pixelBuffer : CVPixelBuffer?
     let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.extent.width), Int(image.extent.height), kCVPixelFormatType_32BGRA, attrs, &pixelBuffer)
-  
+    
     if status == kCVReturnInvalidPixelFormat {
       print("status == kCVReturnInvalidPixelFormat")
     }
@@ -159,8 +181,4 @@ extension NDIControls: GCDWebServerDelegate {
   func webServerDidStart(_ server: GCDWebServer) {
     NotificationCenter.default.post(name: .ndiWebServerDidStart, object: server.serverURL?.absoluteString ?? "Unknown")
   }
-}
-
-extension Notification.Name {
-  static let ndiWebServerDidStart = Notification.Name("ndiWebServerDidStart")
 }

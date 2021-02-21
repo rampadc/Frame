@@ -17,6 +17,8 @@ class CameraViewController: UIViewController {
     super.viewDidLoad()
     
     NotificationCenter.default.addObserver(self, selector: #selector(onNdiWebSeverDidStart(_:)), name: .ndiWebServerDidStart, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
     
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
       guard let image = image else { return }
@@ -28,9 +30,6 @@ class CameraViewController: UIViewController {
       guard let output = filter.outputImage else { return }
       NDIControls.instance.send(image: output)
     })
-    
-    // Disable UI, only enable if NDI is initialised and session starts running
-    NDIControls.instance.startWebServer()
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -46,6 +45,18 @@ class CameraViewController: UIViewController {
   @objc private func onNdiWebSeverDidStart(_ notification: Notification) {
     guard let serverUrl = notification.object as? String else { return }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
+  }
+  
+  @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
+    guard let cameras = notification.object as? [AVCaptureDevice] else { return }
+    
+    NDIControls.instance.cameras = cameras
+    // Start web server
+    NDIControls.instance.startWebServer()
+  }
+  
+  @objc private func onCameraSetupCompleted(_ notification: Notification) {
+    print("Camera setup completed")
   }
 
   @IBAction func onSendButtonTapped(_ sender: UIButton) {

@@ -15,3 +15,9 @@ class Config {
   private init() {
   }
 }
+
+extension Notification.Name {
+  static let ndiWebServerDidStart = Notification.Name("ndiWebServerDidStart")
+  static let cameraDiscoveryCompleted = Notification.Name("cameraDiscoveryCompleted")
+  static let cameraSetupCompleted = Notification.Name("cameraSetupCompleted")
+}
