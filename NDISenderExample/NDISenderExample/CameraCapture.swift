@@ -53,16 +53,13 @@ class CameraCapture: NSObject {
 extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else { return }
-    
-    NDIControls.instance.formatDescription = formatDescription  
-    
+    print("CameraCapture format description:")
+    print(formatDescription)
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
     
     DispatchQueue.main.async {
       let image = CIImage(cvImageBuffer: imageBuffer)
-      self.processingCallback(image)
-      
-//      NDIControls.instance.send(sampleBuffer: sampleBuffer)
+      self.processingCallback(image)      
     }
   }
 }

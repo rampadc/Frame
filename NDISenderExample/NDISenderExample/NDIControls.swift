@@ -14,9 +14,7 @@ class NDIControls {
   private let webServer = GCDWebServer()
   
   static let instance = NDIControls()
-  
-  var formatDescription: CMFormatDescription?
-  
+    
   func startWebServer() {
     webServer.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
       return GCDWebServerDataResponse(html:"<html><body><p>Hello World</p></body></html>")
@@ -58,32 +56,35 @@ class NDIControls {
   func send(image: CIImage) {
     if isSending {
       let pixelBuffer: CVPixelBuffer? = createPixelBufferFrom(image: image)
-      Config.shared.ciContext?.render(image, to: pixelBuffer!)
       
-      // test pixel buffer
+//      // test pixel buffer
 //      let testCIImage = CIImage(cvPixelBuffer: pixelBuffer!)
 //      print("Put a breakpoint on this line then inspect the testCIImage")
       
       let sampleBuffer: CMSampleBuffer? = createSampleBufferFrom(pixelBuffer: pixelBuffer!)
 
-      // test sample buffer - TODO: FIX sample buffer creation error
-      guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer!) else { return }
-      let image = CIImage(cvImageBuffer: imageBuffer)
+//      // test sample buffer - TODO: FIX sample buffer creation error
+//      guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer!) else { return }
+//      let testSampleBufferImage = CIImage(cvImageBuffer: imageBuffer)
       
-      
-//      ndiWrapper.send(sampleBuffer)
+      ndiWrapper.send(sampleBuffer)
     }
     
   }
   
   func createSampleBufferFrom(pixelBuffer: CVPixelBuffer) -> CMSampleBuffer? {
     var sampleBuffer: CMSampleBuffer?
+    
     var timimgInfo  = CMSampleTimingInfo()
+    var formatDescription: CMFormatDescription? = nil
+    CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: pixelBuffer, formatDescriptionOut: &formatDescription)
+    print("Custom sample buffer format description")
+    print(formatDescription!)
     
     let osStatus = CMSampleBufferCreateReadyWithImageBuffer(
       allocator: kCFAllocatorDefault,
       imageBuffer: pixelBuffer,
-      formatDescription: self.formatDescription!,
+      formatDescription: formatDescription!,
       sampleTiming: &timimgInfo,
       sampleBufferOut: &sampleBuffer
     )
@@ -178,6 +179,7 @@ class NDIControls {
       return nil
     }
     
+    Config.shared.ciContext?.render(image, to: pixelBuffer!)
     return pixelBuffer
   }
   
