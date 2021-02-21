@@ -73,7 +73,11 @@
   int height = (int) CVPixelBufferGetHeight(pixelBuffer);
   float aspectRatio = (float) width / (float) height;
   
-  NDIlib_video_frame_v2_t video_frame;
+  // https://stackoverflow.com/questions/61681986/video-broadcast-using-ndi-sdk-4-5-in-ios-13-not-working-receiver-in-lan-does-no
+  // if sending asynchronously instead of NDIlib_send_send_video_v2, a strong reference to the transferred memory area must be maintained until the transfer operation by the NDI library is completed.
+  // 21/Feb/2021: I'm running into dealloc memory issues while sending a pixel buffer, switched to this synchronous implementation until a fix is found
+//  NDIlib_video_frame_v2_t video_frame;
+  NDIlib_video_frame_t video_frame;
   video_frame.frame_rate_N = 30000;
   video_frame.frame_rate_D = 1001;
   video_frame.xres = width;
@@ -82,12 +86,13 @@
   video_frame.frame_format_type = NDIlib_frame_format_type_progressive;
   video_frame.picture_aspect_ratio = aspectRatio;
   video_frame.line_stride_in_bytes = 0;
-  video_frame.p_metadata = NULL;
+//  video_frame.p_metadata = NULL;
   
   CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
   video_frame.p_data = CVPixelBufferGetBaseAddress(pixelBuffer);
   CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
   
-  NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
+//  NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
+  NDIlib_send_send_video(my_ndi_send, &video_frame);
 }
 @end

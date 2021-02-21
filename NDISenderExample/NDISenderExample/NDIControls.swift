@@ -1,10 +1,3 @@
-//
-//  WebServer.swift
-//  NDISenderExample
-//
-//  Created by Cong Nguyen on 11/2/21.
-//
-
 import Foundation
 import GCDWebServer
 
@@ -51,8 +44,6 @@ class NDIControls {
     var timimgInfo  = CMSampleTimingInfo()
     var formatDescription: CMFormatDescription? = nil
     CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: pixelBuffer, formatDescriptionOut: &formatDescription)
-//    print("Custom sample buffer format description")
-//    print(formatDescription!)
     
     let osStatus = CMSampleBufferCreateReadyWithImageBuffer(
       allocator: kCFAllocatorDefault,
