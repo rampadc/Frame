@@ -24,20 +24,13 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
       self.metalView.image = filter.outputImage
       
       guard let output = filter.outputImage else { return }
-//      NDIControls.instance.send(image: output)
+      NDIControls.instance.send(image: output)
     })
     
     // Disable UI, only enable if NDI is initialised and session starts running
     NDIControls.instance.startWebServer()
     // TODO: Expose notifications for webserver
 //    NDIControls.webServer.delegate = self
-    
-//    guard let session = cameraCapture?.session else { fatalError("Cannot create a preview") }
-//    previewLayer = AVCaptureVideoPreviewLayer(session: session)
-//    previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-//    previewLayer.connection?.videoOrientation = .landscapeRight
-//    previewLayer.frame = view.frame
-//    view.layer.insertSublayer(previewLayer, at: 0)
     
     sendStreamButton.backgroundColor = .gray
     sendStreamButton.layer.masksToBounds = true
