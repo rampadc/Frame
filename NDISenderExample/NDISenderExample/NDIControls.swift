@@ -60,14 +60,18 @@ class NDIControls {
       let pixelBuffer: CVPixelBuffer? = createPixelBufferFrom(image: image)
       Config.shared.ciContext?.render(image, to: pixelBuffer!)
       
-      let sampleBuffer: CMSampleBuffer? = createSampleBufferFrom(pixelBuffer: pixelBuffer!)
+      // test pixel buffer
+//      let testCIImage = CIImage(cvPixelBuffer: pixelBuffer!)
+//      print("Put a breakpoint on this line then inspect the testCIImage")
       
-      // test
+      let sampleBuffer: CMSampleBuffer? = createSampleBufferFrom(pixelBuffer: pixelBuffer!)
+
+      // test sample buffer - TODO: FIX sample buffer creation error
       guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer!) else { return }
       let image = CIImage(cvImageBuffer: imageBuffer)
       
       
-      ndiWrapper.send(sampleBuffer)
+//      ndiWrapper.send(sampleBuffer)
     }
     
   }
@@ -75,7 +79,8 @@ class NDIControls {
   func createSampleBufferFrom(pixelBuffer: CVPixelBuffer) -> CMSampleBuffer? {
     var sampleBuffer: CMSampleBuffer?
     var timimgInfo  = CMSampleTimingInfo()
-    CMSampleBufferCreateReadyWithImageBuffer(
+    
+    let osStatus = CMSampleBufferCreateReadyWithImageBuffer(
       allocator: kCFAllocatorDefault,
       imageBuffer: pixelBuffer,
       formatDescription: self.formatDescription!,
@@ -83,17 +88,70 @@ class NDIControls {
       sampleBufferOut: &sampleBuffer
     )
     
+    // Print out errors
+    if osStatus == kCMSampleBufferError_AllocationFailed {
+      print("osStatus == kCMSampleBufferError_AllocationFailed")
+    }
+    if osStatus == kCMSampleBufferError_RequiredParameterMissing {
+      print("osStatus == kCMSampleBufferError_RequiredParameterMissing")
+    }
+    if osStatus == kCMSampleBufferError_AlreadyHasDataBuffer {
+      print("osStatus == kCMSampleBufferError_AlreadyHasDataBuffer")
+    }
+    if osStatus == kCMSampleBufferError_BufferNotReady {
+      print("osStatus == kCMSampleBufferError_BufferNotReady")
+    }
+    if osStatus == kCMSampleBufferError_SampleIndexOutOfRange {
+      print("osStatus == kCMSampleBufferError_SampleIndexOutOfRange")
+    }
+    if osStatus == kCMSampleBufferError_BufferHasNoSampleSizes {
+      print("osStatus == kCMSampleBufferError_BufferHasNoSampleSizes")
+    }
+    if osStatus == kCMSampleBufferError_BufferHasNoSampleTimingInfo {
+      print("osStatus == kCMSampleBufferError_BufferHasNoSampleTimingInfo")
+    }
+    if osStatus == kCMSampleBufferError_ArrayTooSmall {
+      print("osStatus == kCMSampleBufferError_ArrayTooSmall")
+    }
+    if osStatus == kCMSampleBufferError_InvalidEntryCount {
+      print("osStatus == kCMSampleBufferError_InvalidEntryCount")
+    }
+    if osStatus == kCMSampleBufferError_CannotSubdivide {
+      print("osStatus == kCMSampleBufferError_CannotSubdivide")
+    }
+    if osStatus == kCMSampleBufferError_SampleTimingInfoInvalid {
+      print("osStatus == kCMSampleBufferError_SampleTimingInfoInvalid")
+    }
+    if osStatus == kCMSampleBufferError_InvalidMediaTypeForOperation {
+      print("osStatus == kCMSampleBufferError_InvalidMediaTypeForOperation")
+    }
+    if osStatus == kCMSampleBufferError_InvalidSampleData {
+      print("osStatus == kCMSampleBufferError_InvalidSampleData")
+    }
+    if osStatus == kCMSampleBufferError_InvalidMediaFormat {
+      print("osStatus == kCMSampleBufferError_InvalidMediaFormat")
+    }
+    if osStatus == kCMSampleBufferError_Invalidated {
+      print("osStatus == kCMSampleBufferError_Invalidated")
+    }
+    if osStatus == kCMSampleBufferError_DataFailed {
+      print("osStatus == kCMSampleBufferError_DataFailed")
+    }
+    if osStatus == kCMSampleBufferError_DataCanceled {
+      print("osStatus == kCMSampleBufferError_DataCanceled")
+    }
+    
     guard let buffer = sampleBuffer else {
       print("Cannot create sample buffer")
       return nil
     }
     
-    
     return buffer
   }
   
   func createPixelBufferFrom(image: CIImage) -> CVPixelBuffer? {
-    // from https://stackoverflow.com/questions/54354138/how-can-you-make-a-cvpixelbuffer-directly-from-a-ciimage-instead-of-a-uiimage-in
+    // based on https://stackoverflow.com/questions/54354138/how-can-you-make-a-cvpixelbuffer-directly-from-a-ciimage-instead-of-a-uiimage-in
+    
     let attrs = [
       kCVPixelBufferCGImageCompatibilityKey: false,
       kCVPixelBufferCGBitmapContextCompatibilityKey: false,
