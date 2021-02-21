@@ -1,7 +1,7 @@
 import Foundation
 import GCDWebServer
 
-class NDIControls {
+class NDIControls: NSObject {
    var ndiWrapper: NDIWrapper
   private(set) var isSending: Bool = false
   private let webServer = GCDWebServer()
@@ -12,6 +12,7 @@ class NDIControls {
     webServer.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
       return GCDWebServerDataResponse(html:"<html><body><p>Hello World</p></body></html>")
     })
+    webServer.delegate = self
     webServer.start(withPort: 8080, bonjourName: UIDevice.current.name)
   }
   
@@ -147,7 +148,19 @@ class NDIControls {
     return pixelBuffer
   }
   
-  private init() {
+  private override init() {
     ndiWrapper = NDIWrapper()
+    
+    super.init()
   }
+}
+
+extension NDIControls: GCDWebServerDelegate {
+  func webServerDidStart(_ server: GCDWebServer) {
+    NotificationCenter.default.post(name: .ndiWebServerDidStart, object: server.serverURL?.absoluteString ?? "Unknown")
+  }
+}
+
+extension Notification.Name {
+  static let ndiWebServerDidStart = Notification.Name("ndiWebServerDidStart")
 }
