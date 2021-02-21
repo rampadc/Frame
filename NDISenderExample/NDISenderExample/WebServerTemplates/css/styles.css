@@ -16,3 +16,14 @@
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
+
+.columns, .column {
+    margin-left: 0;
+    background-color: lightblue;
+    border-style: dotted;
+}
+
+.row {
+    background-color: lightcoral;
+    border-style: dashed;
+}

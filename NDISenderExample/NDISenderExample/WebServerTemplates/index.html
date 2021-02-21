@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <!-- Basic Page Needs
@@ -19,40 +20,118 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="dist/semantic.min.css">
   <link rel="stylesheet" href="css/jquery.json-viewer.css">
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="js/jquery.js"></script>
+  <script src="dist/semantic.min.js"></script>
+  <script src="js/jquery.json-viewer.js"></script>
+  <script src="js/scripts.js"></script>
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
 </head>
+
 <body>
 
+  <h1 class="ui center aligned header">Responsive UI Examples</h1>
+
+
+  <h2 class="ui center aligned header">Basic Responsive</h2>
+  
+  
+  <h3 class="ui center aligned header">Container</h3>
+  <div class="ui container">
+    <div class="ui segments">
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+    </div>
+  </div>
+  <h3 class="ui center aligned header">Text Container</h3>
+  <div class="ui text container">
+    <div class="ui segments">
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+      <div class="ui segment">Content</div>
+    </div>
+  </div>
+  
+  <h3 class="ui center aligned header">Stackable Grid</h3>
+  <div class="ui two column stackable grid">
+    <div class="column">
+      <div class="ui segment">Content</div>
+    </div>
+    <div class="column">
+      <div class="ui segment">Content</div>
+    </div>
+    <div class="three column row">
+      <div class="column">
+        <div class="ui segment">Content</div>
+      </div>
+      <div class="column">
+        <div class="ui segment">Content</div>
+      </div>
+      <div class="column">
+        <div class="ui segment">Content</div>
+      </div>
+    </div>
+    <div class="ten wide column">
+      <div class="ui segment">Content</div>
+    </div>
+    <div class="six wide column">
+      <div class="ui segment">Content</div>
+    </div>
+  </div>
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
+  <!-- <div class="container">
     <div class="row">
-      
-      <div class="three columns">
+      <div class="four columns">
         <h4>Camera Controls</h4>
         <label for="camerasList">Available cameras:</label>
         <select name="camerasList" id="camerasList">
         </select>
         <button disabled>Switch</button>
 
-        <p class="label">Properties</p>
+        <p class="label">Inspect properties:</p>
         <pre id="cameraProperties"></pre>
       </div>
-    </div>
-  </div>
+      <div class="six columns">
+        <div class="row">
+          <div class="two columns">
+            <label for="zoomSlider">Zoom</label>
+            <input type="range" name="zoomSlider" id="zoomSlider">
+          </div>
+          <div class="two columns">
+            <label for="exposureSlider">Exposure</label>
+            <input type="range" name="exposureSlider" id="exposureSlider">
+          </div>
+          <div class="one column">
+            <label for="hideOnScreenControls">Hide on-screen controls</label>
+            <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
+          </div>
+          <div class="one column">
+            <label for="startStopNDI">NDI</label>
+            <input type="checkbox" name="startStopNDI" id="startStopNDI">
+          </div>
+        </div>
+        <div class="row">
 
-<!-- End Document
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery.json-viewer.js"></script>
-  <script src="js/scripts.js"></script>
 </body>
+
 </html>
