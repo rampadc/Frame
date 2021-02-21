@@ -7,5 +7,6 @@
 - (void)start:(NSString *)name;
 - (void)stop;
 - (void)send:(CMSampleBufferRef)sampleBuffer;
+- (void)sendPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
 @end

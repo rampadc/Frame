@@ -9,7 +9,7 @@ import Foundation
 import GCDWebServer
 
 class NDIControls {
-  private var ndiWrapper: NDIWrapper
+   var ndiWrapper: NDIWrapper
   private(set) var isSending: Bool = false
   private let webServer = GCDWebServer()
   
@@ -38,38 +38,11 @@ class NDIControls {
     }
   }
   
-  func send(imageBuffer: CVImageBuffer, formatDescription: CMFormatDescription) {
-    var timing = CMSampleTimingInfo()
-    var copiedSampleBuffer: CMSampleBuffer?
-    CMSampleBufferCreateReadyWithImageBuffer(
-      allocator: kCFAllocatorDefault,
-      imageBuffer: imageBuffer,
-      formatDescription: formatDescription,
-      sampleTiming: &timing,
-      sampleBufferOut: &copiedSampleBuffer)
-    
-    if isSending {
-      ndiWrapper.send(copiedSampleBuffer)
-    }
-  }
-  
   func send(image: CIImage) {
     if isSending {
-      let pixelBuffer: CVPixelBuffer? = createPixelBufferFrom(image: image)
-      
-//      // test pixel buffer
-//      let testCIImage = CIImage(cvPixelBuffer: pixelBuffer!)
-//      print("Put a breakpoint on this line then inspect the testCIImage")
-      
-      let sampleBuffer: CMSampleBuffer? = createSampleBufferFrom(pixelBuffer: pixelBuffer!)
-
-//      // test sample buffer - TODO: FIX sample buffer creation error
-//      guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer!) else { return }
-//      let testSampleBufferImage = CIImage(cvImageBuffer: imageBuffer)
-      
-      ndiWrapper.send(sampleBuffer)
+      let pixelBuffer: CVImageBuffer? = createPixelBufferFrom(image: image)
+      ndiWrapper.send(pixelBuffer!)
     }
-    
   }
   
   func createSampleBufferFrom(pixelBuffer: CVPixelBuffer) -> CMSampleBuffer? {
@@ -78,8 +51,8 @@ class NDIControls {
     var timimgInfo  = CMSampleTimingInfo()
     var formatDescription: CMFormatDescription? = nil
     CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: pixelBuffer, formatDescriptionOut: &formatDescription)
-    print("Custom sample buffer format description")
-    print(formatDescription!)
+//    print("Custom sample buffer format description")
+//    print(formatDescription!)
     
     let osStatus = CMSampleBufferCreateReadyWithImageBuffer(
       allocator: kCFAllocatorDefault,
@@ -161,7 +134,7 @@ class NDIControls {
     ] as CFDictionary
     var pixelBuffer : CVPixelBuffer?
     let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.extent.width), Int(image.extent.height), kCVPixelFormatType_32BGRA, attrs, &pixelBuffer)
-    
+  
     if status == kCVReturnInvalidPixelFormat {
       print("status == kCVReturnInvalidPixelFormat")
     }

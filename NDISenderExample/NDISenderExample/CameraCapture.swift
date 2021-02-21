@@ -52,10 +52,12 @@ class CameraCapture: NSObject {
 
 extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    guard let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else { return }
-    print("CameraCapture format description:")
-    print(formatDescription)
+//    guard let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else { return }
+//    print("CameraCapture format description:")
+//    print(formatDescription)
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+//    // test to see if ndi wrapper can send an image buffer - works!
+//    NDIControls.instance.ndiWrapper.send(imageBuffer)
     
     DispatchQueue.main.async {
       let image = CIImage(cvImageBuffer: imageBuffer)

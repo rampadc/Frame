@@ -63,4 +63,31 @@
   NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
 }
 
+- (void)sendPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+  if (!my_ndi_send) {
+    NSLog(@"ERROR: NDI instance is nil");
+    return;
+  }
+    
+  int width = (int) CVPixelBufferGetWidth(pixelBuffer);
+  int height = (int) CVPixelBufferGetHeight(pixelBuffer);
+  float aspectRatio = (float) width / (float) height;
+  
+  NDIlib_video_frame_v2_t video_frame;
+  video_frame.frame_rate_N = 30000;
+  video_frame.frame_rate_D = 1001;
+  video_frame.xres = width;
+  video_frame.yres = height;
+  video_frame.FourCC = NDIlib_FourCC_type_BGRA;
+  video_frame.frame_format_type = NDIlib_frame_format_type_progressive;
+  video_frame.picture_aspect_ratio = aspectRatio;
+  video_frame.line_stride_in_bytes = 0;
+  video_frame.p_metadata = NULL;
+  
+  CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
+  video_frame.p_data = CVPixelBufferGetBaseAddress(pixelBuffer);
+  CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
+  
+  NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
+}
 @end
