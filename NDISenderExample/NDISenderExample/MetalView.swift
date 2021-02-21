@@ -10,7 +10,6 @@ class MetalView: MTKView {
   }
   
   private var commandQueue: MTLCommandQueue?
-  private var ciContext: CIContext?
   
   required init(coder: NSCoder) {
     super.init(coder: coder)
@@ -20,7 +19,7 @@ class MetalView: MTKView {
     colorPixelFormat = .bgra8Unorm
     
     commandQueue = device!.makeCommandQueue()
-    ciContext = CIContext(mtlDevice: self.device!)
+    Config.shared.ciContext = CIContext(mtlDevice: self.device!)
   }
   
   private func renderImage() {
@@ -48,7 +47,7 @@ class MetalView: MTKView {
       scaleY = 1.0
     }
     
-    try! ciContext?.startTask(
+    try! Config.shared.ciContext?.startTask(
       toRender: image.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY)), to: destination)
     commandBuffer?.present(currentDrawable!)
     commandBuffer?.commit()

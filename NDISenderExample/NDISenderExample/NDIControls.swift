@@ -53,6 +53,36 @@ class NDIControls {
     }
   }
   
+  func send(image: CIImage) {
+    if isSending {
+      // Based on https://gist.github.com/levantAJ/4e3e40ba2fa190fd88e329ede8f27f3f
+      // Create a CVPixelBuffer
+      var pixelBuffer: CVPixelBuffer? = nil
+          let options: [NSObject: Any] = [
+              kCVPixelBufferCGImageCompatibilityKey: false,
+              kCVPixelBufferCGBitmapContextCompatibilityKey: false,
+              ]
+      let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.extent.width), Int(image.extent.height), kCVPixelFormatType_32BGRA, options as CFDictionary, &pixelBuffer)
+          CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+      let destination = CIRenderDestination(pixelBuffer: pixelBuffer!)
+      
+      let ciContext = CIContext()
+      try! ciContext.startTask(toRender: image, to: destination)
+      
+      
+//
+      // Create a CMSampleBuffer
+      var newSampleBuffer: CMSampleBuffer? = nil
+      var timimgInfo  = CMSampleTimingInfo()
+      var videoInfo: CMVideoFormatDescription? = nil
+      CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: pixelBuffer!, formatDescriptionOut: &videoInfo)
+      CMSampleBufferCreateReadyWithImageBuffer(allocator: kCFAllocatorDefault, imageBuffer: pixelBuffer!, formatDescription: videoInfo!, sampleTiming: &timimgInfo, sampleBufferOut: &newSampleBuffer)
+
+      ndiWrapper.send(newSampleBuffer)
+    }
+    
+  }
+  
   private init() {
     ndiWrapper = NDIWrapper()
   }

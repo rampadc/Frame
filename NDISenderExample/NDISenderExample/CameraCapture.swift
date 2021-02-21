@@ -57,9 +57,6 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
       return
     }
     
-    // use `var` when start to modify finalVideoPixelBuffer, using let` to suppress warnings for now
-    let finalVideoPixelBuffer = videoPixelBuffer
-    
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
     
     DispatchQueue.main.async {
@@ -67,18 +64,6 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
       self.processingCallback(image)
       
       NDIControls.instance.send(sampleBuffer: sampleBuffer)
-//      // create a sample buffer from processed finalVideoPixelBuffer
-//      var timing = CMSampleTimingInfo()
-//      var copiedSampleBuffer: CMSampleBuffer?
-//      CMSampleBufferCreateReadyWithImageBuffer(
-//        allocator: kCFAllocatorDefault,
-//        imageBuffer: finalVideoPixelBuffer,
-//        formatDescription: formatDescription,
-//        sampleTiming: &timing,
-//        sampleBufferOut: &copiedSampleBuffer)
-//
-//      guard let ndiWrapper = self.ndiWrapper, self.isSending else { return }
-//      ndiWrapper.send(copiedSampleBuffer)
     }
   }
 }

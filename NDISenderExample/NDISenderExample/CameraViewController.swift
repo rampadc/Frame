@@ -1,6 +1,8 @@
 import UIKit
 import AVFoundation
 import GCDWebServer
+import CoreImage
+import CoreImage.CIFilterBuiltins
 
 class CameraViewController: UIViewController, GCDWebServerDelegate {
   // MARK: Properties
@@ -16,7 +18,13 @@ class CameraViewController: UIViewController, GCDWebServerDelegate {
     
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
       guard let image = image else { return }
-      self.metalView.image = image
+      
+      let filter = CIFilter.thermal()
+      filter.inputImage = image
+      self.metalView.image = filter.outputImage
+      
+      guard let output = filter.outputImage else { return }
+//      NDIControls.instance.send(image: output)
     })
     
     // Disable UI, only enable if NDI is initialised and session starts running
