@@ -44,10 +44,7 @@ class CameraViewController: UIViewController {
   }
   
   @objc private func onNdiWebSeverDidStart(_ notification: Notification) {
-    print("Prior good")
     guard let serverUrl = notification.object as? String else { return }
-    print("All good")
-    print(serverUrl)
     remoteControlsLabel.text = "Controls: \(serverUrl)"
   }
 
