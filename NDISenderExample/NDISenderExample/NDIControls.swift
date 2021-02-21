@@ -2,42 +2,51 @@ import Foundation
 import GCDWebServer
 
 class NDIControls: NSObject {
-  private(set)var ndiWrapper: NDIWrapper
-  private(set) var isSending: Bool = false
-  private let webServer = GCDWebServer()
+  
+  // MARK: Properties
   static let instance = NDIControls()
   
+  // MARK: - NDI Properties
+  private(set)var ndiWrapper: NDIWrapper
+  private(set) var isSending: Bool = false
+  
+  // MARK: - Web server properties
+  private let webServer = GCDWebServer()
   var cameras: [AVCaptureDevice]?
   
+  // MARK: Web server functions
   func startWebServer() {
     // Get the path to the website directory
     let websiteTemplate = Bundle.main.path(forResource: "WebServerTemplates", ofType: nil)
     
-    guard let templateDirectory = websiteTemplate,
-          let cameras = cameras
-    else { return }
-    
+    guard let templateDirectory = websiteTemplate else { return }
+  
     // Add a default handler to server static files (anything other than HTML files)
-    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: nil, cacheAge: 3600, allowRangeRequests: true)
+    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: "index.html", cacheAge: 3600, allowRangeRequests: true)
     
-    // Add an override handler for all requests to "*.html" URLs to do HTML templating
-    webServer.addHandler(forMethod: "GET", pathRegex: "/.*\\.html", request: GCDWebServerRequest.self) { (request) in
-      var var_cameras_options = ""
-      for (i, camera) in cameras.enumerated() {
-        var_cameras_options += "<option value='\(i)'>\(camera.localizedName)</option>\n"
-      }
-     
-      let variables = [
-        "var_cameras_options": var_cameras_options,
-      ]
-      print(request.path)
-      return GCDWebServerDataResponse(htmlTemplate: templateDirectory.appending(request.path), variables: variables)
-    }
-
+    addWebServerHandlers()
     webServer.delegate = self
     webServer.start(withPort: 8080, bonjourName: UIDevice.current.name)
   }
   
+  func addWebServerHandlers() {
+    // MARK: - Get cameras JSON
+    webServer.addHandler(forMethod: "GET", path: "/cameras", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      guard cameras != nil else { return GCDWebServerErrorResponse(statusCode: 500) }
+      
+      let jsonObject: [String: Any] = [
+          "type_id": 1,
+          "model_id": 1,
+          "transfer": [
+              "startDate": "10/04/2015 12:45",
+              "endDate": "10/04/2015 16:00"
+          ]
+      ]
+      return GCDWebServerDataResponse(jsonObject: jsonObject)
+    }
+  }
+  
+  // MARK: NDI Wrapper functions
   func start() {
     isSending = true
     ndiWrapper.start(UIDevice.current.name)
@@ -177,6 +186,7 @@ class NDIControls: NSObject {
   }
 }
 
+// MARK: GCDWebServerDelegate
 extension NDIControls: GCDWebServerDelegate {
   func webServerDidStart(_ server: GCDWebServer) {
     NotificationCenter.default.post(name: .ndiWebServerDidStart, object: server.serverURL?.absoluteString ?? "Unknown")

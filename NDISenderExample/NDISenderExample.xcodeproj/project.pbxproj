@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F5FD625D908DF00AE7266 /* MetalView.swift */; };
 		924C19C125E2627700B73675 /* WebServerTemplates in Resources */ = {isa = PBXBuildFile; fileRef = 924C19C025E2627700B73675 /* WebServerTemplates */; };
+		924C19C825E2835800B73675 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C19C725E2835800B73675 /* Camera.swift */; };
 		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
 		927E37C625E1E47D00916809 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927E37C525E1E47D00916809 /* Config.swift */; };
 		9288397125DFC4E80032692A /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288397025DFC4E80032692A /* CameraCapture.swift */; };
@@ -28,6 +29,7 @@
 		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
 		922F5FD625D908DF00AE7266 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		924C19C025E2627700B73675 /* WebServerTemplates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WebServerTemplates; path = NDISenderExample/WebServerTemplates; sourceTree = "<group>"; };
+		924C19C725E2835800B73675 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		924D2CC925D41C4B000F8D80 /* NDIControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControls.swift; sourceTree = "<group>"; };
 		927E37C525E1E47D00916809 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		9288397025DFC4E80032692A /* CameraCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCapture.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				922F5FD625D908DF00AE7266 /* MetalView.swift */,
 				9288397025DFC4E80032692A /* CameraCapture.swift */,
 				927E37C525E1E47D00916809 /* Config.swift */,
+				924C19C725E2835800B73675 /* Camera.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
+				924C19C825E2835800B73675 /* Camera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

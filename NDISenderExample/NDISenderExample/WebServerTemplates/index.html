@@ -1,24 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>NDI Camera Experience</title>
-  <link rel="stylesheet" href="default.css" type="text/css"> 
-  <script src="jquery.js" charset="utf-8"></script>
-  <script>
-  </script>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Your page title here :)</title>
+  <meta name="description" content="">
+  <meta name="author" content="Cong Nguyen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
 </head>
 <body>
-  <div>
-    <label for="camerasList">Available cameras:</label>
-    <select name="camerasList" id="camerasList">
-      %var_cameras_options%
-    </select>
-    <button>Switch</button>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      
+      <div class="six columns">
+        <h4>Camera Selection</h4>
+        <label for="camerasList">Available cameras:</label>
+        <select name="camerasList" id="camerasList">
+          %var_cameras_options%
+        </select>
+        <button>Switch</button>
+
+        <label for="cameraProperties">Properties</label>
+        <textarea name="cameraProperties" id="cameraProperties" cols="50" rows="40" readonly>%var_camera_properties%</textarea>
+      </div>
+    </div>
   </div>
-  <div>
-    <label for="zoomSlider">Zoom</label>
-    <input type="range" min="1" max="100" value="50" id="zoomSlider" name="zoomSlider">
-  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>
