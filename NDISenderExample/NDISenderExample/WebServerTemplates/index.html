@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Your page title here :)</title>
+  <title>NDI Camera Controls</title>
   <meta name="description" content="">
   <meta name="author" content="Cong Nguyen">
 
@@ -21,6 +21,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/jquery.json-viewer.css">
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- Favicon
@@ -35,21 +36,23 @@
   <div class="container">
     <div class="row">
       
-      <div class="six columns">
-        <h4>Camera Selection</h4>
+      <div class="three columns">
+        <h4>Camera Controls</h4>
         <label for="camerasList">Available cameras:</label>
         <select name="camerasList" id="camerasList">
-          %var_cameras_options%
         </select>
-        <button>Switch</button>
+        <button disabled>Switch</button>
 
-        <label for="cameraProperties">Properties</label>
-        <textarea name="cameraProperties" id="cameraProperties" cols="50" rows="40" readonly>%var_camera_properties%</textarea>
+        <p class="label">Properties</p>
+        <pre id="cameraProperties"></pre>
       </div>
     </div>
   </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery.json-viewer.js"></script>
+  <script src="js/scripts.js"></script>
 </body>
 </html>

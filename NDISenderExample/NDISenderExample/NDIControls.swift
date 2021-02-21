@@ -22,7 +22,7 @@ class NDIControls: NSObject {
     guard let templateDirectory = websiteTemplate else { return }
   
     // Add a default handler to server static files (anything other than HTML files)
-    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: "index.html", cacheAge: 3600, allowRangeRequests: true)
+    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: "index.html", cacheAge: 0, allowRangeRequests: true)
     
     addWebServerHandlers()
     webServer.delegate = self
@@ -32,17 +32,14 @@ class NDIControls: NSObject {
   func addWebServerHandlers() {
     // MARK: - Get cameras JSON
     webServer.addHandler(forMethod: "GET", path: "/cameras", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
-      guard cameras != nil else { return GCDWebServerErrorResponse(statusCode: 500) }
+      guard let cameras = self.cameras else { return GCDWebServerErrorResponse(statusCode: 500) }
+      var cameraObjects: [Camera] = []
+      for camera in cameras {
+        cameraObjects.append(Camera(camera: camera))
+      }
       
-      let jsonObject: [String: Any] = [
-          "type_id": 1,
-          "model_id": 1,
-          "transfer": [
-              "startDate": "10/04/2015 12:45",
-              "endDate": "10/04/2015 16:00"
-          ]
-      ]
-      return GCDWebServerDataResponse(jsonObject: jsonObject)
+      let data = try! JSONEncoder().encode(cameraObjects)
+      return GCDWebServerDataResponse(data: data, contentType: "application/json")
     }
   }
   

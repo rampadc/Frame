@@ -3,3 +3,16 @@
     max-width: none;
     margin: 16px;
 }
+
+#cameraProperties {
+    background-color: lightgrey;
+    height: 500px;
+    resize: both;
+    overflow: auto;
+    margin-top: 0;
+}
+
+.label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}

@@ -7,103 +7,132 @@
 
 import AVFoundation
 
+class DeviceProperties: Codable {
+  var uniqueID: String = ""
+  var modelID: String = ""
+  var localizedName: String = ""
+  var lensAperture: Float = 0
+  var supports1080p: Bool = false
+  var supports720p: Bool = false
+  var supports4K: Bool = false
+}
+
+class Exposure: Codable {
+  var exposureTargetOffset: Float = 0
+  var minExposureTargetBias_EV: Float = 0
+  var maxExposeTargetBias_EV: Float = 0
+  var currentTargetBias_EV: Float = 0
+  var exposureMode: String = ""
+  var activeMaxExposureDuration: Float = 0
+//  var currentExposureDuration: Float = 0
+  var isAutoExposureSupported: Bool = false
+  var isContinuousExposureSupported: Bool = false
+  var isCustomExposureSupported: Bool = false
+  var isExposurePointOfInterestSupported: Bool = false
+  var exposurePointOfInterest: CGPoint = CGPoint()
+}
+
+class Zoom: Codable {
+  var videoZoomFactor: Float = 0
+  var minAvailableZoomFactor: Float = 0
+  var maxAvailableZoomFactor: Float = 0
+}
+
+class AutoFocus: Codable {
+  var isAutoFocusSupported: Bool = false
+  var isContinuousAutoFocusSupported: Bool = false
+  var focusPointOfInterest: CGPoint = CGPoint()
+  var isFocusPointOfInterestSupported: Bool = false
+  var isSmoothAutoFocusSupported: Bool = false
+  var isSmoothAutoFocusEnabled: Bool = false
+  var isAutoFocusRangeRestrictionSupported: Bool = false
+}
+
+class Flash: Codable {
+  var hasFlash: Bool = false
+}
+
+class Torch: Codable {
+  var hasTorch: Bool = false
+}
+
+class LowLight: Codable {
+  var isLowLightBoostSupported: Bool = false
+  var isLowLightBoostEnabled: Bool = false
+}
+
 class Camera: Codable {
+  var properties = DeviceProperties()
+  var exposure = Exposure()
+  var zoom = Zoom()
+  var autoFocus = AutoFocus()
+  var flash = Flash()
+  var torch = Torch()
+  var lowLight = LowLight()
   
-  var uniqueID: String
-  var modelID: String
-  var lensAperture: Float
-  var supports1080p: Bool
-  var supports720p: Bool
-  var supports4K: Bool
-  var exposureTargetOffset: Float
-  var minExposureTargetBias_EV: Float
-  var maxExposeTargetBias_EV: Float
-  var currentTargetBias_EV: Float
-  var exposureMode: String
-  var activeMaxExposureDuration: Float
-  var currentExposureDuration: Float
-  var isAutoExposureSupported: Bool
-  var isContinuousExposureSupported: Bool
-  var isCustomExposureSupported: Bool
-  var isExposurePointOfInterestSupported: Bool
-  var exposurePointOfInterest: CGPoint
-  var videoZoomFactor: Float
-  var minAvailableZoomFactor: Float
-  var maxAvailableZoomFactor: Float
-  var isAutoFocusSupported: Bool
-  var isContinuousAutoFocusSupported: Bool
-  var focusPointOfInterest: CGPoint
-  var isFocusPointOfInterestSupported: Bool
-  var isSmoothAutoFocusSupported: Bool
-  var isSmoothAutoFocusEnabled: Bool
-  var isAutoFocusRangeRestrictionSupported: Bool
-  var hasFlash: Bool
-  var hasTorch: Bool
-  var isLowLightBoostSupported: Bool
-  var isLowLightBoostEnabled: Bool
-  
-  // TODO: White balance
-  // TODO: ISO
-  // TODO: HDR
-  // TODO: Tone mapping
+//   TODO: White balance
+//   TODO: ISO
+//   TODO: HDR
+//   TODO: Tone mapping
 
   init(camera: AVCaptureDevice) {
     
     // MARK: Device characteristics
-    uniqueID = camera.uniqueID
-    modelID = camera.modelID
-    lensAperture = camera.lensAperture
-    supports1080p = camera.supportsSessionPreset(.hd1920x1080)
-    supports720p = camera.supportsSessionPreset(.hd1280x720)
-    supports4K = camera.supportsSessionPreset(.hd4K3840x2160)
+    self.properties.uniqueID = camera.uniqueID
+    self.properties.modelID = camera.modelID
+    self.properties.localizedName = camera.localizedName
+    self.properties.lensAperture = camera.lensAperture
+    self.properties.supports1080p = camera.supportsSessionPreset(.hd1920x1080)
+    self.properties.supports720p = camera.supportsSessionPreset(.hd1280x720)
+    self.properties.supports4K = camera.supportsSessionPreset(.hd4K3840x2160)
     
     // MARK: Exposure
-    minExposureTargetBias_EV = camera.minExposureTargetBias
-    maxExposeTargetBias_EV = camera.maxExposureTargetBias
-    currentTargetBias_EV = camera.exposureTargetBias
+    self.exposure.minExposureTargetBias_EV = camera.minExposureTargetBias
+    self.exposure.maxExposeTargetBias_EV = camera.maxExposureTargetBias
+    self.exposure.currentTargetBias_EV = camera.exposureTargetBias
     switch camera.exposureMode {
     case .autoExpose:
-      exposureMode = "auto expose"
+      self.exposure.exposureMode = "auto expose"
     case .continuousAutoExposure:
-      exposureMode = "continuous auto exposure"
+      self.exposure.exposureMode = "continuous auto exposure"
     case .custom:
-      exposureMode = "custom, need iso and exposure duration"
+      self.exposure.exposureMode = "custom, need iso and exposure duration"
     case .locked:
-      exposureMode = "locked"
+      self.exposure.exposureMode = "locked"
     default:
-      exposureMode = "unknown setting"
+      self.exposure.exposureMode = "unknown setting"
     }
-    exposureTargetOffset = camera.exposureTargetOffset
-    activeMaxExposureDuration = Float(CMTimeGetSeconds(camera.activeMaxExposureDuration))
-    currentExposureDuration = Float(CMTimeGetSeconds(AVCaptureDevice.currentExposureDuration))
-    isAutoExposureSupported = camera.isExposureModeSupported(.autoExpose)
-    isContinuousExposureSupported = camera.isExposureModeSupported(.continuousAutoExposure)
-    isCustomExposureSupported = camera.isExposureModeSupported(.custom)
-    isExposurePointOfInterestSupported = camera.isExposurePointOfInterestSupported
-    exposurePointOfInterest = camera.exposurePointOfInterest
+    self.exposure.exposureTargetOffset = camera.exposureTargetOffset
+    self.exposure.activeMaxExposureDuration = Float(CMTimeGetSeconds(camera.activeMaxExposureDuration))
+//    self.exposure.currentExposureDuration = Float(CMTimeGetSeconds(AVCaptureDevice.currentExposureDuration))
+    self.exposure.isAutoExposureSupported = camera.isExposureModeSupported(.autoExpose)
+    self.exposure.isContinuousExposureSupported = camera.isExposureModeSupported(.continuousAutoExposure)
+    self.exposure.isCustomExposureSupported = camera.isExposureModeSupported(.custom)
+    self.exposure.isExposurePointOfInterestSupported = camera.isExposurePointOfInterestSupported
+    self.exposure.exposurePointOfInterest = camera.exposurePointOfInterest
     
     // MARK: Zoom
-    videoZoomFactor = Float(camera.videoZoomFactor)
-    minAvailableZoomFactor = Float(camera.minAvailableVideoZoomFactor)
-    maxAvailableZoomFactor = Float(camera.maxAvailableVideoZoomFactor)
+    self.zoom.videoZoomFactor = Float(camera.videoZoomFactor)
+    self.zoom.minAvailableZoomFactor = Float(camera.minAvailableVideoZoomFactor)
+    self.zoom.maxAvailableZoomFactor = Float(camera.maxAvailableVideoZoomFactor)
     
     // MARK: Auto focus
-    isAutoFocusSupported = camera.isFocusModeSupported(.autoFocus)
-    isContinuousAutoFocusSupported = camera.isFocusModeSupported(.continuousAutoFocus)
-    focusPointOfInterest = camera.focusPointOfInterest
-    isFocusPointOfInterestSupported = camera.isFocusPointOfInterestSupported
-    isSmoothAutoFocusSupported = camera.isSmoothAutoFocusSupported
-    isSmoothAutoFocusEnabled = camera.isSmoothAutoFocusEnabled
-    isAutoFocusRangeRestrictionSupported = camera.isAutoFocusRangeRestrictionSupported
+    self.autoFocus.isAutoFocusSupported = camera.isFocusModeSupported(.autoFocus)
+    self.autoFocus.isContinuousAutoFocusSupported = camera.isFocusModeSupported(.continuousAutoFocus)
+    self.autoFocus.focusPointOfInterest = camera.focusPointOfInterest
+    self.autoFocus.isFocusPointOfInterestSupported = camera.isFocusPointOfInterestSupported
+    self.autoFocus.isSmoothAutoFocusSupported = camera.isSmoothAutoFocusSupported
+    self.autoFocus.isSmoothAutoFocusEnabled = camera.isSmoothAutoFocusEnabled
+    self.autoFocus.isAutoFocusRangeRestrictionSupported = camera.isAutoFocusRangeRestrictionSupported
     
     // MARK: Flash
-    hasFlash = camera.hasFlash
+    self.flash.hasFlash = camera.hasFlash
     
     // MARK: Torch
-    hasTorch = camera.hasTorch
+    self.torch.hasTorch = camera.hasTorch
     
     // MARK: Low light
-    isLowLightBoostSupported = camera.isLowLightBoostSupported
-    isLowLightBoostEnabled = camera.isLowLightBoostEnabled
+    self.lowLight.isLowLightBoostSupported = camera.isLowLightBoostSupported
+    self.lowLight.isLowLightBoostEnabled = camera.isLowLightBoostEnabled
   }
 }
