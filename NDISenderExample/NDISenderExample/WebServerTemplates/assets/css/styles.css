@@ -28,6 +28,12 @@
     border-style: dashed;
 }
 
-.inline {
-    display: inline;
+.slider.inline {
+    display: inline-block;
+    width: 80% !important;
+}
+
+.input.inline {
+    display: inline-block;
+    width: 15% !important;
 }
