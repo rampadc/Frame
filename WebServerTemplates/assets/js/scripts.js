@@ -1,6 +1,8 @@
 var cameras = [];
 
-$(document).ready(function() {
+$(document).ready(function () {
+    $('.ui.slider').slider();
+
     $.ajax(`/cameras`).done((data) => {
         cameras = data;
         $('#camerasList').html('')
