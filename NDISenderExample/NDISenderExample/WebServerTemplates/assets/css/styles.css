@@ -27,3 +27,7 @@
     background-color: lightcoral;
     border-style: dashed;
 }
+
+.inline {
+    display: inline;
+}

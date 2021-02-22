@@ -29,9 +29,9 @@
   <script src="assets/js/jquery.js"></script>
   <script src="semantic/semantic.min.js"></script>
   <script src="assets/js/jquery.json-viewer.js"></script>
-  <!-- <script src="assets/js/dev-load-data.js"></script> -->
+  <script src="assets/js/dev-load-data.js"></script>
   <script src="assets/js/scripts.js"></script>
-  
+
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -55,7 +55,7 @@
         </div>
 
       </div>
-      <div class="nine wide column">
+      <div class="six wide column">
         <div class="ui segment">
           <p class="label">Zoom</p>
           <input type="text" name="zoom-slider" id="zoom-slider-value">
@@ -68,7 +68,7 @@
         </div>
         <div class="ui segment">Focus</div>
       </div>
-      <div class="three wide column">
+      <div class="six wide column">
         <div class="ui segment">
           <div class="ui toggle checkbox">
             <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
@@ -82,13 +82,10 @@
           </div>
         </div>
         <div class="ui segment">
-          <div class="ui segment">Colour correction</div>
-          <label for="colorCorrectionRed">Red</label>
-          <input type="range" name="colorCorrectionRed" id="ccRedSlider">
-          <label for="colorCorrectionGreen">Green</label>
-          <input type="range" name="colorCorrectionGreen" id="ccGreenSlider">
-          <label for="colorCorrectionBlue">Blue</label>
-          <input type="range" name="colorCorrectionBlue" id="ccBlueSlider">
+          <p class="label">Colour correction</p>
+          <div class="ui red slider" id="red-cc-slider"></div>
+          <div class="ui blue slider" id="blue-cc-slider"></div>
+          <div class="ui green slider" id="green-cc-slider"></div>
         </div>
       </div>
     </div>
