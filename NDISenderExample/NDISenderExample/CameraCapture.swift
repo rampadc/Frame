@@ -8,6 +8,7 @@ class CameraCapture: NSObject {
   
   let cameraPosition: AVCaptureDevice.Position
   let processingCallback: ProcessingCallback
+  var currentDevice: AVCaptureDevice?
   
   private(set) var session = AVCaptureSession()
   private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
@@ -48,6 +49,9 @@ class CameraCapture: NSObject {
     Config.shared.cameras = cameraDiscovery.devices
     
     guard let camera = cameraDiscovery.devices.first, let input = try? AVCaptureDeviceInput(device: camera) else { fatalError("Cannot use the camera") }
+    
+    self.currentDevice = camera
+    
     if session.canAddInput(input) {
       session.addInput(input)
     }
@@ -86,11 +90,25 @@ extension CameraCapture {
     })
     guard let camera = matchingCameras?.first else { return false }
     
+    self.currentDevice = camera
+    
     do {
       try session.addInput(AVCaptureDeviceInput(device: camera))
       return true
     } catch {
       print("Cannot change camera. Error: \(error.localizedDescription)")
+      return false
+    }
+  }
+  
+  func zoom(factor: Float) -> Bool {
+    do {
+      try self.currentDevice?.lockForConfiguration()
+      self.currentDevice?.videoZoomFactor = CGFloat(factor)
+      self.currentDevice?.unlockForConfiguration()
+      return true
+    } catch {
+      print("Cannot zoom. Error: \(error.localizedDescription)")
       return false
     }
   }

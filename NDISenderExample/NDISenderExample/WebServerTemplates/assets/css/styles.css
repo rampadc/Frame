@@ -17,23 +17,7 @@
     margin-bottom: 0.5rem;
 }
 
-.columns, .column {
-    margin-left: 0;
-    background-color: lightblue;
-    border-style: dotted;
-}
-
-.row {
-    background-color: lightcoral;
-    border-style: dashed;
-}
-
-.slider.inline {
-    display: inline-block;
-    width: 80% !important;
-}
-
-.input.inline {
-    display: inline-block;
-    width: 15% !important;
+.range-slider {
+    width: 100%;
+    margin-top: 0.5rem;
 }

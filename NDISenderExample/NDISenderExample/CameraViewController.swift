@@ -25,7 +25,8 @@ class CameraViewController: UIViewController {
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
       guard let image = image else { return }
       
-      let filter = CIFilter.thermal()
+      let filter = CIFilter.sepiaTone()
+      filter.intensity = 1.4
       filter.inputImage = image
       self.metalView.image = filter.outputImage
       
@@ -49,7 +50,7 @@ class CameraViewController: UIViewController {
     remoteControlsLabel.text = "Controls: \(serverUrl)"
   }
   
-  @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {    
+  @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
     // Start web server
     NDIControls.instance.startWebServer()
   }
@@ -77,5 +78,10 @@ extension CameraViewController: NDIControlsDelegate {
   func switchCamera(uniqueID: String) -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.switchCamera(uniqueID: uniqueID)
+  }
+  
+  func zoom(factor: Float) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.zoom(factor: factor)
   }
 }

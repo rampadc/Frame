@@ -60,6 +60,23 @@ class NDIControls: NSObject {
         }
       }
     }
+    
+    // MARK: - Zoom camera
+    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/zoom", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      let r = request as! GCDWebServerURLEncodedFormRequest
+      guard let zoomFactor = r.arguments["zoomFactor"] else { return GCDWebServerDataResponse(statusCode: 400) }
+      
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      guard let zf = Float(zoomFactor) else { return GCDWebServerDataResponse(statusCode: 400) }
+      if self.delegate!.zoom(factor: zf) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
   }
   
   // MARK: NDI Wrapper functions
@@ -211,4 +228,5 @@ extension NDIControls: GCDWebServerDelegate {
 
 protocol NDIControlsDelegate {
   func switchCamera(uniqueID: String) -> Bool
+  func zoom(factor: Float) -> Bool
 }

@@ -41,98 +41,102 @@
 </head>
 
 <body>
-  <h1 class="ui left aligned header">Camera Controls</h3>
-    <div class="ui three column grid">
-      <div class="column">
-        <div class="ui segment">
-          <p class="label">Current camera:</p>
-          <select class="ui dropdown" name="currentCameraSelection" id="currentCameraSelection">
-          </select>
+  <div>
+
+  </div>
+  <h1 class="ui left aligned header">Camera Controls</h1>
+  <div class="ui three column grid">
+    <div class="column">
+      <div class="ui segment">
+        <p class="label">Current camera:</p>
+        <select class="ui dropdown" name="currentCameraSelection" id="currentCameraSelection">
+        </select>
+      </div>
+      <div class="ui segment">
+        <p class="label">Available cameras (change will not switch camera):</p>
+        <select class="ui dropdown" name="camerasList" id="camerasList">
+        </select>
+        <div style="padding-top: 1.5rem;"></div>
+        <p class="label">Inspect properties:</p>
+        <pre id="cameraProperties"></pre>
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui segment">
+        <div class="ui grid">
+          <div class="eight wide column left aligned">
+            <p class="label">Zoom</p>
+          </div>
+          <div class="eight wide column right aligned">
+            <div class="ui input">
+              <input type="text" id="zoom-slider-input" style="width: 100%;">
+            </div>
+          </div>
         </div>
-        <div class="ui segment">
-          <p class="label">Available cameras (change will not switch camera):</p>
-          <select class="ui dropdown" name="camerasList" id="camerasList">
-          </select>
-          <div style="padding-top: 1.5rem;"></div>
-          <p class="label">Inspect properties:</p>
-          <pre id="cameraProperties"></pre>
+        <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
+        <!-- <div class="ui orange slider" id="zoom-slider"></div> -->
+      </div>
+      <div class="ui segment">
+        <div class="ui grid">
+          <div class="eight wide column left aligned">
+            <p class="label">Exposure</p>
+          </div>
+          <div class="eight wide column right aligned">
+            <div class="ui input">
+              <input type="text" id="exposure-slider-input" style="width: 100%;">
+            </div>
+          </div>
+        </div>
+        <div class="ui brown slider" id="exposure-slider"></div>
+
+      </div>
+      <div class="ui segment">Focus</div>
+    </div>
+    <div class="column">
+      <div class="ui segment">
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
+          <label>Hide on-screen controls</label>
         </div>
       </div>
-      <div class="column">
-        <div class="ui segment">
-          <div class="ui grid">
-            <div class="eight wide column left aligned">
-              <p class="label">Zoom</p>
-            </div>
-            <div class="eight wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="zoom-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-          <div class="ui orange slider" id="zoom-slider"></div>
+      <div class="ui segment">
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="enableNDI" id="enableNDI">
+          <label>Enable NDI</label>
         </div>
-        <div class="ui segment">
-          <div class="ui grid">
-            <div class="eight wide column left aligned">
-              <p class="label">Exposure</p>
-            </div>
-            <div class="eight wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="exposure-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-          <div class="ui brown slider" id="exposure-slider"></div>
-          
-        </div>
-        <div class="ui segment">Focus</div>
       </div>
-      <div class="column">
-        <div class="ui segment">
-          <div class="ui toggle checkbox">
-            <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
-            <label>Hide on-screen controls</label>
+      <div class="ui segment">
+        <p class="label">Colour correction</p>
+        <div class="ui grid">
+          <div class="thirteen wide column">
+            <div class="ui red slider" id="red-cc-slider"></div>
+          </div>
+          <div class="three wide column right aligned">
+            <div class="ui input">
+              <input type="text" id="red-cc-slider-input" style="width: 100%;">
+            </div>
           </div>
         </div>
-        <div class="ui segment">
-          <div class="ui toggle checkbox">
-            <input type="checkbox" name="enableNDI" id="enableNDI">
-            <label>Enable NDI</label>
+        <div class="ui grid">
+          <div class="thirteen wide column">
+            <div class="ui green slider" id="green-cc-slider"></div>
+          </div>
+          <div class="three wide column right aligned">
+            <div class="ui input">
+              <input type="text" id="green-cc-slider-input" style="width: 100%;">
+            </div>
           </div>
         </div>
-        <div class="ui segment">
-          <p class="label">Colour correction</p>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui red slider" id="red-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="red-cc-slider-input" style="width: 100%;">
-              </div>
+        <div class="ui grid">
+          <div class="thirteen wide column">
+            <div class="ui blue slider" id="blue-cc-slider"></div>
+          </div>
+          <div class="three wide column right aligned">
+            <div class="ui input">
+              <input type="text" id="blue-cc-slider-input" style="width: 100%;">
             </div>
           </div>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui green slider" id="green-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="green-cc-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui blue slider" id="blue-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="blue-cc-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
+        </div>
       </div>
       <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->

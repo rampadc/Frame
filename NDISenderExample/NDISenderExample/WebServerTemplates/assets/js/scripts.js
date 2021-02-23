@@ -67,7 +67,7 @@ $(document).ready(function () {
         }).fail((jqXHR, textStatus, errorThrown) => {
             if (jqXHR.status == 501) {
                 toastError('Camera switch failed', 'Dev forgot to implement NDI Control delegate');
-            } 
+            }
             if (jqXHR.status == 400) {
                 toastError('Camera switch failed', 'Bad inputs. Expected a camera\'s unique ID');
             }
@@ -105,20 +105,48 @@ function setupCurrentCameraSelection() {
 }
 
 function updateGuiForSelectedCamera() {
-    $('#zoom-slider').slider({
-        min: selectedCamera.zoom.minAvailableZoomFactor,
-        max: selectedCamera.zoom.maxAvailableZoomFactor,
-        start: selectedCamera.zoom.videoZoomFactor,
-        step: 0.01,
-        onChange: function(value) {
-            $.ajax(`/camera/zoom?value=${value}`)
-            .done((data) => {
+    $('#zoom-slider').val(selectedCamera.zoom.minAvailableZoomFactor);
+    $('#zoom-slider').attr('min', selectedCamera.zoom.minAvailableZoomFactor);
+    $('#zoom-slider').attr('max', selectedCamera.zoom.maxAvailableZoomFactor);
+    $('#zoom-slider').attr('step', 0.01);
+    $('#zoom-slider').on('input change', (e) => {
+        const factor = e.target.value;
+        $('#zoom-slider-input').val(factor);
+        zoom(factor);
+    });
 
-            })
-            .fail((jqXHR, textStatus, errorThrown) => {
+    $('#zoom-slider-input').change(() => {
+        const factor = $('#zoom-slider-input').val();
+        zoom(factor);
+    });
 
-            })
+    $('#zoom-slider-input').on('keypress', function(e) {
+        if (e.which === 13) {
+            const factor = $('#zoom-slider-input').val();
+            zoom(factor);
+        }
+    })
+}
+
+function zoom(factor) {
+    const formData = new URLSearchParams()
+    formData.append('zoomFactor', factor);
+
+    $.ajax('/camera/zoom', {
+        type: 'POST',
+        data: formData.toString()
+    }).done((data) => {
+        $('#zoom-slider-input').val(factor);
+        $('#zoom-slider').val(factor);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        if (jqXHR.status == 501) {
+            toastError('Cannot zoom', 'Dev forgot to implement NDI Control delegate');
+        }
+        if (jqXHR.status == 400) {
+            toastError('Cannot zoom', 'Bad inputs. Expected a zoomFactor as a floating number');
+        }
+        if (jqXHR.status == 500) {
+            toastError('Cannot zoom', 'iPhone does not want to switch. Try again later.');
         }
     });
-    
 }
