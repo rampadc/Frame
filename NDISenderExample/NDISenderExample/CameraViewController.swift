@@ -25,11 +25,12 @@ class CameraViewController: UIViewController {
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
       guard let image = image else { return }
       
-      let filter = CIFilter.sepiaTone()
-      filter.intensity = 1.4
+      let filter = CIFilter.colorMonochrome()
+      filter.intensity = 1
+      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
       filter.inputImage = image
       self.metalView.image = filter.outputImage
-      
+
       guard let output = filter.outputImage else { return }
       NDIControls.instance.send(image: output)
     })
