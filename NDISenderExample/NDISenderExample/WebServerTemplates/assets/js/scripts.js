@@ -105,26 +105,38 @@ function setupCurrentCameraSelection() {
 }
 
 function updateGuiForSelectedCamera() {
-    $('#zoom-slider').val(selectedCamera.zoom.minAvailableZoomFactor);
-    $('#zoom-slider-input').val(selectedCamera.zoom.minAvailableZoomFactor);
+    updateZoomGui();
+    updateExposureGui();
+}
 
-    $('#zoom-slider').attr('min', selectedCamera.zoom.minAvailableZoomFactor);
-    $('#zoom-slider').attr('max', selectedCamera.zoom.maxAvailableZoomFactor);
-    $('#zoom-slider').attr('step', 0.01);
-    $('#zoom-slider').on('input change', (e) => {
+function updateExposureGui() {
+
+}
+
+function updateZoomGui() {
+    var slider = $('#zoom-slider');
+    var input = $('#zoom-slider-input');
+
+    slider.val(selectedCamera.zoom.minAvailableZoomFactor);
+    input.val(selectedCamera.zoom.minAvailableZoomFactor);
+
+    slider.attr('min', selectedCamera.zoom.minAvailableZoomFactor);
+    slider.attr('max', selectedCamera.zoom.maxAvailableZoomFactor);
+    slider.attr('step', 0.01);
+    slider.on('input change', (e) => {
         const factor = e.target.value;
-        $('#zoom-slider-input').val(factor);
+        input.val(factor);
         zoom(factor);
     });
 
-    $('#zoom-slider-input').change(() => {
-        const factor = $('#zoom-slider-input').val();
+    input.change(() => {
+        const factor = input.val();
         zoom(factor);
     });
 
-    $('#zoom-slider-input').on('keypress', function(e) {
+    input.on('keypress', function(e) {
         if (e.which === 13) {
-            const factor = $('#zoom-slider-input').val();
+            const factor = input.val();
             zoom(factor);
         }
     })
