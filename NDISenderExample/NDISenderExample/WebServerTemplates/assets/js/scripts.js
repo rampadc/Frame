@@ -84,12 +84,12 @@ function configureCamera(cameras) {
     availableCameras = cameras;
     selectedCamera = cameras[0];
 
-    setupCamerasInspection();
-    setupCurrentCameraSelection();
+    setupCamerasInspection(cameras);
+    setupCurrentCameraSelection(cameras);
     updateGuiForSelectedCamera();
 }
 
-function setupCamerasInspection() {
+function setupCamerasInspection(cameras) {
     $('#camerasList').html('')
     $.each(cameras, (idx, camera) => {
         $('#camerasList').append(`<option value="${camera.properties.uniqueID}">${camera.properties.localizedName}</option>`)
@@ -97,7 +97,7 @@ function setupCamerasInspection() {
     $('#cameraProperties').jsonViewer(cameras[0]);
 }
 
-function setupCurrentCameraSelection() {
+function setupCurrentCameraSelection(cameras) {
     $('#currentCameraSelection').html('')
     $.each(cameras, (idx, camera) => {
         $('#currentCameraSelection').append(`<option value="${camera.properties.uniqueID}">${camera.properties.localizedName}</option>`)

@@ -1,5 +1,10 @@
 var cameras = [
     {
+        "iso": {
+            "minISO": 32,
+            "maxISO": 3072,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -15,7 +20,7 @@ var cameras = [
             ],
             "minExposureTargetBias_EV": -8,
             "isAutoExposureSupported": true,
-            "exposureTargetOffset": -6.523561954498291,
+            "exposureTargetOffset": 0.10691528022289276,
             "currentTargetBias_EV": 0,
             "isContinuousExposureSupported": true,
             "isCustomExposureSupported": false
@@ -54,6 +59,11 @@ var cameras = [
         }
     },
     {
+        "iso": {
+            "minISO": 32,
+            "maxISO": 3072,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -62,7 +72,7 @@ var cameras = [
             "maxExposeTargetBias_EV": 8,
             "exposureMode": "continuous auto exposure",
             "isExposurePointOfInterestSupported": true,
-            "activeMaxExposureDuration": 0.03333333507180214,
+            "activeMaxExposureDuration": 0.033333335071802139,
             "exposurePointOfInterest": [
                 0.5,
                 0.5
@@ -108,6 +118,11 @@ var cameras = [
         }
     },
     {
+        "iso": {
+            "minISO": 32,
+            "maxISO": 3072,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -116,7 +131,7 @@ var cameras = [
             "maxExposeTargetBias_EV": 8,
             "exposureMode": "continuous auto exposure",
             "isExposurePointOfInterestSupported": true,
-            "activeMaxExposureDuration": 0.03333333507180214,
+            "activeMaxExposureDuration": 0.033333335071802139,
             "exposurePointOfInterest": [
                 0.5,
                 0.5
@@ -162,6 +177,11 @@ var cameras = [
         }
     },
     {
+        "iso": {
+            "minISO": 21,
+            "maxISO": 2016,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -170,7 +190,7 @@ var cameras = [
             "maxExposeTargetBias_EV": 8,
             "exposureMode": "continuous auto exposure",
             "isExposurePointOfInterestSupported": true,
-            "activeMaxExposureDuration": 0.03333333507180214,
+            "activeMaxExposureDuration": 0.033333335071802139,
             "exposurePointOfInterest": [
                 0.5,
                 0.5
@@ -216,6 +236,11 @@ var cameras = [
         }
     },
     {
+        "iso": {
+            "minISO": 32,
+            "maxISO": 3072,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -224,7 +249,7 @@ var cameras = [
             "maxExposeTargetBias_EV": 8,
             "exposureMode": "continuous auto exposure",
             "isExposurePointOfInterestSupported": true,
-            "activeMaxExposureDuration": 0.03333333507180214,
+            "activeMaxExposureDuration": 0.033333335071802139,
             "exposurePointOfInterest": [
                 0.5,
                 0.5
@@ -270,6 +295,11 @@ var cameras = [
         }
     },
     {
+        "iso": {
+            "minISO": 21,
+            "maxISO": 2016,
+            "currentISO": 3.4028234663852886e+38
+        },
         "lowLight": {
             "isLowLightBoostEnabled": false,
             "isLowLightBoostSupported": false
@@ -278,7 +308,7 @@ var cameras = [
             "maxExposeTargetBias_EV": 8,
             "exposureMode": "continuous auto exposure",
             "isExposurePointOfInterestSupported": true,
-            "activeMaxExposureDuration": 0.03333333507180214,
+            "activeMaxExposureDuration": 0.033333335071802139,
             "exposurePointOfInterest": [
                 0.5,
                 0.5

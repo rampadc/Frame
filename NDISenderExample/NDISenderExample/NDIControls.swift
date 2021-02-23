@@ -88,11 +88,12 @@ class NDIControls: NSObject {
       }
       
       guard let v = Float(val) else { return GCDWebServerDataResponse(statusCode: 400) }
-      if self.delegate!.exposure(target: v) {
-        return GCDWebServerDataResponse(statusCode: 200)
-      } else {
-        return GCDWebServerDataResponse(statusCode: 500)
-      }
+      return GCDWebServerDataResponse(statusCode: 200)
+//      if self.delegate!.exposure(target: v) {
+//        return GCDWebServerDataResponse(statusCode: 200)
+//      } else {
+//        return GCDWebServerDataResponse(statusCode: 500)
+//      }
     }
   }
   
@@ -246,5 +247,4 @@ extension NDIControls: GCDWebServerDelegate {
 protocol NDIControlsDelegate {
   func switchCamera(uniqueID: String) -> Bool
   func zoom(factor: Float) -> Bool
-  func setExposure(duration: Float, iso: Float) -> Bool
 }

@@ -61,6 +61,12 @@ class LowLight: Codable {
   var isLowLightBoostEnabled: Bool = false
 }
 
+class ISO: Codable {
+  var minISO: Float = 0
+  var maxISO: Float = 0
+  var currentISO: Float = 0
+}
+
 class Camera: Codable {
   var properties = DeviceProperties()
   var exposure = Exposure()
@@ -70,8 +76,8 @@ class Camera: Codable {
   var torch = Torch()
   var lowLight = LowLight()
   
-//   TODO: White balance
-//   TODO: ISO
+  var iso = ISO()
+  //   TODO: White balance
 //   TODO: HDR
 //   TODO: Tone mapping
 
@@ -134,5 +140,10 @@ class Camera: Codable {
     // MARK: Low light
     self.lowLight.isLowLightBoostSupported = camera.isLowLightBoostSupported
     self.lowLight.isLowLightBoostEnabled = camera.isLowLightBoostEnabled
+    
+    // MARK: ISO
+    self.iso.minISO = camera.activeFormat.minISO
+    self.iso.maxISO = camera.activeFormat.maxISO
+    self.iso.currentISO = AVCaptureDevice.currentISO
   }
 }

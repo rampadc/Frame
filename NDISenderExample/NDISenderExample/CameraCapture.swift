@@ -120,4 +120,8 @@ extension CameraCapture {
   func setIso(target: Float) -> Bool {
     return true
   }
+  
+  func autoExpose() -> Bool {
+    return true
+  }
 }
