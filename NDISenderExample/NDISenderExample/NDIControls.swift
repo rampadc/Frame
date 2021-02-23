@@ -32,7 +32,7 @@ class NDIControls: NSObject {
   
   func addWebServerHandlers() {
     // MARK: - Get cameras JSON
-    webServer.addHandler(forMethod: "GET", path: "/cameras", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+    webServer.addHandler(forMethod: "GET", path: "/cameras", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
       guard let cameras = Config.shared.cameras else { return GCDWebServerErrorResponse(statusCode: 500) }
       var cameraObjects: [Camera] = []
       for camera in cameras {

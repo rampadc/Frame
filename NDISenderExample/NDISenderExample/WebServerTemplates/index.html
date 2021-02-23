@@ -44,12 +44,15 @@
     <div class="ui three column grid">
       <div class="column">
         <div class="ui segment">
+          <p class="label">Current camera:</p>
+          <select class="ui dropdown" name="currentCameraSelection" id="currentCameraSelection">
+          </select>
+        </div>
+        <div class="ui segment">
           <p class="label">Available cameras:</p>
           <select class="ui dropdown" name="camerasList" id="camerasList">
           </select>
-          <button class="ui button">Switch</button>
-        </div>
-        <div class="ui segment">
+          <div style="padding-top: 1.5rem;"></div>
           <p class="label">Inspect properties:</p>
           <pre id="cameraProperties"></pre>
         </div>
@@ -62,7 +65,7 @@
             </div>
             <div class="eight wide column right aligned">
               <div class="ui input">
-                <input type="text" id="zoom-slider-input">
+                <input type="text" id="zoom-slider-input" style="width: 100%;">
               </div>
             </div>
           </div>
@@ -75,7 +78,7 @@
             </div>
             <div class="eight wide column right aligned">
               <div class="ui input">
-                <input type="text" id="exposure-slider-input">
+                <input type="text" id="exposure-slider-input" style="width: 100%;">
               </div>
             </div>
           </div>

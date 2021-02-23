@@ -49,9 +49,7 @@ class CameraViewController: UIViewController {
     remoteControlsLabel.text = "Controls: \(serverUrl)"
   }
   
-  @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
-    guard let cameras = notification.object as? [AVCaptureDevice] else { return }
-    
+  @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {    
     // Start web server
     NDIControls.instance.startWebServer()
   }
