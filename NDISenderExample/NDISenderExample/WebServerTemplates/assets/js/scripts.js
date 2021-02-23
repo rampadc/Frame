@@ -105,5 +105,20 @@ function setupCurrentCameraSelection() {
 }
 
 function updateGuiForSelectedCamera() {
+    $('#zoom-slider').slider({
+        min: selectedCamera.zoom.minAvailableZoomFactor,
+        max: selectedCamera.zoom.maxAvailableZoomFactor,
+        start: selectedCamera.zoom.videoZoomFactor,
+        step: 0.01,
+        onChange: function(value) {
+            $.ajax(`/camera/zoom?value=${value}`)
+            .done((data) => {
 
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+
+            })
+        }
+    });
+    
 }
