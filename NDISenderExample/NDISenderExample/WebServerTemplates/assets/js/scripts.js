@@ -106,6 +106,8 @@ function setupCurrentCameraSelection() {
 
 function updateGuiForSelectedCamera() {
     $('#zoom-slider').val(selectedCamera.zoom.minAvailableZoomFactor);
+    $('#zoom-slider-input').val(selectedCamera.zoom.minAvailableZoomFactor);
+
     $('#zoom-slider').attr('min', selectedCamera.zoom.minAvailableZoomFactor);
     $('#zoom-slider').attr('max', selectedCamera.zoom.maxAvailableZoomFactor);
     $('#zoom-slider').attr('step', 0.01);
