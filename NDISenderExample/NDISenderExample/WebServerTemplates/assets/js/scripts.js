@@ -110,7 +110,71 @@ function updateGuiForSelectedCamera() {
 }
 
 function updateExposureGui() {
+    var exposureTimeSlider = $('#exposure-time-slider');
+    var exposureTimeInput = $('#exposure-time-slider-input');
+    var isoSlider = $('#iso-slider');
+    var isoInput = $('#iso-slider-input');
 
+    if (selectedCamera.exposure.isCustomExposureSupported) {
+        $('#exposure-label').text(`Aperture: ${selectedCamera.properties.lensAperture}`);
+        exposureTimeSlider.prop('disabled', false);
+        exposureTimeInput.prop('disabled', false);
+        isoSlider.prop('disabled', false);
+        isoInput.prop('disabled', false);
+
+        exposureTimeSlider.val(selectedCamera.exposure.currentTargetBias_EV);
+        exposureTimeInput.val(selectedCamera.exposure.currentTargetBias_EV);
+    
+        exposureTimeSlider.attr('min', selectedCamera.exposure.minExposureTargetBias_EV);
+        exposureTimeSlider.attr('max', selectedCamera.exposure.maxExposeTargetBias_EV);
+        exposureTimeSlider.attr('step', 0.1);
+        exposureTimeSlider.on('input change', (e) => {
+            const value = e.target.value;
+            exposureTimeInput.val(value);
+            expose(value);
+        });
+    
+        exposureTimeInput.change(() => {
+            const value = exposureTimeInput.val();
+            expose(value);
+        });
+    
+        exposureTimeInput.on('keypress', function(e) {
+            if (e.which === 13) {
+                var value = exposureTimeInput.val();
+                expose(value);
+            }
+        })
+    } else {
+        $('#exposure-label').text('Custom exposure not supported');
+        exposureTimeSlider.prop('disabled', true);
+        exposureTimeInput.prop('disabled', true);
+        isoSlider.prop('disabled', true);
+        isoInput.prop('disabled', true);
+    }
+}
+
+function expose(target) {
+    const formData = new URLSearchParams()
+    formData.append('exposureTarget', target);
+
+    $.ajax('/camera/exposure', {
+        type: 'POST',
+        data: formData.toString()
+    }).done((data) => {
+        $('#exposure-slider-input').val(target);
+        $('#exposure-slider').val(target);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        if (jqXHR.status == 501) {
+            toastError('Cannot change exposure', 'Dev forgot to implement NDI Control delegate');
+        }
+        if (jqXHR.status == 400) {
+            toastError('Cannot change exposure', 'Bad inputs. Expected a exposureTarget as a floating number');
+        }
+        if (jqXHR.status == 500) {
+            toastError('Cannot change exposure', 'iPhone does not want to switch. Try again later.');
+        }
+    });
 }
 
 function updateZoomGui() {

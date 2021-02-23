@@ -112,4 +112,12 @@ extension CameraCapture {
       return false
     }
   }
+  
+  func setExposureDuration(target: CMTime) -> Bool {
+    return true
+  }
+  
+  func setIso(target: Float) -> Bool {
+    return true
+  }
 }

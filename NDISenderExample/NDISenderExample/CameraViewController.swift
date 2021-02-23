@@ -85,4 +85,8 @@ extension CameraViewController: NDIControlsDelegate {
     guard let cc = cameraCapture else { return false }
     return cc.zoom(factor: factor)
   }
+  
+  func setExposure(duration: CMTime, iso: Float) -> Bool {
+    
+  }
 }

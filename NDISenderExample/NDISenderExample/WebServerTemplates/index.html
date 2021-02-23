@@ -70,23 +70,46 @@
                 <input type="text" id="zoom-slider-input" style="width: 100%;">
               </div>
             </div>
+            <div class="sixteen wide column" style="padding-top: 0;">
+              <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
+            </div>
           </div>
-          <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
-          <!-- <div class="ui orange slider" id="zoom-slider"></div> -->
+          
         </div>
         <div class="ui segment">
-          <div class="ui grid">
-            <div class="eight wide column left aligned">
-              <p class="label">Exposure</p>
+          <p class="label" id="exposure-label">Exposure</p>
+          <div class="ui segment">
+            <div class="ui grid">
+              <div class="eight wide column left aligned">
+                <p class="label">Exposure time</p>
+              </div>
+              <div class="eight wide column right aligned">
+                <div class="ui input">
+                  <input type="text" id="exposure-time-slider-input" style="width: 100%;">
+                </div>
+              </div>
+              <div class="sixteen wide column" style="padding-top: 0;">
+                <input type="range" name="exposure-time-slider" id="exposure-time-slider" class="range-slider">
+              </div>
+              
             </div>
-            <div class="eight wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="exposure-slider-input" style="width: 100%;">
+          </div>
+          <div class="ui segment">
+            <div class="ui grid">
+              <div class="eight wide column left aligned">
+                <p class="label">ISO</p>
+              </div>
+              <div class="eight wide column right aligned">
+                <div class="ui input">
+                  <input type="text" id="iso-slider-input" style="width: 100%;">
+                </div>
+              </div>
+              <div class="sixteen wide column" style="padding-top: 0;">
+                <input type="range" name="iso-slider" id="iso-slider" class="range-slider">
               </div>
             </div>
           </div>
-          <div class="ui brown slider" id="exposure-slider"></div>
-  
+
         </div>
         <div class="ui segment">Focus</div>
       </div>
@@ -136,8 +159,8 @@
             </div>
           </div>
         </div>
-  </div>
-  
+      </div>
+
       <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>

@@ -77,6 +77,23 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 500)
       }
     }
+    
+    // MARK: - Custom exposure
+    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      let r = request as! GCDWebServerURLEncodedFormRequest
+      guard let val = r.arguments["exposureTarget"] else { return GCDWebServerDataResponse(statusCode: 400) }
+      
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      guard let v = Float(val) else { return GCDWebServerDataResponse(statusCode: 400) }
+      if self.delegate!.exposure(target: v) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
   }
   
   // MARK: NDI Wrapper functions
@@ -229,4 +246,5 @@ extension NDIControls: GCDWebServerDelegate {
 protocol NDIControlsDelegate {
   func switchCamera(uniqueID: String) -> Bool
   func zoom(factor: Float) -> Bool
+  func setExposure(duration: Float, iso: Float) -> Bool
 }
