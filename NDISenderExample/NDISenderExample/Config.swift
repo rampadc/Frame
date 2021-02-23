@@ -11,9 +11,9 @@ import CoreImage
 class Config {
   static var shared = Config()
   var ciContext: CIContext?
+  var cameras: [AVCaptureDevice]?
   
-  private init() {
-  }
+  private init() {}
 }
 
 extension Notification.Name {

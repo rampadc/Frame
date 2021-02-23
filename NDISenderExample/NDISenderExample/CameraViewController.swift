@@ -16,6 +16,8 @@ class CameraViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    NDIControls.instance.delegate = self
+    
     NotificationCenter.default.addObserver(self, selector: #selector(onNdiWebSeverDidStart(_:)), name: .ndiWebServerDidStart, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
@@ -50,7 +52,6 @@ class CameraViewController: UIViewController {
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
     guard let cameras = notification.object as? [AVCaptureDevice] else { return }
     
-    NDIControls.instance.cameras = cameras
     // Start web server
     NDIControls.instance.startWebServer()
   }
@@ -71,5 +72,12 @@ class CameraViewController: UIViewController {
       sendStreamButton.backgroundColor = .gray
       NDIControls.instance.stop()
     }
+  }
+}
+
+extension CameraViewController: NDIControlsDelegate {
+  func switchCamera(uniqueID: String) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.switchCamera(uniqueID: uniqueID)
   }
 }
