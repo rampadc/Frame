@@ -114,6 +114,7 @@ function updateExposureGui() {
     var exposureTimeInput = $('#exposure-time-slider-input');
     var isoSlider = $('#iso-slider');
     var isoInput = $('#iso-slider-input');
+    var autoExposeBtn = $('#auto-expose-btn');
 
     if (selectedCamera.exposure.isCustomExposureSupported) {
         $('#exposure-label').text(`Aperture: ${selectedCamera.properties.lensAperture}`);
@@ -121,6 +122,7 @@ function updateExposureGui() {
         exposureTimeInput.prop('disabled', false);
         isoSlider.prop('disabled', false);
         isoInput.prop('disabled', false);
+        autoExposeBtn.prop('disabled', false);
 
         exposureTimeSlider.val(selectedCamera.exposure.currentTargetBias_EV);
         exposureTimeInput.val(selectedCamera.exposure.currentTargetBias_EV);
@@ -151,6 +153,7 @@ function updateExposureGui() {
         exposureTimeInput.prop('disabled', true);
         isoSlider.prop('disabled', true);
         isoInput.prop('disabled', true);
+        autoExposeBtn.prop('disabled', true);
     }
 }
 
