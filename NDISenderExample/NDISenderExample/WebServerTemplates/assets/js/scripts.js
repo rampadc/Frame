@@ -31,11 +31,11 @@ $(document).ready(function () {
     $('.ui.slider').slider();
 
     if (typeof cameras != 'undefined') {
+        // dev mode
         configureCamera(cameras);
     } else {
-        $.ajax(`/cameras`).done((data) => {
-            configureCamera(data);
-        });
+        // on device
+        getCameras();
     }
 
     // When available cameras list is changed, update the JSON viewer to see that camera's property
@@ -80,6 +80,12 @@ $(document).ready(function () {
     });
 });
 
+function getCameras() {
+    $.ajax(`/cameras`).done((data) => {
+        configureCamera(data);
+    });
+}
+
 function configureCamera(cameras) {
     availableCameras = cameras;
     selectedCamera = cameras[0];
@@ -106,10 +112,11 @@ function setupCurrentCameraSelection(cameras) {
 
 function updateGuiForSelectedCamera() {
     updateZoomGui();
-    updateExposureGui();
+    // updateCustomExposureGui();
+    updateCompensationExposureGui();
 }
 
-function updateExposureGui() {
+function updateCustomExposureGui() {
     var exposureTimeSlider = $('#exposure-time-slider');
     var exposureTimeInput = $('#exposure-time-slider-input');
     var isoSlider = $('#iso-slider');
@@ -127,9 +134,9 @@ function updateExposureGui() {
         exposureTimeSlider.val(selectedCamera.exposure.currentTargetBias_EV);
         exposureTimeInput.val(selectedCamera.exposure.currentTargetBias_EV);
     
-        exposureTimeSlider.attr('min', selectedCamera.exposure.minExposureTargetBias_EV);
-        exposureTimeSlider.attr('max', selectedCamera.exposure.maxExposeTargetBias_EV);
-        exposureTimeSlider.attr('step', 0.1);
+        exposureTimeSlider.attr('min', 0.0);
+        exposureTimeSlider.attr('max', 1.0);
+        exposureTimeSlider.attr('step', 0.0001);
         exposureTimeSlider.on('input change', (e) => {
             const value = e.target.value;
             exposureTimeInput.val(value);
@@ -147,6 +154,18 @@ function updateExposureGui() {
                 expose(value);
             }
         })
+
+        isoInput.change(() => {
+            const value = isoInput.val();
+            expose(value);
+        });
+    
+        isoInput.on('keypress', function(e) {
+            if (e.which === 13) {
+                var value = isoInput.val();
+                expose(value);
+            }
+        })
     } else {
         $('#exposure-label').text('Custom exposure not supported');
         exposureTimeSlider.prop('disabled', true);
@@ -157,19 +176,79 @@ function updateExposureGui() {
     }
 }
 
-function expose(target) {
+function exposeCustom(duration, iso) {
+    // UNUSED
     const formData = new URLSearchParams()
-    formData.append('exposureTarget', target);
+    formData.append('exposeTime', parseFloat(duration));
+    formData.append('iso', parseFloat(iso));
 
-    $.ajax('/camera/exposure', {
+    $.ajax('/camera/exposure/custom', {
         type: 'POST',
         data: formData.toString()
     }).done((data) => {
-        $('#exposure-slider-input').val(target);
-        $('#exposure-slider').val(target);
+        $('#exposure-slider-input').val(duration);
+        $('#exposure-slider').val(duration);
+        $('#iso-slider-input').val(iso);
+        $('#iso-slider').val(iso);
     }).fail((jqXHR, textStatus, errorThrown) => {
         if (jqXHR.status == 501) {
-            toastError('Cannot change exposure', 'Dev forgot to implement NDI Control delegate');
+            toastError('Cannot change exposure', 'Feature not implemented');
+        }
+        if (jqXHR.status == 400) {
+            toastError('Cannot change exposure', 'Bad inputs. Expected a exposureTarget as a floating number');
+        }
+        if (jqXHR.status == 500) {
+            toastError('Cannot change exposure', 'iPhone does not want to switch. Try again later.');
+        }
+    });
+}
+
+function updateCompensationExposureGui() {
+    var slider = $('#ev-slider');
+    var input = $('#ev-slider-input');
+
+    let min = selectedCamera.exposure.minExposureTargetBias_EV;
+    let max = selectedCamera.exposure.maxExposureTargetBias_EV;
+    let current = selectedCamera.exposure.currentTargetBias_EV;
+
+    slider.val(current);
+    input.val(current);
+
+    slider.attr('min', min);
+    slider.attr('max', max);
+    slider.attr('step', 0.01);
+    slider.on('input change', (e) => {
+        const ev = e.target.value;
+        input.val(ev);
+        compensateExposure(ev);
+    });
+
+    input.change(() => {
+        const ev = input.val();
+        compensateExposure(ev);
+    });
+
+    input.on('keypress', function(e) {
+        if (e.which === 13) {
+            const ev = input.val();
+            compensateExposure(ev);
+        }
+    })
+}
+
+function compensateExposure(ev) {
+    const formData = new URLSearchParams()
+    formData.append('bias', parseFloat(ev));
+
+    $.ajax('/camera/exposure/bias', {
+        type: 'POST',
+        data: formData.toString()
+    }).done((data) => {
+        $('#ev-slider-input').val(ev);
+        $('#ev-slider').val(ev);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        if (jqXHR.status == 501) {
+            toastError('Cannot change exposure', 'Feature not implemented');
         }
         if (jqXHR.status == 400) {
             toastError('Cannot change exposure', 'Bad inputs. Expected a exposureTarget as a floating number');
@@ -221,7 +300,7 @@ function zoom(factor) {
         $('#zoom-slider').val(factor);
     }).fail((jqXHR, textStatus, errorThrown) => {
         if (jqXHR.status == 501) {
-            toastError('Cannot zoom', 'Dev forgot to implement NDI Control delegate');
+            toastError('Cannot zoom', 'Feature not implemented');
         }
         if (jqXHR.status == 400) {
             toastError('Cannot zoom', 'Bad inputs. Expected a zoomFactor as a floating number');

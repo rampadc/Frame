@@ -102,10 +102,16 @@ extension CameraCapture {
   }
   
   func zoom(factor: Float) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    let cgFactor = CGFloat(factor)
+    if device.minAvailableVideoZoomFactor > cgFactor || device.maxAvailableVideoZoomFactor < cgFactor {
+      return false
+    }
+    
     do {
-      try self.currentDevice?.lockForConfiguration()
-      self.currentDevice?.videoZoomFactor = CGFloat(factor)
-      self.currentDevice?.unlockForConfiguration()
+      try device.lockForConfiguration()
+      device.videoZoomFactor = CGFloat(factor)
+      device.unlockForConfiguration()
       return true
     } catch {
       print("Cannot zoom. Error: \(error.localizedDescription)")
@@ -113,15 +119,57 @@ extension CameraCapture {
     }
   }
   
-  func setExposureDuration(target: CMTime) -> Bool {
+  func setExposure(exposeTime: CMTime, iso: Float) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    
+    if !device.isExposureModeSupported(.custom) {
+      return false
+    }
+
+    do {
+      try device.lockForConfiguration()
+      device.setExposureModeCustom(duration: exposeTime, iso: iso, completionHandler: nil)
+      device.unlockForConfiguration()
+    } catch {
+      print("Cannot set custom exposure time and iso. Error: \(error.localizedDescription)")
+      return false
+    }
     return true
   }
   
-  func setIso(target: Float) -> Bool {
+  func setExposureCompensation(bias: Float) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    
+    if device.maxExposureTargetBias < bias || device.minExposureTargetBias > bias {
+      return false
+    }
+    
+    do {
+      try device.lockForConfiguration()
+      device.setExposureTargetBias(bias, completionHandler: nil)
+      device.unlockForConfiguration()
+    } catch {
+      print("Cannot set custom exposure time and iso. Error: \(error.localizedDescription)")
+      return false
+    }
+    
     return true
   }
   
   func autoExpose() -> Bool {
+    guard let device = self.currentDevice else { return false }
+    if !device.isExposureModeSupported(.autoExpose) {
+      return false
+    }
+    
+    do {
+      try device.lockForConfiguration()
+      device.exposureMode = .autoExpose
+      device.unlockForConfiguration()
+    } catch {
+      print("Cannot set exposure duration. Error: \(error.localizedDescription)")
+      return false
+    }
     return true
   }
 }

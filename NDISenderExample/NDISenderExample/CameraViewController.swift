@@ -25,14 +25,14 @@ class CameraViewController: UIViewController {
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
       guard let image = image else { return }
       
-      let filter = CIFilter.colorMonochrome()
-      filter.intensity = 1
-      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
-      filter.inputImage = image
-      self.metalView.image = filter.outputImage
+//      let filter = CIFilter.colorMonochrome()
+//      filter.intensity = 1
+//      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
+//      filter.inputImage = image
+      self.metalView.image = image
 
-      guard let output = filter.outputImage else { return }
-      NDIControls.instance.send(image: output)
+//      guard let output = filter.outputImage else { return }
+      NDIControls.instance.send(image: image)
     })
   }
   
@@ -84,6 +84,21 @@ extension CameraViewController: NDIControlsDelegate {
   func zoom(factor: Float) -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.zoom(factor: factor)
+  }
+  
+  func setExposure(exposeTime: CMTime, iso: Float) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.setExposure(exposeTime: exposeTime, iso: iso)
+  }
+  
+  func setExposureCompensation(bias: Float) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.setExposureCompensation(bias: bias)
+  }
+  
+  func autoExpose() -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.autoExpose()
   }
 
 }

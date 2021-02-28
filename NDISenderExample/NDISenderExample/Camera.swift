@@ -20,11 +20,11 @@ class DeviceProperties: Codable {
 class Exposure: Codable {
   var exposureTargetOffset: Float = 0
   var minExposureTargetBias_EV: Float = 0
-  var maxExposeTargetBias_EV: Float = 0
+  var maxExposureTargetBias_EV: Float = 0
   var currentTargetBias_EV: Float = 0
   var exposureMode: String = ""
   var activeMaxExposureDuration: Float = 0
-//  var currentExposureDuration: Float = 0
+  var currentExposureDuration: Float = 0
   var isAutoExposureSupported: Bool = false
   var isContinuousExposureSupported: Bool = false
   var isCustomExposureSupported: Bool = false
@@ -94,7 +94,7 @@ class Camera: Codable {
     
     // MARK: Exposure
     self.exposure.minExposureTargetBias_EV = camera.minExposureTargetBias
-    self.exposure.maxExposeTargetBias_EV = camera.maxExposureTargetBias
+    self.exposure.maxExposureTargetBias_EV = camera.maxExposureTargetBias
     self.exposure.currentTargetBias_EV = camera.exposureTargetBias
     switch camera.exposureMode {
     case .autoExpose:
@@ -110,7 +110,9 @@ class Camera: Codable {
     }
     self.exposure.exposureTargetOffset = camera.exposureTargetOffset
     self.exposure.activeMaxExposureDuration = Float(CMTimeGetSeconds(camera.activeMaxExposureDuration))
-//    self.exposure.currentExposureDuration = Float(CMTimeGetSeconds(AVCaptureDevice.currentExposureDuration))
+    let currentExposureDuration = Float(CMTimeGetSeconds(AVCaptureDevice.currentExposureDuration))
+    self.exposure.currentExposureDuration = currentExposureDuration.isNaN ? -1 : currentExposureDuration
+    
     self.exposure.isAutoExposureSupported = camera.isExposureModeSupported(.autoExpose)
     self.exposure.isContinuousExposureSupported = camera.isExposureModeSupported(.continuousAutoExposure)
     self.exposure.isCustomExposureSupported = camera.isExposureModeSupported(.custom)

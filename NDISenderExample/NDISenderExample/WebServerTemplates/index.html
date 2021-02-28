@@ -51,7 +51,20 @@
           </select>
         </div>
         <div class="ui segment">
-          <p class="label">Available cameras (change will not switch camera):</p>
+          <div class="ui toggle checkbox">
+            <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
+            <label>Hide on-screen controls</label>
+          </div>
+        </div>
+        <div class="ui segment">
+          <div class="ui toggle checkbox">
+            <input type="checkbox" name="enableNDI" id="enableNDI">
+            <label>Enable NDI</label>
+          </div>
+        </div>
+        <div class="ui segment">
+          <p class="label">Available cameras:</p>
+          <p>Change will not switch cameras</p>
           <select class="ui dropdown" name="camerasList" id="camerasList">
           </select>
           <div style="padding-top: 1.5rem;"></div>
@@ -74,60 +87,25 @@
               <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
             </div>
           </div>
-          
         </div>
         <div class="ui segment">
-          <p class="label" id="exposure-label">Exposure</p>
-          <div class="ui segment">
-            <div class="ui grid">
-              <div class="eight wide column left aligned">
-                <p class="label">Exposure time</p>
-              </div>
-              <div class="eight wide column right aligned">
-                <div class="ui input">
-                  <input type="text" id="exposure-time-slider-input" style="width: 100%;">
-                </div>
-              </div>
-              <div class="sixteen wide column" style="padding-top: 0;">
-                <input type="range" name="exposure-time-slider" id="exposure-time-slider" class="range-slider">
-              </div>
-              
+          <div class="ui grid">
+            <div class="eight wide column left aligned">
+              <p class="label">Exposure compensation (EV)</p>
             </div>
-          </div>
-          <div class="ui segment">
-            <div class="ui grid">
-              <div class="eight wide column left aligned">
-                <p class="label">ISO</p>
-              </div>
-              <div class="eight wide column right aligned">
-                <div class="ui input">
-                  <input type="text" id="iso-slider-input" style="width: 100%;">
-                </div>
-              </div>
-              <div class="sixteen wide column" style="padding-top: 0;">
-                <input type="range" name="iso-slider" id="iso-slider" class="range-slider">
+            <div class="eight wide column right aligned">
+              <div class="ui input">
+                <input type="text" id="ev-slider-input" style="width: 100%;">
               </div>
             </div>
+            <div class="sixteen wide column" style="padding-top: 0;">
+              <input type="range" id="ev-slider" class="range-slider">
+            </div>
           </div>
-          <div class="sixteen wide column">
-            <button class="ui button" id="auto-expose-btn" style="width: 100%;">Auto expose</button>
-          </div> 
+          <div class="ui segment">Focus</div>
         </div>
-        <div class="ui segment">Focus</div>
       </div>
       <div class="column">
-        <div class="ui segment">
-          <div class="ui toggle checkbox">
-            <input type="checkbox" name="hideOnScreenControls" id="hideOnScreenControls">
-            <label>Hide on-screen controls</label>
-          </div>
-        </div>
-        <div class="ui segment">
-          <div class="ui toggle checkbox">
-            <input type="checkbox" name="enableNDI" id="enableNDI">
-            <label>Enable NDI</label>
-          </div>
-        </div>
         <div class="ui segment">
           <p class="label">Colour correction</p>
           <div class="ui grid">
