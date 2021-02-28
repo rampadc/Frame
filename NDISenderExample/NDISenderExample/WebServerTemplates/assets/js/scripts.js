@@ -78,6 +78,22 @@ $(document).ready(function () {
 
         updateGuiForSelectedCamera();
     });
+
+    $('#hideOnScreenControls').change(() => {
+        if ($('#hideOnScreenControls').is(":checked")) {
+            $.ajax('/controls/hide').done(() => { toastSuccess('Controls are now hidden', '') });
+        } else {
+            $.ajax('/controls/show').done(() => { toastSuccess('Controls are now shown', '') });
+        }
+    });
+
+    $('#enableNDI').change(() => {
+        if ($('#enableNDI').is(":checked")) {
+            $.ajax('/ndi/start').done(() => { toastSuccess('Controls are now hidden', '') });
+        } else {
+            $.ajax('/ndi/stop').done(() => { toastSuccess('Controls are now shown', '') });
+        }
+    });
 });
 
 function getCameras() {

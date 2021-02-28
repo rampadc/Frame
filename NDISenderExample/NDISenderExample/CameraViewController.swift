@@ -64,13 +64,9 @@ class CameraViewController: UIViewController {
     let isSending = NDIControls.instance.isSending
     
     if !isSending {
-      NDIControls.instance.start()
-      sendStreamButton.setTitle("Sending...", for: .normal)
-      sendStreamButton.backgroundColor = .blue
+      startNDI()
     } else {
-      sendStreamButton.setTitle("Send", for: .normal)
-      sendStreamButton.backgroundColor = .gray
-      NDIControls.instance.stop()
+      stopNDI()
     }
   }
 }
@@ -99,6 +95,47 @@ extension CameraViewController: NDIControlsDelegate {
   func autoExpose() -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.autoExpose()
+  }
+  
+  func hideControls() -> Bool {
+    DispatchQueue.main.async {
+      self.remoteControlsLabel.isHidden = true
+      self.sendStreamButton.isHidden = true
+    }
+    
+    return true
+  }
+  
+  func showControls() -> Bool {
+    DispatchQueue.main.async {
+      self.remoteControlsLabel.isHidden = false
+      self.sendStreamButton.isHidden = false
+    }
+    return true
+  }
+  
+  func startNDI() -> Bool {
+    if !NDIControls.instance.isSending {
+      DispatchQueue.main.async {
+        self.sendStreamButton.setTitle("Sending...", for: .normal)
+        self.sendStreamButton.backgroundColor = .blue
+      }
+      NDIControls.instance.start()
+      return true
+    }
+    return false
+  }
+  
+  func stopNDI() -> Bool {
+    if NDIControls.instance.isSending {
+      DispatchQueue.main.async {
+        self.sendStreamButton.setTitle("Send", for: .normal)
+        self.sendStreamButton.backgroundColor = .gray
+      }
+      NDIControls.instance.stop()
+      return true
+    }
+    return false
   }
 
 }

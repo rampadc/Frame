@@ -78,7 +78,7 @@ class NDIControls: NSObject {
       }
     }
     
-    // MARK: - Custom exposure    
+    // MARK: - Custom exposure
     webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure/bias", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       let r = request as! GCDWebServerURLEncodedFormRequest
       guard let bias = Float(r.arguments["bias"] ?? "invalidNumber") else {
@@ -90,6 +90,60 @@ class NDIControls: NSObject {
       }
       
       if self.delegate!.setExposureCompensation(bias: bias) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    // MARK: - Colour correct
+    
+    // MARK: - Focus
+    
+    // MARK: - on-screen controls
+    webServer.addHandler(forMethod: "GET", pathRegex: "/controls/hide", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.hideControls() {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/controls/show", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.showControls() {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    // MARK: - ndi control
+    webServer.addHandler(forMethod: "GET", pathRegex: "/ndi/start", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.startNDI() {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/ndi/stop", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.stopNDI() {
         return GCDWebServerDataResponse(statusCode: 200)
       } else {
         return GCDWebServerDataResponse(statusCode: 500)
@@ -252,4 +306,8 @@ protocol NDIControlsDelegate {
   func setExposure(exposeTime: CMTime, iso: Float) -> Bool
   func setExposureCompensation(bias: Float) -> Bool
   func autoExpose() -> Bool
+  func hideControls() -> Bool
+  func showControls() -> Bool
+  func startNDI() -> Bool
+  func stopNDI() -> Bool
 }
