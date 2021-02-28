@@ -89,9 +89,9 @@ $(document).ready(function () {
 
     $('#enableNDI').change(() => {
         if ($('#enableNDI').is(":checked")) {
-            $.ajax('/ndi/start').done(() => { toastSuccess('Controls are now hidden', '') });
+            $.ajax('/ndi/start').done(() => { toastSuccess('NDI started', '') });
         } else {
-            $.ajax('/ndi/stop').done(() => { toastSuccess('Controls are now shown', '') });
+            $.ajax('/ndi/stop').done(() => { toastSuccess('NDI stopped', '') });
         }
     });
 });
