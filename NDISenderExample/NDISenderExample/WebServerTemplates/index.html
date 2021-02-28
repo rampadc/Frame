@@ -107,8 +107,8 @@
           </div>
           <div class="eight wide column">
             <div class="ui segment">
-              <p class="label">Colour correction</p>
-              <div class="ui grid">
+              <p class="label">Colour correction (RGB)</p>
+              <div class="ui grid" style="height: 60px;">
                 <div class="thirteen wide column">
                   <div class="ui red slider" id="red-cc-slider"></div>
                 </div>
@@ -118,7 +118,7 @@
                   </div>
                 </div>
               </div>
-              <div class="ui grid">
+              <div class="ui grid" style="height: 60px;">
                 <div class="thirteen wide column">
                   <div class="ui green slider" id="green-cc-slider"></div>
                 </div>
@@ -128,7 +128,7 @@
                   </div>
                 </div>
               </div>
-              <div class="ui grid">
+              <div class="ui grid" style="height: 60px;">
                 <div class="thirteen wide column">
                   <div class="ui blue slider" id="blue-cc-slider"></div>
                 </div>
@@ -136,6 +136,42 @@
                   <div class="ui input">
                     <input type="text" id="blue-cc-slider-input" style="width: 100%;">
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui grid">
+          <div class="eight wide column">
+            <div class="ui segment">
+              <div class="ui grid">
+                <div class="eight wide column left aligned">
+                  <p class="label">White balance temperature</p>
+                </div>
+                <div class="eight wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="wb-temp-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+                <div class="sixteen wide column" style="padding-top: 0;">
+                  <input type="range" id="wb-temp-slider" class="range-slider">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="eight wide column">
+            <div class="ui segment">
+              <div class="ui grid">
+                <div class="eight wide column left aligned">
+                  <p class="label">White balance tint</p>
+                </div>
+                <div class="eight wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="wb-tint-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+                <div class="sixteen wide column" style="padding-top: 0;">
+                  <input type="range" id="wb-tint-slider" class="range-slider">
                 </div>
               </div>
             </div>
