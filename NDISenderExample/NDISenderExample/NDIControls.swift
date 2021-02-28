@@ -78,25 +78,7 @@ class NDIControls: NSObject {
       }
     }
     
-    // MARK: - Custom exposure
-    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure/custom", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
-      let r = request as! GCDWebServerURLEncodedFormRequest
-      guard let iso = Float(r.arguments["iso"] ?? "invalidNumber"),
-            let exposeTime = Double(r.arguments["exposeTime"] ?? "invalidNumber") else {
-        return GCDWebServerDataResponse(statusCode: 400)
-      }
-      
-      if self.delegate == nil {
-        return GCDWebServerDataResponse(statusCode: 501)
-      }
-      
-      if self.delegate!.setExposure(exposeTime: CMTime(seconds: exposeTime, preferredTimescale: 1), iso: iso){
-        return GCDWebServerDataResponse(statusCode: 200)
-      } else {
-        return GCDWebServerDataResponse(statusCode: 500)
-      }
-    }
-    
+    // MARK: - Custom exposure    
     webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure/bias", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       let r = request as! GCDWebServerURLEncodedFormRequest
       guard let bias = Float(r.arguments["bias"] ?? "invalidNumber") else {
@@ -108,19 +90,6 @@ class NDIControls: NSObject {
       }
       
       if self.delegate!.setExposureCompensation(bias: bias) {
-        return GCDWebServerDataResponse(statusCode: 200)
-      } else {
-        return GCDWebServerDataResponse(statusCode: 500)
-      }
-    }
-    
-    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure/auto", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
-      
-      if self.delegate == nil {
-        return GCDWebServerDataResponse(statusCode: 501)
-      }
-      
-      if self.delegate!.autoExpose() {
         return GCDWebServerDataResponse(statusCode: 200)
       } else {
         return GCDWebServerDataResponse(statusCode: 500)
