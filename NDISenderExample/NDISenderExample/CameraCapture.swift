@@ -119,24 +119,6 @@ extension CameraCapture {
     }
   }
   
-  func setExposure(exposeTime: CMTime, iso: Float) -> Bool {
-    guard let device = self.currentDevice else { return false }
-    
-    if !device.isExposureModeSupported(.custom) {
-      return false
-    }
-
-    do {
-      try device.lockForConfiguration()
-      device.setExposureModeCustom(duration: exposeTime, iso: iso, completionHandler: nil)
-      device.unlockForConfiguration()
-    } catch {
-      print("Cannot set custom exposure time and iso. Error: \(error.localizedDescription)")
-      return false
-    }
-    return true
-  }
-  
   func setExposureCompensation(bias: Float) -> Bool {
     guard let device = self.currentDevice else { return false }
     
@@ -153,23 +135,6 @@ extension CameraCapture {
       return false
     }
     
-    return true
-  }
-  
-  func autoExpose() -> Bool {
-    guard let device = self.currentDevice else { return false }
-    if !device.isExposureModeSupported(.autoExpose) {
-      return false
-    }
-    
-    do {
-      try device.lockForConfiguration()
-      device.exposureMode = .autoExpose
-      device.unlockForConfiguration()
-    } catch {
-      print("Cannot set exposure duration. Error: \(error.localizedDescription)")
-      return false
-    }
     return true
   }
 }

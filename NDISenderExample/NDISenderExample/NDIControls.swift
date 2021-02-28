@@ -300,12 +300,8 @@ extension NDIControls: GCDWebServerDelegate {
 
 protocol NDIControlsDelegate {
   func switchCamera(uniqueID: String) -> Bool
-  
   func zoom(factor: Float) -> Bool
-  
-  func setExposure(exposeTime: CMTime, iso: Float) -> Bool
   func setExposureCompensation(bias: Float) -> Bool
-  func autoExpose() -> Bool
   func hideControls() -> Bool
   func showControls() -> Bool
   func startNDI() -> Bool

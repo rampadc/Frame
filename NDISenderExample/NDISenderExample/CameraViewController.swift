@@ -82,19 +82,9 @@ extension CameraViewController: NDIControlsDelegate {
     return cc.zoom(factor: factor)
   }
   
-  func setExposure(exposeTime: CMTime, iso: Float) -> Bool {
-    guard let cc = cameraCapture else { return false }
-    return cc.setExposure(exposeTime: exposeTime, iso: iso)
-  }
-  
   func setExposureCompensation(bias: Float) -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.setExposureCompensation(bias: bias)
-  }
-  
-  func autoExpose() -> Bool {
-    guard let cc = cameraCapture else { return false }
-    return cc.autoExpose()
   }
   
   func hideControls() -> Bool {
