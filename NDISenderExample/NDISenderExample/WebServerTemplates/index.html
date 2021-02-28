@@ -42,9 +42,8 @@
 
 <body style="padding: 16px;">
   <div>
-    <h1 class="ui left aligned header">Camera Controls</h1>
-    <div class="ui three column grid">
-      <div class="column">
+    <div class="ui grid">
+      <div class="three wide column">
         <div class="ui segment">
           <p class="label">Current camera:</p>
           <select class="ui dropdown" name="currentCameraSelection" id="currentCameraSelection">
@@ -72,76 +71,87 @@
           <pre id="cameraProperties"></pre>
         </div>
       </div>
-      <div class="column">
-        <div class="ui segment">
-          <div class="ui grid">
-            <div class="eight wide column left aligned">
-              <p class="label">Zoom</p>
-            </div>
-            <div class="eight wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="zoom-slider-input" style="width: 100%;">
+      <div class="thirteen wide column">
+        <div class="ui grid">
+          <div class="eight wide column">
+            <div class="ui segment">
+              <div class="ui grid">
+                <div class="eight wide column left aligned">
+                  <p class="label">Zoom</p>
+                </div>
+                <div class="eight wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="zoom-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+                <div class="sixteen wide column" style="padding-top: 0;">
+                  <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
+                </div>
               </div>
             </div>
-            <div class="sixteen wide column" style="padding-top: 0;">
-              <input type="range" name="zoom-slider" id="zoom-slider" class="range-slider">
+            <div class="ui segment">
+              <div class="ui grid">
+                <div class="eight wide column left aligned">
+                  <p class="label">Exposure compensation (EV)</p>
+                </div>
+                <div class="eight wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="ev-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+                <div class="sixteen wide column" style="padding-top: 0;">
+                  <input type="range" id="ev-slider" class="range-slider">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="eight wide column">
+            <div class="ui segment">
+              <p class="label">Colour correction</p>
+              <div class="ui grid">
+                <div class="thirteen wide column">
+                  <div class="ui red slider" id="red-cc-slider"></div>
+                </div>
+                <div class="three wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="red-cc-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
+              <div class="ui grid">
+                <div class="thirteen wide column">
+                  <div class="ui green slider" id="green-cc-slider"></div>
+                </div>
+                <div class="three wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="green-cc-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
+              <div class="ui grid">
+                <div class="thirteen wide column">
+                  <div class="ui blue slider" id="blue-cc-slider"></div>
+                </div>
+                <div class="three wide column right aligned">
+                  <div class="ui input">
+                    <input type="text" id="blue-cc-slider-input" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="ui segment">
-          <div class="ui grid">
-            <div class="eight wide column left aligned">
-              <p class="label">Exposure compensation (EV)</p>
-            </div>
-            <div class="eight wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="ev-slider-input" style="width: 100%;">
-              </div>
-            </div>
-            <div class="sixteen wide column" style="padding-top: 0;">
-              <input type="range" id="ev-slider" class="range-slider">
+        <div class="ui grid">
+          <div class="sixteen wide column">
+            <div class="ui segment">
+              <p class="label">Focus</p>
             </div>
           </div>
-          <div class="ui segment">Focus</div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui segment">
-          <p class="label">Colour correction</p>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui red slider" id="red-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="red-cc-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui green slider" id="green-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="green-cc-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-          <div class="ui grid">
-            <div class="thirteen wide column">
-              <div class="ui blue slider" id="blue-cc-slider"></div>
-            </div>
-            <div class="three wide column right aligned">
-              <div class="ui input">
-                <input type="text" id="blue-cc-slider-input" style="width: 100%;">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- End Document
+    </div>
+  </div>
+  <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 
