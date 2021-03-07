@@ -43,6 +43,19 @@ class NDIControls: NSObject {
       return GCDWebServerDataResponse(data: data, contentType: "application/json")
     }
     
+    // MARK: - Get active camera
+    webServer.addHandler(forMethod: "GET", path: "/cameras/active", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      guard let camera = self.delegate!.getCurrentCamera() else {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      let data = try! JSONEncoder().encode(camera)
+      return GCDWebServerDataResponse(data: data, contentType: "application/json")
+    }
+    
     // MARK: - Switch camera
     webServer.addHandler(forMethod: "POST", path: "/cameras/select", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       // GCDWebServerURLEncodedFormRequest expects the body data to be contained in a x-www-form-urlencoded
@@ -141,7 +154,7 @@ class NDIControls: NSObject {
     
     webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       let r = request as! GCDWebServerURLEncodedFormRequest
-      guard let temp = Float(r.arguments["temp"] ?? "invalidNumber"),
+      guard let temp = Float(r.arguments["temperature"] ?? "invalidNumber"),
             let tint = Float(r.arguments["tint"] ?? "invalidNumber")
       else {
         return GCDWebServerDataResponse(statusCode: 400)
@@ -385,4 +398,5 @@ protocol NDIControlsDelegate {
   func getWhiteBalanceTemp() -> Float
   func getWhiteBalanceTint() -> Float
   func lockGrey() -> Bool
+  func getCurrentCamera() -> Camera?
 }

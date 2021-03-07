@@ -137,9 +137,15 @@ function updateWhiteBalanceTempGui() {
     var tempSlider = $('#wb-temp-slider');
     var tempInput = $('#wb-temp-slider-input');
 
-    let min = selectedCamera.exposure.minExposureTargetBias_EV;
-    let max = selectedCamera.exposure.maxExposureTargetBias_EV;
-    let current = selectedCamera.exposure.currentTargetBias_EV;
+    if (!selectedCamera.whiteBalance.isLockedWhiteBalanceSupported) {
+        tempSlider.prop('disabled', true)
+        tempInput.prop('disabled', true)
+        return
+    }
+
+    let min = selectedCamera.whiteBalance.minTemp;
+    let max = selectedCamera.whiteBalance.maxTemp;
+    let current = selectedCamera.whiteBalance.currentTemperature;
 
     tempSlider.val(current);
     tempInput.val(current);
@@ -148,20 +154,20 @@ function updateWhiteBalanceTempGui() {
     tempSlider.attr('max', max);
     tempSlider.attr('step', 0.01);
     tempSlider.on('input change', (e) => {
-        const ev = e.target.value;
-        tempInput.val(ev);
-        
+        const v = e.target.value;
+        tempInput.val(v);
+        // setWhiteBalanceTempTint(temp);
     });
 
     tempInput.change(() => {
-        const ev = input.val();
-        
+        const temp = input.val();
+        // setWhiteBalanceTempTint(temp);
     });
 
     tempInput.on('keypress', function(e) {
         if (e.which === 13) {
             const ev = input.val();
-            
+            // setWhiteBalanceTempTint(temp);
         }
     })
 }

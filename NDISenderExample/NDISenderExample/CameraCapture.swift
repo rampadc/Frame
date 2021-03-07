@@ -101,6 +101,11 @@ extension CameraCapture {
     }
   }
   
+  func getCurrentCamera() -> Camera? {
+    guard let device = self.currentDevice else { return nil }
+    return Camera(camera: device)
+  }
+  
   func zoom(factor: Float) -> Bool {
     guard let device = self.currentDevice else { return false }
     let cgFactor = CGFloat(factor)
@@ -163,6 +168,11 @@ extension CameraCapture {
       return false
     }
     
+    if !device.isLockingWhiteBalanceWithCustomDeviceGainsSupported {
+      print("Device does not support white balance locking with custom gains")
+      return false
+    }
+    
     let temperatureAndTint = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(
       temperature: temperature,
       tint: tint
@@ -174,8 +184,15 @@ extension CameraCapture {
   
   func lockGreyWorld() -> Bool {
     guard let device = self.currentDevice else { return false }
-    self.setWhiteBalanceGains(device.grayWorldDeviceWhiteBalanceGains)
-    return true
+    
+    if device.isLockingWhiteBalanceWithCustomDeviceGainsSupported {
+      print("white balance with grey locking is supported")
+      self.setWhiteBalanceGains(device.grayWorldDeviceWhiteBalanceGains)
+      return true
+    } else {
+      print("white balance with grey locking is not supported")
+      return false
+    }
   }
   
   private func setWhiteBalanceGains(_ gains: AVCaptureDevice.WhiteBalanceGains) {

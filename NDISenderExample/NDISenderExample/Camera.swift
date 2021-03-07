@@ -81,6 +81,8 @@ class WhiteBalance: Codable {
   var maxTint = 150
   var currentTemperature: Float = 0
   var currentTint: Float = 0
+  var isGreyWhiteBalanceSupported: Bool = false
+  var isCustomGainsSupportedInLockedMode: Bool = false
 }
 
 class Camera: Codable {
@@ -169,6 +171,8 @@ class Camera: Codable {
     self.whiteBalance.isAutoWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.autoWhiteBalance)
     self.whiteBalance.isLockedWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.locked)
     self.whiteBalance.isContinuousWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance)
+    self.whiteBalance.isGreyWhiteBalanceSupported = camera.isLockingWhiteBalanceWithCustomDeviceGainsSupported
+    self.whiteBalance.isCustomGainsSupportedInLockedMode = camera.isLockingWhiteBalanceWithCustomDeviceGainsSupported
     
     let whiteBalanceGains = camera.deviceWhiteBalanceGains
     let whiteBalanceTemperatureAndTint = camera.temperatureAndTintValues(for: whiteBalanceGains)
