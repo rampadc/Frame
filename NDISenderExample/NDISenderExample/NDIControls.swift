@@ -39,8 +39,13 @@ class NDIControls: NSObject {
         cameraObjects.append(Camera(camera: camera))
       }
       
-      let data = try! JSONEncoder().encode(cameraObjects)
-      return GCDWebServerDataResponse(data: data, contentType: "application/json")
+      do {
+        let data = try JSONEncoder().encode(cameraObjects)
+        return GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
     }
     
     // MARK: - Get active camera
@@ -52,8 +57,13 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
-      let data = try! JSONEncoder().encode(camera)
-      return GCDWebServerDataResponse(data: data, contentType: "application/json")
+      do {
+        let data = try JSONEncoder().encode(camera)
+        return GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
     }
     
     // MARK: - Switch camera

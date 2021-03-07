@@ -10,7 +10,6 @@ class CameraViewController: UIViewController {
   @IBOutlet weak var sendStreamButton: UIButton!
   @IBOutlet weak var metalView: MetalView!
   
-//  private var previewLayer: AVCaptureVideoPreviewLayer!
   private var cameraCapture: CameraCapture?
   
   override func viewDidLoad() {
