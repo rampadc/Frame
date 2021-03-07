@@ -158,6 +158,18 @@ class NDIControls: NSObject {
       }
     }
     
+    webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/grey", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.lockGrey() {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
     // MARK: - Colour correct
     
     // MARK: - Focus
@@ -372,4 +384,5 @@ protocol NDIControlsDelegate {
   func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool
   func getWhiteBalanceTemp() -> Float
   func getWhiteBalanceTint() -> Float
+  func lockGrey() -> Bool
 }
