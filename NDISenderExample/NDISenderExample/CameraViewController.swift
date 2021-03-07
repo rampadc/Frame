@@ -128,4 +128,23 @@ extension CameraViewController: NDIControlsDelegate {
     return false
   }
 
+  func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.setWhiteBalanceMode(mode: mode)
+  }
+  
+  func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.setTemperatureAndTint(temperature: temperature, tint: tint)
+  }
+  
+  func getWhiteBalanceTemp() -> Float {
+    guard let cc = cameraCapture else { return -1 }
+    return cc.getTemperature()
+  }
+  
+  func getWhiteBalanceTint() -> Float {
+    guard let cc = cameraCapture else { return -1 }
+    return cc.getTint()
+  }
 }

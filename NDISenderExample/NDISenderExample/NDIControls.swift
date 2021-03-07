@@ -78,7 +78,7 @@ class NDIControls: NSObject {
       }
     }
     
-    // MARK: - Custom exposure
+    // MARK: - Exposure bias adjustment
     webServer.addHandler(forMethod: "POST", pathRegex: "/camera/exposure/bias", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       let r = request as! GCDWebServerURLEncodedFormRequest
       guard let bias = Float(r.arguments["bias"] ?? "invalidNumber") else {
@@ -90,6 +90,68 @@ class NDIControls: NSObject {
       }
       
       if self.delegate!.setExposureCompensation(bias: bias) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    // MARK: - White balance
+    webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/mode/auto", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.setWhiteBalanceMode(mode: .continuousAutoWhiteBalance) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/mode/locked", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.setWhiteBalanceMode(mode: .locked) {
+        return GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      let response: [String: Float] = [
+        "temperature": self.delegate!.getWhiteBalanceTemp(),
+        "tint": self.delegate!.getWhiteBalanceTint()
+      ]
+      do {
+        let json = try JSONEncoder().encode(response)
+        return GCDWebServerDataResponse(data: json, contentType: "application/json")
+      } catch {
+        print("Cannot convert to JSON")
+        return GCDWebServerDataResponse(statusCode: 500)
+      }
+    }
+    
+    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      let r = request as! GCDWebServerURLEncodedFormRequest
+      guard let temp = Float(r.arguments["temp"] ?? "invalidNumber"),
+            let tint = Float(r.arguments["tint"] ?? "invalidNumber")
+      else {
+        return GCDWebServerDataResponse(statusCode: 400)
+      }
+      
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      if self.delegate!.setTemperatureAndTint(temperature: temp, tint: tint) {
         return GCDWebServerDataResponse(statusCode: 200)
       } else {
         return GCDWebServerDataResponse(statusCode: 500)
@@ -306,4 +368,8 @@ protocol NDIControlsDelegate {
   func showControls() -> Bool
   func startNDI() -> Bool
   func stopNDI() -> Bool
+  func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool
+  func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool
+  func getWhiteBalanceTemp() -> Float
+  func getWhiteBalanceTint() -> Float
 }

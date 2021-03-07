@@ -67,6 +67,22 @@ class ISO: Codable {
   var currentISO: Float = 0
 }
 
+class WhiteBalance: Codable {
+  var isAutoWhiteBalanceSupported: Bool = false
+  var isLockedWhiteBalanceSupported: Bool = false
+  var isContinuousWhiteBalanceSupported: Bool = false
+  var currentWhiteBalanceMode: String = ""
+  var gain: Float = 0
+  var temperature: Float = 0
+  var tint: Float = 0
+  var minTemp = 3000
+  var maxTemp = 8000
+  var minTint = -150
+  var maxTint = 150
+  var currentTemperature: Float = 0
+  var currentTint: Float = 0
+}
+
 class Camera: Codable {
   var properties = DeviceProperties()
   var exposure = Exposure()
@@ -77,10 +93,10 @@ class Camera: Codable {
   var lowLight = LowLight()
   
   var iso = ISO()
-  //   TODO: White balance
-//   TODO: HDR
-//   TODO: Tone mapping
-
+  var whiteBalance = WhiteBalance()
+  //   TODO: HDR
+  //   TODO: Tone mapping
+  
   init(camera: AVCaptureDevice) {
     
     // MARK: Device characteristics
@@ -147,5 +163,47 @@ class Camera: Codable {
     self.iso.minISO = camera.activeFormat.minISO
     self.iso.maxISO = camera.activeFormat.maxISO
     self.iso.currentISO = AVCaptureDevice.currentISO
+    
+    // MARK: White balance
+    self.whiteBalance.currentWhiteBalanceMode = camera.whiteBalanceMode.description
+    self.whiteBalance.isAutoWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.autoWhiteBalance)
+    self.whiteBalance.isLockedWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.locked)
+    self.whiteBalance.isContinuousWhiteBalanceSupported = camera.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance)
+    
+    let whiteBalanceGains = camera.deviceWhiteBalanceGains
+    let whiteBalanceTemperatureAndTint = camera.temperatureAndTintValues(for: whiteBalanceGains)
+    self.whiteBalance.currentTemperature = whiteBalanceTemperatureAndTint.temperature
+    self.whiteBalance.currentTint = whiteBalanceTemperatureAndTint.tint
+  }
+  
+  static func getTemperature(device: AVCaptureDevice) -> Float {
+    let whiteBalanceGains = device.deviceWhiteBalanceGains
+    let whiteBalanceTemperatureAndTint = device.temperatureAndTintValues(for: whiteBalanceGains)
+    return whiteBalanceTemperatureAndTint.temperature
+  }
+  
+  static func getTint(device: AVCaptureDevice) -> Float {
+    let whiteBalanceGains = device.deviceWhiteBalanceGains
+    let whiteBalanceTemperatureAndTint = device.temperatureAndTintValues(for: whiteBalanceGains)
+    return whiteBalanceTemperatureAndTint.tint
+  }
+}
+
+extension AVCaptureDevice.WhiteBalanceMode: CustomStringConvertible {
+  public var description: String {
+    var string: String
+    
+    switch self {
+    case .locked:
+      string = "Locked"
+    case .autoWhiteBalance:
+      string = "Auto"
+    case .continuousAutoWhiteBalance:
+      string = "ContinuousAuto"
+    @unknown default:
+      string = "unknown value"
+    }
+    
+    return string
   }
 }

@@ -130,6 +130,40 @@ function updateGuiForSelectedCamera() {
     updateZoomGui();
     // updateCustomExposureGui();
     updateCompensationExposureGui();
+    updateWhiteBalanceTempGui();
+}
+
+function updateWhiteBalanceTempGui() {
+    var tempSlider = $('#wb-temp-slider');
+    var tempInput = $('#wb-temp-slider-input');
+
+    let min = selectedCamera.exposure.minExposureTargetBias_EV;
+    let max = selectedCamera.exposure.maxExposureTargetBias_EV;
+    let current = selectedCamera.exposure.currentTargetBias_EV;
+
+    tempSlider.val(current);
+    tempInput.val(current);
+
+    tempSlider.attr('min', min);
+    tempSlider.attr('max', max);
+    tempSlider.attr('step', 0.01);
+    tempSlider.on('input change', (e) => {
+        const ev = e.target.value;
+        tempInput.val(ev);
+        
+    });
+
+    tempInput.change(() => {
+        const ev = input.val();
+        
+    });
+
+    tempInput.on('keypress', function(e) {
+        if (e.which === 13) {
+            const ev = input.val();
+            
+        }
+    })
 }
 
 function updateCustomExposureGui() {

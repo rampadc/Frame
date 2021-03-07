@@ -12,7 +12,7 @@ class CameraCapture: NSObject {
   
   private(set) var session = AVCaptureSession()
   private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
-
+  
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
     self.processingCallback = processingCallback
@@ -44,7 +44,7 @@ class CameraCapture: NSObject {
       ],
       mediaType: .video,
       position: cameraPosition)
-
+    
     NotificationCenter.default.post(name: .cameraDiscoveryCompleted, object: cameraDiscovery.devices)
     Config.shared.cameras = cameraDiscovery.devices
     
@@ -136,5 +136,85 @@ extension CameraCapture {
     }
     
     return true
+  }
+  
+  func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    do {
+      try device.lockForConfiguration()
+      if device.isWhiteBalanceModeSupported(mode) {
+        device.whiteBalanceMode = mode
+        device.unlockForConfiguration()
+        return true
+      } else {
+        print("White balance mode \(mode.description) is not supported. White balance mode is \(device.whiteBalanceMode.description).")
+        device.unlockForConfiguration()
+        return false
+      }
+    } catch let error {
+      print("Could not lock device for configuration: \(error)")
+      return false
+    }
+  }
+  
+  func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    if device.whiteBalanceMode != .locked {
+      return false
+    }
+    
+    let temperatureAndTint = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(
+      temperature: temperature,
+      tint: tint
+    )
+    
+    self.setWhiteBalanceGains(device.deviceWhiteBalanceGains(for: temperatureAndTint))
+    return true
+  }
+  
+  func lockGreyWorld() -> Bool {
+    guard let device = self.currentDevice else { return false }
+    self.setWhiteBalanceGains(device.grayWorldDeviceWhiteBalanceGains)
+    return true
+  }
+  
+  private func setWhiteBalanceGains(_ gains: AVCaptureDevice.WhiteBalanceGains) {
+    guard let device = self.currentDevice else { return }
+    do {
+      try device.lockForConfiguration()
+      let normalizedGains = self.normalizedGains(gains) // Conversion can yield out-of-bound values, cap to limits
+      device.setWhiteBalanceModeLocked(with: normalizedGains, completionHandler: nil)
+      device.unlockForConfiguration()
+    } catch let error {
+      print("Could not lock device for configuration: \(error)")
+    }
+  }
+  
+  func getTemperature() -> Float {
+    guard let device = self.currentDevice else { return -1 }
+    return Camera.getTemperature(device: device)
+  }
+  
+  func getTint() -> Float {
+    guard let device = self.currentDevice else { return -1 }
+    return Camera.getTint(device: device)
+  }
+  
+  private func normalizedGains(_ gains: AVCaptureDevice.WhiteBalanceGains) -> AVCaptureDevice.WhiteBalanceGains {
+    if self.currentDevice == nil {
+      fatalError("No camera active, cannot normalize gains")
+    }
+    
+    var g = gains
+    
+    g.redGain = max(1.0, g.redGain)
+    g.greenGain = max(1.0, g.greenGain)
+    g.blueGain = max(1.0, g.blueGain)
+    
+    g.redGain = min(self.currentDevice!.maxWhiteBalanceGain, g.redGain)
+    g.greenGain = min(self.currentDevice!.maxWhiteBalanceGain, g.greenGain)
+    g.blueGain = min(self.currentDevice!.maxWhiteBalanceGain, g.blueGain)
+    
+    return g
   }
 }
