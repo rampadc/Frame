@@ -2,35 +2,79 @@
 
 ## Overview
 
-Minimum implementation of the NDI SDK that works on the iPhone using Swift.
+Minimum implementation of the NDI SDK that works on the iPhone using Swift, with a set of exposed API to control the camera:
+
+- List all available cameras `GET /cameras`
+- Get active camera `GET /cameras/active`
+- Switch camera `POST /cameras/select`
+- Zoom with the selected camera `POST /camera/zoom`
+- Change exposure bias `POST /camera/exposure/bias`
+- Enable auto white balance `GET /camera/white-balance/mode/auto`
+- Enable custom white balance `GET /camera/white-balance/mode/locked`
+- Get current white balance temperature and white balance tint `GET /camera/white-balance/temp-tint`
+- Set a new white balance temperature and white balance tint `POST /camera/white-balance/temp-tint`
+- Set a custom white balance with a grey reference colour card `GET /camera/white-balance/grey`
+- Hide controls on screen `GET /controls/hide`
+- Show controls on screen `GET /controls/show`
+- Start NDI `GET /ndi/start`
+- Stop NDI `GET /ndi/stop` 
+
+POST requests require a body of type `application/x-www-form-urlencoded`. As of Mar/2021, I haven't made a Swagger file for all the endpoints yet. To see what parameters you need to input, have a look at `NDIControls.swift`. For example, to change the white balance temperature and tint, you will need `temperature` and `tint` keys in the POST body, as indicated by the code in `NDIControls.swift` as below:
+
+```swift
+webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+   let r = request as! GCDWebServerURLEncodedFormRequest
+   guard let temp = Float(r.arguments["temperature"] ?? "invalidNumber"),
+         let tint = Float(r.arguments["tint"] ?? "invalidNumber")
+```
+
+## How it use
+
+When the app first starts, it will start the web server on port 8080. If the phone is connected to a LAN network, the user can access this endpoint using `http://<PHONE_LAN_HOST>:8080`. At port 8080, a basic and lagging (in terms of development in relations to the APIs exposed) is available. To use the APIs directly, you can enter in `http://<PHONE_LAN_HOST>:8080/cameras` to get all the cameras available on the phone. A link to the controls will be shown on the screen and will also be shown in Xcode's Output window if you're building the project.
+
+The app is built with the assumption that Metalkit effects will be added in the future (chroma-key, filters, etc.). In `CameraViewController.swift`, you can find a similar block as below
+
+```swift
+cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in
+   guard let image = image else { return }
+
+   // isUsingFilters defined before viewDidLoad()
+   if self.isUsingFilters {
+      // You can use CIFilters here.
+      let filter = CIFilter.colorMonochrome()
+      filter.intensity = 1
+      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
+      filter.inputImage = image
+      guard let output = filter.outputImage else { return }
+      self.metalView.image = output
+      NDIControls.instance.send(image: output)
+   } else {
+      self.metalView.image = image
+      NDIControls.instance.send(image: image)
+   }
+})
+```
+
+In this block, you can chain CIFilters and build some cool effects. 
 
 ![output3](https://user-images.githubusercontent.com/5768361/97207673-9f32bf80-17fd-11eb-8cd6-9b5ed8791038.gif)
 
-You'll need a high-speed network connection.
+You'll need a high-speed network connection and an Apple device capable of MetalKit 2.
 
-## How to use
+## How to build
 
-1. Get the SDK from the [NDI SDK](https://www.ndi.tv/sdk/) site and install it (using `4.5.3` as of 2020-10-27).
+1. Get the SDK from the [NDI SDK](https://www.ndi.tv/sdk/) site and install it (using `4.6` as of Feb/2021).
 
 2. Copy `/Library/NDI SDK for Apple_/lib/iOS/libndi_ios.a` to `/NDISenderExample/NDIWrapper/NDIWrapper/wrapper/libndi_ios.a`
 
-3. Open `NDISenderExample.xcworkspace` in Xcode, select the `NDISenderExample` schema, and run it.
+3. Open the top-level `NDISenderExample.xcworkspace` in Xcode, select the `NDISenderExample` schema, and run it.
 
 4. Tap the Send button on the screen to start sending with NDI.
 
+## Help out
 
-## 概要
+Check the issues list for known issues.
 
-NDI SDKをSwiftから使用しiPhoneで動作させる最小実装です。
+## Acknowledgement
 
-## 本リポジトリの使い方
-
-1. [NDI SDK](https://www.ndi.tv/sdk/)サイト経由で取得するダウンロードリンクからSDKを入手しインストール(2020-10-27時点で `4.5.3` を使用)
-
-   検証用: https://drive.google.com/file/d/1USWZTfIsry8hANdI3Ra5Hx1jKiYYPUq5/view?usp=sharing
-
-2. `/Library/NDI SDK for Apple_/lib/iOS/libndi_ios.a` を `/NDISenderExample/NDIWrapper/NDIWrapper/wrapper/libndi_ios.a` にコピー
-
-3. Xcodeで `NDISenderExample.xcworkspace` を開き `NDISenderExample` スキーマを選択し実行
-
-4. 画面内のSendボタンをタップするとNDIで送信開始します。
+Base NDI bridge based on `satoshi0212`'s [example](https://github.com/satoshi0212/NDISenderExample).
