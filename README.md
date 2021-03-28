@@ -30,7 +30,7 @@ webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-t
 
 ## How it use
 
-When the app first starts, it will start the web server on port 8080. If the phone is connected to a LAN network, the user can access this endpoint using `http://<PHONE_LAN_HOST>:8080`. At port 8080, a basic and lagging (in terms of development in relations to the APIs exposed) is available. To use the APIs directly, you can enter in `http://<PHONE_LAN_HOST>:8080/cameras` to get all the cameras available on the phone. A link to the controls will be shown on the screen and will also be shown in Xcode's Output window if you're building the project.
+When the app first starts, it will start the web server on port 8080. If the phone is connected to a LAN network, the user can access this endpoint using `http://<PHONE_LAN_HOST>:8080`. At port 8080, a basic and lagging UI (in terms of development in relations to the APIs exposed) is available. To use the APIs directly, you can enter in `http://<PHONE_LAN_HOST>:8080/cameras` to get all the cameras available on the phone. A link to the controls will be shown on the screen and will also be shown in Xcode's Output window if you're building the project.
 
 The app is built with the assumption that Metalkit effects will be added in the future (chroma-key, filters, etc.). In `CameraViewController.swift`, you can find a similar block as below
 
