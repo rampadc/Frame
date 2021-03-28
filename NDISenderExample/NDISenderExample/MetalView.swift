@@ -32,23 +32,24 @@ class MetalView: MTKView {
     
     let imageWidth = CGFloat(image.extent.width)
     let imageHeight = CGFloat(image.extent.height)
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-
-    var scaleX = imageWidth / screenWidth
-    var scaleY = imageHeight / screenHeight
     
-    // TODO: Solve scaling issue
-    if scaleX > scaleY {
-      scaleY = scaleX / scaleY
-      scaleX = 1.0
+    var scale: CGFloat = 0
+    if imageWidth > imageHeight {
+      if imageWidth < drawableSize.width {
+        scale = drawableSize.width / imageWidth
+      } else {
+        scale = imageWidth / drawableSize.width
+      }
     } else {
-      scaleX = scaleY / scaleX
-      scaleY = 1.0
+      if imageHeight < drawableSize.height {
+        scale = drawableSize.height / imageHeight
+      } else {
+        scale = imageHeight / drawableSize.height
+      }
     }
     
     try! Config.shared.ciContext?.startTask(
-      toRender: image.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY)), to: destination)
+      toRender: image.transformed(by: CGAffineTransform(scaleX: scale, y: scale)), to: destination)
     commandBuffer?.present(currentDrawable!)
     commandBuffer?.commit()
     draw()

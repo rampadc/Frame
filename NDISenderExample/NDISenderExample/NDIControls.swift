@@ -14,7 +14,6 @@ class NDIControls: NSObject {
   // MARK: - Web server properties
   private let webServer = GCDWebServer()
   
-  
   // MARK: Web server functions
   func startWebServer() {
     // Get the path to the website directory
