@@ -12,6 +12,8 @@ class CameraViewController: UIViewController {
   
   private var cameraCapture: CameraCapture?
   
+  private var isUsingFilters = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -21,17 +23,21 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { (image) in
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in 
       guard let image = image else { return }
       
-//      let filter = CIFilter.colorMonochrome()
-//      filter.intensity = 1
-//      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
-//      filter.inputImage = image
-      self.metalView.image = image
-
-//      guard let output = filter.outputImage else { return }
-      NDIControls.instance.send(image: image)
+      if self.isUsingFilters {
+        let filter = CIFilter.colorMonochrome()
+        filter.intensity = 1
+        filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
+        filter.inputImage = image
+        guard let output = filter.outputImage else { return }
+        self.metalView.image = output
+        NDIControls.instance.send(image: output)
+      } else {
+        self.metalView.image = image
+        NDIControls.instance.send(image: image)
+      }
     })
   }
   
@@ -58,7 +64,7 @@ class CameraViewController: UIViewController {
   @objc private func onCameraSetupCompleted(_ notification: Notification) {
     print("Camera setup completed")
   }
-
+  
   @IBAction func onSendButtonTapped(_ sender: UIButton) {
     let isSending = NDIControls.instance.isSending
     
@@ -126,7 +132,7 @@ extension CameraViewController: NDIControlsDelegate {
     }
     return false
   }
-
+  
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.setWhiteBalanceMode(mode: mode)
