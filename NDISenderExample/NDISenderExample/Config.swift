@@ -12,6 +12,7 @@ class Config {
   static var shared = Config()
   var ciContext: CIContext?
   var cameras: [AVCaptureDevice]?
+  var bufferPool: CVPixelBufferPool?
   
   private init() {}
 }

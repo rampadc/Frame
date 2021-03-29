@@ -7,8 +7,10 @@ class NDIControls: NSObject {
   static let instance = NDIControls()
   var delegate: NDIControlsDelegate?
   
+  private var isPreparingPixelBufferPool = false
+  
   // MARK: - NDI Properties
-  private(set)var ndiWrapper: NDIWrapper
+  private(set) var ndiWrapper: NDIWrapper
   private(set) var isSending: Bool = false
   
   // MARK: - Web server properties
@@ -20,7 +22,7 @@ class NDIControls: NSObject {
     let websiteTemplate = Bundle.main.path(forResource: "WebServerTemplates", ofType: nil)
     
     guard let templateDirectory = websiteTemplate else { return }
-  
+    
     // Add a default handler to server static files (anything other than HTML files)
     webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: "index.html", cacheAge: 0, allowRangeRequests: true)
     
@@ -266,7 +268,7 @@ class NDIControls: NSObject {
   
   func send(image: CIImage) {
     if isSending {
-      let pixelBuffer: CVImageBuffer? = createPixelBufferFrom(image: image)
+      let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
       ndiWrapper.send(pixelBuffer!)
     }
   }
@@ -380,9 +382,76 @@ class NDIControls: NSObject {
     return pixelBuffer
   }
   
+  // MARK: TEST replace createPixelBufferFromImage with overwritePixelBufferWithImage
+  func overwritePixelBufferWithImage(image: CIImage) -> CVPixelBuffer? {
+    // take a pixel buffer out from pool
+    var pbuf: CVPixelBuffer?
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, Config.shared.bufferPool!, &pbuf)
+    guard pbuf != nil else {
+      print("Allocation failure")
+      return nil
+    }
+    
+    Config.shared.ciContext?.render(image, to: pbuf!)
+    
+    return pbuf
+  }
+  
+  // MARK: Create buffer pool
+  func preparePixelBufferPool(widthOfFrame width: Int, heightOfFrame height: Int) {
+    if !isPreparingPixelBufferPool {
+      isPreparingPixelBufferPool = true
+      
+      let pixelBufferAttributes = [
+        kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+        kCVPixelBufferCGImageCompatibilityKey: false,
+        kCVPixelBufferCGBitmapContextCompatibilityKey: false,
+        kCVPixelBufferWidthKey: width,
+        kCVPixelBufferHeightKey: height
+      ] as CFDictionary
+      
+      let poolAttributes = [
+        kCVPixelBufferPoolMinimumBufferCountKey: 3
+      ] as CFDictionary
+      
+      let status = CVPixelBufferPoolCreate(
+        kCFAllocatorDefault,
+        poolAttributes,
+        pixelBufferAttributes,
+        &Config.shared.bufferPool)
+      
+      if status == kCVReturnWouldExceedAllocationThreshold {
+        print("status == kCVReturnWouldExceedAllocationThreshold")
+      } else if status == kCVReturnPoolAllocationFailed {
+        print("status == kCVReturnPoolAllocationFailed")
+      } else if status == kCVReturnInvalidPoolAttributes {
+        print("status == kCVReturnInvalidPoolAttributes")
+      } else if status == kCVReturnRetry {
+        print("status == kCVReturnRetry")
+      } else if status == kCVReturnSuccess {
+        print("status == kCVReturnSuccess")
+      } else if status == kCVReturnInvalidArgument {
+        print("status == kCVReturnInvalidArgument")
+      } else if status == kCVReturnAllocationFailed {
+        print("status == kCVReturnAllocationFailed")
+      } else if status == kCVReturnUnsupported {
+        print("status == kCVReturnUnsupported")
+      } else {
+        print("Unknown status: \(status)")
+      }
+      
+      if Config.shared.bufferPool == nil {
+        fatalError("Cannot create buffer pool")
+      } else {
+        // upon creation of buffer pool, turn off preparing flag
+        isPreparingPixelBufferPool = false
+        print("Created buffer pool")
+      }
+    }
+  }
+  // MARK: Init
   private override init() {
     ndiWrapper = NDIWrapper()
-    
     super.init()
   }
 }

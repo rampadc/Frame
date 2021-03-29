@@ -23,7 +23,7 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in 
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in
       guard let image = image else { return }
       
       if self.isUsingFilters {
@@ -37,6 +37,10 @@ class CameraViewController: UIViewController {
       } else {
         self.metalView.image = image
         NDIControls.instance.send(image: image)
+      }
+      
+      if !NDIControls.instance.isSending && Config.shared.bufferPool == nil {
+        NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1920, heightOfFrame: 1080)
       }
     })
   }
