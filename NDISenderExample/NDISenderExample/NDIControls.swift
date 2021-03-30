@@ -28,7 +28,7 @@ class NDIControls: NSObject {
     
     addWebServerHandlers()
     webServer.delegate = self
-    webServer.start(withPort: 8080, bonjourName: UIDevice.current.name)
+    webServer.start(withPort: 80, bonjourName: UIDevice.current.name)
   }
   
   func addWebServerHandlers() {
@@ -273,6 +273,7 @@ class NDIControls: NSObject {
     }
   }
   
+  // MARK: Create a brand new SampleBuffer from a CVPixelBuffer
   func createSampleBufferFrom(pixelBuffer: CVPixelBuffer) -> CMSampleBuffer? {
     var sampleBuffer: CMSampleBuffer?
     
@@ -349,6 +350,7 @@ class NDIControls: NSObject {
     return buffer
   }
   
+  // MARK: Create a brand new pixel buffer from a CIImage
   func createPixelBufferFrom(image: CIImage) -> CVPixelBuffer? {
     // based on https://stackoverflow.com/questions/54354138/how-can-you-make-a-cvpixelbuffer-directly-from-a-ciimage-instead-of-a-uiimage-in
     
@@ -382,7 +384,7 @@ class NDIControls: NSObject {
     return pixelBuffer
   }
   
-  // MARK: TEST replace createPixelBufferFromImage with overwritePixelBufferWithImage
+  // MARK: Use an existing pixel buffer pool
   func overwritePixelBufferWithImage(image: CIImage) -> CVPixelBuffer? {
     // take a pixel buffer out from pool
     var pbuf: CVPixelBuffer?
