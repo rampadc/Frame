@@ -40,13 +40,16 @@ class NDIControls: NSObject {
         cameraObjects.append(Camera(camera: camera))
       }
       
+      var response: GCDWebServerDataResponse
       do {
         let data = try JSONEncoder().encode(cameraObjects)
-        return GCDWebServerDataResponse(data: data, contentType: "application/json")
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
         print("Cannot serialise JSON. Error: \(error.localizedDescription)")
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - Get active camera
@@ -58,13 +61,16 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       do {
         let data = try JSONEncoder().encode(camera)
-        return GCDWebServerDataResponse(data: data, contentType: "application/json")
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
         print("Cannot serialise JSON. Error: \(error.localizedDescription)")
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - Switch camera
@@ -77,11 +83,15 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       } else {
         let hasCameraSwitched = self.delegate!.switchCamera(uniqueID: cameraUniqueID)
+        
+        var response: GCDWebServerDataResponse
         if hasCameraSwitched {
-          return GCDWebServerDataResponse(statusCode: 200)
-        } else {
-          return GCDWebServerDataResponse(statusCode: 500)
+          response = GCDWebServerDataResponse(statusCode: 200)
+       } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
         }
+        response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+        return response
       }
     }
     
@@ -95,11 +105,15 @@ class NDIControls: NSObject {
       }
       
       guard let zf = Float(zoomFactor) else { return GCDWebServerDataResponse(statusCode: 400) }
+      
+      var response: GCDWebServerDataResponse
       if self.delegate!.zoom(factor: zf) {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - Exposure bias adjustment
@@ -113,11 +127,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
-      if self.delegate!.setExposureCompensation(bias: bias) {
-        return GCDWebServerDataResponse(statusCode: 200)
+      var response: GCDWebServerDataResponse
+      if self.delegate!.setExposureCompensation(bias: bias)  {
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - White balance
@@ -126,11 +143,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.setWhiteBalanceMode(mode: .continuousAutoWhiteBalance) {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/mode/locked", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -138,11 +158,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.setWhiteBalanceMode(mode: .locked) {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -150,17 +173,21 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
-      let response: [String: Float] = [
+      let respData: [String: Float] = [
         "temperature": self.delegate!.getWhiteBalanceTemp(),
         "tint": self.delegate!.getWhiteBalanceTint()
       ]
+      
+      var response: GCDWebServerDataResponse
       do {
-        let json = try JSONEncoder().encode(response)
-        return GCDWebServerDataResponse(data: json, contentType: "application/json")
+        let json = try JSONEncoder().encode(respData)
+        response = GCDWebServerDataResponse(data: json, contentType: "application/json")
       } catch {
         print("Cannot convert to JSON")
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-tint", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -175,11 +202,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.setTemperatureAndTint(temperature: temp, tint: tint) {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "GET", pathRegex: "/camera/white-balance/grey", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -187,11 +217,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.lockGrey() {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - Colour correct
@@ -204,11 +237,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.hideControls() {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "GET", pathRegex: "/controls/show", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -216,11 +252,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.showControls() {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     // MARK: - ndi control
@@ -229,11 +268,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.startNDI() {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
     
     webServer.addHandler(forMethod: "GET", pathRegex: "/ndi/stop", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -241,11 +283,14 @@ class NDIControls: NSObject {
         return GCDWebServerDataResponse(statusCode: 501)
       }
       
+      var response: GCDWebServerDataResponse
       if self.delegate!.stopNDI() {
-        return GCDWebServerDataResponse(statusCode: 200)
+        response = GCDWebServerDataResponse(statusCode: 200)
       } else {
-        return GCDWebServerDataResponse(statusCode: 500)
+        response = GCDWebServerDataResponse(statusCode: 500)
       }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
     }
   }
   
