@@ -226,10 +226,29 @@ class NDIControls: NSObject {
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
       return response
     }
-    
-    // MARK: - Colour correct
-    
+        
     // MARK: - Focus
+    webServer.addHandler(forMethod: "POST", pathRegex: "/camera/focus", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      let r = request as! GCDWebServerURLEncodedFormRequest
+      guard let x = Double(r.arguments["x"] ?? "invalidNumber"),
+            let y = Double(r.arguments["y"] ?? "invalidNumber")
+      else {
+        return GCDWebServerDataResponse(statusCode: 400)
+      }
+      
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      var response: GCDWebServerDataResponse
+      if self.delegate!.highlightPointOfInterest(pointOfInterest: CGPoint(x: x, y: y)) {
+        response = GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
     
     // MARK: - on-screen controls
     webServer.addHandler(forMethod: "GET", pathRegex: "/controls/hide", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
@@ -524,4 +543,5 @@ protocol NDIControlsDelegate {
   func getWhiteBalanceTint() -> Float
   func lockGrey() -> Bool
   func getCurrentCamera() -> Camera?
+  func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool
 }

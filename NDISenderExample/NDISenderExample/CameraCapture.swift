@@ -195,6 +195,33 @@ extension CameraCapture {
     }
   }
   
+  func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    
+    if device.isFocusPointOfInterestSupported || device.isExposurePointOfInterestSupported {
+      print("Point of interest focus/exposure is supported")
+      do {
+        try device.lockForConfiguration()
+        if device.isFocusPointOfInterestSupported {
+          device.focusPointOfInterest = pointOfInterest
+          device.focusMode = .continuousAutoFocus
+        }
+        if device.isExposurePointOfInterestSupported {
+          device.exposurePointOfInterest = pointOfInterest
+          device.exposureMode = .continuousAutoExposure
+        }
+        device.unlockForConfiguration()
+        return true
+      } catch let error {
+        print("Could not lock device for configuration: \(error)")
+        return false
+      }
+    } else {
+      print("Point of interest focus/exposure is not supported")
+      return false
+    }
+  }
+  
   private func setWhiteBalanceGains(_ gains: AVCaptureDevice.WhiteBalanceGains) {
     guard let device = self.currentDevice else { return }
     do {

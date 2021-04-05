@@ -166,4 +166,9 @@ extension CameraViewController: NDIControlsDelegate {
     guard let cc = cameraCapture else { return nil }
     return cc.getCurrentCamera()
   }
+  
+  func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool {
+    guard let cc = cameraCapture else { return false }
+    return cc.highlightPointOfInterest(pointOfInterest: pointOfInterest)
+  }
 }
