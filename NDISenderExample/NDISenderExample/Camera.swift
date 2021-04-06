@@ -32,6 +32,12 @@ class Exposure: Codable {
   var exposurePointOfInterest: CGPoint = CGPoint()
 }
 
+class Depth: Codable {
+  var supportsDepthDataOutput: Bool = false
+  var kCVPixelFormatType_DepthFloat16: Bool = false
+  var kCVPixelFormatType_DepthFloat32: Bool = false
+}
+
 class Zoom: Codable {
   var videoZoomFactor: Float = 0
   var minAvailableZoomFactor: Float = 0
@@ -96,6 +102,7 @@ class Camera: Codable {
   
   var iso = ISO()
   var whiteBalance = WhiteBalance()
+  var depth = Depth()
   //   TODO: HDR
   //   TODO: Tone mapping
   
@@ -150,6 +157,21 @@ class Camera: Codable {
     self.autoFocus.isSmoothAutoFocusSupported = camera.isSmoothAutoFocusSupported
     self.autoFocus.isSmoothAutoFocusEnabled = camera.isSmoothAutoFocusEnabled
     self.autoFocus.isAutoFocusRangeRestrictionSupported = camera.isAutoFocusRangeRestrictionSupported
+    
+    // MARK: Depth data format
+    let depthDataFormats = camera.activeFormat.supportedDepthDataFormats
+    if depthDataFormats.count > 0 {
+      self.depth.supportsDepthDataOutput = true
+      for format in depthDataFormats {
+        let desc = CMFormatDescriptionGetMediaSubType(format.formatDescription)
+        if desc == kCVPixelFormatType_DepthFloat16 {
+          self.depth.kCVPixelFormatType_DepthFloat16 = true
+        }
+        if desc == kCVPixelFormatType_DepthFloat32 {
+          self.depth.kCVPixelFormatType_DepthFloat32 = true
+        }
+      }
+    }
     
     // MARK: Flash
     self.flash.hasFlash = camera.hasFlash

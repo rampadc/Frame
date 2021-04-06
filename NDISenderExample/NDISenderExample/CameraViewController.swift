@@ -73,9 +73,9 @@ class CameraViewController: UIViewController {
     let isSending = NDIControls.instance.isSending
     
     if !isSending {
-      startNDI()
+      let _ = startNDI()
     } else {
-      stopNDI()
+      let _ = stopNDI()
     }
   }
 }

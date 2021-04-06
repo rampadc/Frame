@@ -13,6 +13,8 @@ class CameraCapture: NSObject {
   private(set) var session = AVCaptureSession()
   private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
   
+  private let output = AVCaptureVideoDataOutput()
+    
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
     self.processingCallback = processingCallback
@@ -56,14 +58,14 @@ class CameraCapture: NSObject {
       session.addInput(input)
     }
     
-    let output = AVCaptureVideoDataOutput()
     output.videoSettings = [kCVPixelBufferPixelFormatTypeKey :  kCVPixelFormatType_32BGRA] as [String : Any]
     output.alwaysDiscardsLateVideoFrames = true
     output.setSampleBufferDelegate(self, queue: sampleBufferQueue)
+    
     if session.canAddOutput(output) {
       session.addOutput(output)
     }
-    
+    session.commitConfiguration()
     
     NotificationCenter.default.post(name: .cameraSetupCompleted, object: nil)
   }
@@ -72,10 +74,10 @@ class CameraCapture: NSObject {
 extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-    
+
     DispatchQueue.main.async {
       let image = CIImage(cvImageBuffer: imageBuffer)
-      self.processingCallback(image)      
+      self.processingCallback(image)
     }
   }
 }
@@ -222,6 +224,53 @@ extension CameraCapture {
     }
   }
   
+  func getTemperature() -> Float {
+    guard let device = self.currentDevice else { return -1 }
+    return Camera.getTemperature(device: device)
+  }
+  
+  func getTint() -> Float {
+    guard let device = self.currentDevice else { return -1 }
+    return Camera.getTint(device: device)
+  }
+  
+  func setActiveDepthDataFormat(format: String) -> Bool {
+    guard let device = self.currentDevice else { return false }
+    
+    let depthFormats = device.activeFormat.supportedDepthDataFormats
+    
+    var supportedFormat: [AVCaptureDevice.Format] = []
+    if format == "kCVPixelFormatType_DepthFloat16" {
+      supportedFormat = depthFormats.filter({
+        CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat16
+      })
+    } else if format == "kCVPixelFormatType_DepthFloat32" {
+      supportedFormat = depthFormats.filter({
+        CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat32
+      })
+    }
+    
+    if supportedFormat.isEmpty {
+      print("Device does not support the chosen depth data format")
+      return false
+    }
+    
+    let selectedFormat = supportedFormat.max(
+      by: { first, second in
+        CMVideoFormatDescriptionGetDimensions(first.formatDescription).width <
+          CMVideoFormatDescriptionGetDimensions(second.formatDescription).width })
+    do {
+      try device.lockForConfiguration()
+      device.activeDepthDataFormat = selectedFormat
+      device.unlockForConfiguration()
+      return true
+    } catch {
+      print("Could not lock device for configuration \(error)")
+      return false
+    }
+  }
+  
+  // MARK: Private functions
   private func setWhiteBalanceGains(_ gains: AVCaptureDevice.WhiteBalanceGains) {
     guard let device = self.currentDevice else { return }
     do {
@@ -232,16 +281,6 @@ extension CameraCapture {
     } catch let error {
       print("Could not lock device for configuration: \(error)")
     }
-  }
-  
-  func getTemperature() -> Float {
-    guard let device = self.currentDevice else { return -1 }
-    return Camera.getTemperature(device: device)
-  }
-  
-  func getTint() -> Float {
-    guard let device = self.currentDevice else { return -1 }
-    return Camera.getTint(device: device)
   }
   
   private func normalizedGains(_ gains: AVCaptureDevice.WhiteBalanceGains) -> AVCaptureDevice.WhiteBalanceGains {
