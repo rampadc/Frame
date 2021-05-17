@@ -58,6 +58,8 @@ class CameraViewController: UIViewController {
   @objc private func onNdiWebSeverDidStart(_ notification: Notification) {
     guard let serverUrl = notification.object as? String else { return }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
+    
+    let _ = startNDI()
   }
   
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {

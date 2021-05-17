@@ -351,6 +351,9 @@ class NDIControls: NSObject {
   func send(image: CIImage) {
     if isSending {
       let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
+      if pixelBuffer == nil {
+        return
+      }
       ndiWrapper.send(pixelBuffer!)
     }
   }
@@ -468,9 +471,12 @@ class NDIControls: NSObject {
   
   // MARK: Use an existing pixel buffer pool
   func overwritePixelBufferWithImage(image: CIImage) -> CVPixelBuffer? {
+    guard let bufferPool = Config.shared.bufferPool else {
+      return nil
+    }
     // take a pixel buffer out from pool
     var pbuf: CVPixelBuffer?
-    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, Config.shared.bufferPool!, &pbuf)
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, bufferPool, &pbuf)
     guard pbuf != nil else {
       print("Allocation failure")
       return nil
