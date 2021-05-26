@@ -75,9 +75,9 @@ class CameraViewController: UIViewController {
     let isSending = NDIControls.instance.isSending
     
     if !isSending {
-      let _ = startNDI()
+      startNDI()
     } else {
-      let _ = stopNDI()
+      stopNDI()
     }
   }
 }
@@ -115,28 +115,24 @@ extension CameraViewController: NDIControlsDelegate {
     return true
   }
   
-  func startNDI() -> Bool {
-    if !NDIControls.instance.isSending {
-      DispatchQueue.main.async {
+  func startNDI() {
+    DispatchQueue.main.async {
+      if !NDIControls.instance.isSending {
         self.sendStreamButton.setTitle("Sending...", for: .normal)
         self.sendStreamButton.backgroundColor = .blue
+        NDIControls.instance.start()
       }
-      NDIControls.instance.start()
-      return true
     }
-    return false
   }
   
-  func stopNDI() -> Bool {
-    if NDIControls.instance.isSending {
-      DispatchQueue.main.async {
+  func stopNDI() {
+    DispatchQueue.main.async {
+      if NDIControls.instance.isSending {
         self.sendStreamButton.setTitle("Send", for: .normal)
         self.sendStreamButton.backgroundColor = .gray
+        NDIControls.instance.stop()
       }
-      NDIControls.instance.stop()
-      return true
     }
-    return false
   }
   
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {

@@ -306,11 +306,8 @@ class NDIControls: NSObject {
       }
       
       var response: GCDWebServerDataResponse
-      if self.delegate!.startNDI() {
-        response = GCDWebServerDataResponse(statusCode: 200)
-      } else {
-        response = GCDWebServerDataResponse(statusCode: 500)
-      }
+      self.delegate!.startNDI()
+      response = GCDWebServerDataResponse(statusCode: 200)
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
       return response
     }
@@ -321,11 +318,8 @@ class NDIControls: NSObject {
       }
       
       var response: GCDWebServerDataResponse
-      if self.delegate!.stopNDI() {
-        response = GCDWebServerDataResponse(statusCode: 200)
-      } else {
-        response = GCDWebServerDataResponse(statusCode: 500)
-      }
+      self.delegate!.stopNDI()
+      response = GCDWebServerDataResponse(statusCode: 200)
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
       return response
     }
@@ -559,8 +553,8 @@ protocol NDIControlsDelegate {
   func setExposureCompensation(bias: Float) -> Bool
   func hideControls() -> Bool
   func showControls() -> Bool
-  func startNDI() -> Bool
-  func stopNDI() -> Bool
+  func startNDI()
+  func stopNDI()
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool
   func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool
   func getWhiteBalanceTemp() -> Float
