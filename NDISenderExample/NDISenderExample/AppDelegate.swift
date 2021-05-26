@@ -4,8 +4,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        NDIWrapper.initialize()
-        return true
+      NDIWrapper.initialize()
+      return true
     }
 
     // MARK: UISceneSession Lifecycle

@@ -48,6 +48,9 @@ class CameraViewController: UIViewController {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     cameraCapture?.startCapture()
+    
+//     stop screen from going to sleep
+    UIApplication.shared.isIdleTimerDisabled = true
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -59,11 +62,12 @@ class CameraViewController: UIViewController {
     guard let serverUrl = notification.object as? String else { return }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
     
-    let _ = startNDI()
+    startNDI()
   }
   
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
     // Start web server
+    print("Starting web server...")
     NDIControls.instance.startWebServer()
   }
   
