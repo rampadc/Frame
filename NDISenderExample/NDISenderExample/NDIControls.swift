@@ -17,15 +17,7 @@ class NDIControls: NSObject {
   private let webServer = GCDWebServer()
   
   // MARK: Web server functions
-  func startWebServer() {
-    // Get the path to the website directory
-    let websiteTemplate = Bundle.main.path(forResource: "WebServerTemplates", ofType: nil)
-    
-    guard let templateDirectory = websiteTemplate else { return }
-    
-    // Add a default handler to server static files (anything other than HTML files)
-    webServer.addGETHandler(forBasePath: "/", directoryPath: templateDirectory, indexFilename: "index.html", cacheAge: 0, allowRangeRequests: true)
-    
+  func startWebServer() {    
     addWebServerHandlers()
     webServer.delegate = self
     webServer.start(withPort: 80, bonjourName: UIDevice.current.name)
@@ -543,6 +535,7 @@ class NDIControls: NSObject {
 // MARK: GCDWebServerDelegate
 extension NDIControls: GCDWebServerDelegate {
   func webServerDidStart(_ server: GCDWebServer) {
+    print("Web server did start")
     NotificationCenter.default.post(name: .ndiWebServerDidStart, object: server.serverURL?.absoluteString ?? "Unknown")
   }
 }
