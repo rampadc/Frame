@@ -14,6 +14,8 @@ class CameraViewController: UIViewController {
   
   private var isUsingFilters = false
   
+  private var currentOrientation: UIDeviceOrientation = .landscapeLeft
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -23,8 +25,19 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
     
+    NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in
-      guard let image = image else { return }
+      guard var image = image else { return }
+      
+      switch currentOrientation {
+      case .landscapeLeft:
+        image = image.oriented(forExifOrientation: 1)
+      case .landscapeRight:
+        image = image.oriented(forExifOrientation: 3)
+      default:
+        break
+      }
       
       if self.isUsingFilters {
         let filter = CIFilter.colorMonochrome()
@@ -49,8 +62,11 @@ class CameraViewController: UIViewController {
     super.viewDidAppear(animated)
     cameraCapture?.startCapture()
     
-//     stop screen from going to sleep
+    // stop screen from going to sleep
     UIApplication.shared.isIdleTimerDisabled = true
+    
+    // get device orientation nofications
+    UIDevice.current.beginGeneratingDeviceOrientationNotifications()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -83,6 +99,10 @@ class CameraViewController: UIViewController {
     } else {
       stopNDI()
     }
+  }
+  
+  @objc private func deviceDidRotated(_ notification: Notification) {
+    currentOrientation = UIDevice.current.orientation
   }
 }
 
