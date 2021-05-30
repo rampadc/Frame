@@ -53,7 +53,14 @@ class CameraViewController: UIViewController {
       }
       
       if !NDIControls.instance.isSending && Config.shared.bufferPool == nil {
-        NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1920, heightOfFrame: 1080)
+        switch (cameraCapture?.session.sessionPreset) {
+        case AVCaptureSession.Preset.hd1920x1080:
+          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1920, heightOfFrame: 1080)
+        case AVCaptureSession.Preset.hd1280x720:
+          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1280, heightOfFrame: 720)
+        default:
+          break
+        }
       }
     })
   }
@@ -192,5 +199,33 @@ extension CameraViewController: NDIControlsDelegate {
   func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool {
     guard let cc = cameraCapture else { return false }
     return cc.highlightPointOfInterest(pointOfInterest: pointOfInterest)
+  }
+  
+  func setPreset4K() -> Bool {
+    guard let cc = cameraCapture else { return false }
+    if cc.setPreset(preset: .hd4K3840x2160) {
+      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 3840, heightOfFrame: 2160)
+      return true
+    }
+    return false
+    
+  }
+  
+  func setPreset1080() -> Bool {
+    guard let cc = cameraCapture else { return false }
+    if cc.setPreset(preset: .hd1920x1080) {
+      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 1920, heightOfFrame: 1080)
+      return true
+    }
+    return false
+  }
+  
+  func setPreset720() -> Bool {
+    guard let cc = cameraCapture else { return false }
+    if cc.setPreset(preset: .hd1280x720) {
+      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 1280, heightOfFrame: 720)
+      return true
+    }
+    return false
   }
 }

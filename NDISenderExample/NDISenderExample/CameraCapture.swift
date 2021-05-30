@@ -32,7 +32,8 @@ class CameraCapture: NSObject {
   }
   
   private func prepareSession() {
-    session.sessionPreset = .hd1920x1080
+//    session.sessionPreset = .hd1920x1080
+    session.sessionPreset = .hd1280x720
     
     let cameraDiscovery = AVCaptureDevice.DiscoverySession(
       deviceTypes: [
@@ -266,6 +267,15 @@ extension CameraCapture {
       return true
     } catch {
       print("Could not lock device for configuration \(error)")
+      return false
+    }
+  }
+  
+  func setPreset(preset: AVCaptureSession.Preset) -> Bool {
+    if session.canSetSessionPreset(preset) {
+      session.sessionPreset = preset
+      return true
+    } else {
       return false
     }
   }

@@ -31,7 +31,7 @@
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Need the network for NDI stream</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>Required for NDI audio streaming</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -315,6 +315,55 @@ class NDIControls: NSObject {
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
       return response
     }
+    
+    // MARK: - swtich session preset
+    webServer.addHandler(forMethod: "GET", pathRegex: "/preset/1080p", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      var response: GCDWebServerDataResponse
+      if self.delegate!.setPreset1080() {
+        response = GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response = GCDWebServerDataResponse(statusCode: 200)
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/preset/720p", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      var response: GCDWebServerDataResponse
+      if self.delegate!.setPreset720() {
+        response = GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response = GCDWebServerDataResponse(statusCode: 200)
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
+    
+    webServer.addHandler(forMethod: "GET", pathRegex: "/preset/4K", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      if self.delegate == nil {
+        return GCDWebServerDataResponse(statusCode: 501)
+      }
+      
+      var response: GCDWebServerDataResponse
+      if self.delegate!.setPreset4K() {
+        response = GCDWebServerDataResponse(statusCode: 200)
+      } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response = GCDWebServerDataResponse(statusCode: 200)
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
   }
   
   // MARK: NDI Wrapper functions
@@ -530,6 +579,15 @@ class NDIControls: NSObject {
     ndiWrapper = NDIWrapper()
     super.init()
   }
+  
+  func didPresetChanged_resetNdiPixelBuffer(widthOfFrame: Int, heightOfFrame: Int) {
+    if isSending {
+      stop()
+    }
+    
+    preparePixelBufferPool(widthOfFrame: widthOfFrame, heightOfFrame: heightOfFrame)
+    start()
+  }
 }
 
 // MARK: GCDWebServerDelegate
@@ -555,4 +613,7 @@ protocol NDIControlsDelegate {
   func lockGrey() -> Bool
   func getCurrentCamera() -> Camera?
   func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool
+  func setPreset4K() -> Bool
+  func setPreset1080() -> Bool
+  func setPreset720() -> Bool
 }
