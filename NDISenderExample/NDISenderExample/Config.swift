@@ -21,4 +21,6 @@ extension Notification.Name {
   static let ndiWebServerDidStart = Notification.Name("ndiWebServerDidStart")
   static let cameraDiscoveryCompleted = Notification.Name("cameraDiscoveryCompleted")
   static let cameraSetupCompleted = Notification.Name("cameraSetupCompleted")
+  static let microphoneDiscoveryCompleted = Notification.Name("microphoneDiscoveryCompleted")
+  static let microphoneDidSwitch = Notification.Name("microphoneDidSwitch")
 }

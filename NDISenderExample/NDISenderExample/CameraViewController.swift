@@ -11,6 +11,7 @@ class CameraViewController: UIViewController {
   @IBOutlet weak var metalView: MetalView!
   
   private var cameraCapture: CameraCapture?
+  private var audioCapture: AudioCapture?
   
   private var isUsingFilters = false
   
@@ -24,6 +25,8 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onNdiWebSeverDidStart(_:)), name: .ndiWebServerDidStart, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDiscoveryCompleted(_:)), name: .cameraDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDiscoveryCompleted(_:)), name: .microphoneDiscoveryCompleted, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDidSwitch(_:)), name: .microphoneDidSwitch, object: nil)
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
@@ -63,6 +66,10 @@ class CameraViewController: UIViewController {
         }
       }
     })
+    
+    audioCapture = AudioCapture(processingCallback: { buffer, time in
+      // print out VU
+    })
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -96,6 +103,20 @@ class CameraViewController: UIViewController {
   
   @objc private func onCameraSetupCompleted(_ notification: Notification) {
     print("Camera setup completed")
+  }
+  
+  @objc private func onMicrophoneDiscoveryCompleted(_ notification: Notification) {
+    guard let microphones = notification.object as? [AVAudioSessionPortDescription] else {
+      print("Microphones list does not conform to type [AVAudioSessionPortDescription]")
+      return }
+    print(microphones)
+  }
+  
+  @objc private func onMicrophoneDidSwitch(_ notification: Notification) {
+    guard let microphone = notification.object as? AVAudioSessionPortDescription else {
+      print("Microphone does not conform to type AVAudioSessionPortDescription")
+      return }
+    print("Switched to \(microphone.portName)")
   }
   
   @IBAction func onSendButtonTapped(_ sender: UIButton) {
