@@ -14,6 +14,8 @@ class CameraCapture: NSObject {
   private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
   
   private let output = AVCaptureVideoDataOutput()
+  
+  private var isUsingFilters = true
     
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
@@ -34,6 +36,7 @@ class CameraCapture: NSObject {
   private func prepareSession() {
 //    session.sessionPreset = .hd1920x1080
     session.sessionPreset = .hd1280x720
+//    session.sessionPreset = .hd4K3840x2160
     
     let cameraDiscovery = AVCaptureDevice.DiscoverySession(
       deviceTypes: [
@@ -76,10 +79,25 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-    DispatchQueue.main.async {
-      let image = CIImage(cvImageBuffer: imageBuffer)
-      self.processingCallback(image)
+    let image = CIImage(cvImageBuffer: imageBuffer)
+  
+    if self.isUsingFilters {
+      let filter = CIFilter.colorMonochrome()
+      filter.intensity = 1
+      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
+      filter.inputImage = image
+      guard let output = filter.outputImage else { return }
+      
+      DispatchQueue.main.async {
+        self.processingCallback(output)
+      }
+    } else {
+      DispatchQueue.main.async {
+        self.processingCallback(image)
+      }
     }
+    
+    
   }
 }
 
