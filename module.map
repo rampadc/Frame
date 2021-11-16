@@ -1,0 +1,4 @@
+module NDI {
+    header "/Library/NDI SDK for Apple/include/Processing.NDI.Lib.h"
+    export *
+}
