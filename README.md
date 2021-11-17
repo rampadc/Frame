@@ -64,9 +64,9 @@ You'll need a high-speed network connection and an Apple device capable of Metal
 
 ## How to build
 
-1. Get the SDK from the [NDI SDK](https://www.ndi.tv/sdk/) site and install it (using `4.6` as of Feb/2021).
-2. Copy `module.map` into `/Library/NDI SDK for Apple/include`.
-4. Open the top-level `NDISenderExample.xcworkspace` in Xcode, select the `NDISenderExample` schema, and run it. The project expects to find `libndi_ios.a` in `/Library/NDI SDK for Apple/lib/iOS/libndi_ios.a`.
+1. Get the SDK from the [NDI SDK](https://www.ndi.tv/sdk/) site and install it (using `5.0` as of Nov/2021).
+2. Copy `module.map` into `/Library/NDI Advanced SDK for Apple/include`.
+4. Open the top-level `NDISenderExample.xcworkspace` in Xcode, select the `NDISenderExample` schema, and run it. The project expects to find `libndi_advanced_ios.a` in `/Library/NDI Advanced SDK for Apple/lib/iOS/libndi_advanced_ios.a`.
 5. Tap the Send button on the screen to start sending with NDI.
 
 ## Help out
