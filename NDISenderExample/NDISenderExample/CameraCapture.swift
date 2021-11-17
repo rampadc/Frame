@@ -34,8 +34,8 @@ class CameraCapture: NSObject {
   }
   
   private func prepareSession() {
-//    session.sessionPreset = .hd1920x1080
-    session.sessionPreset = .hd1280x720
+    session.sessionPreset = .hd1920x1080
+//    session.sessionPreset = .hd1280x720
 //    session.sessionPreset = .hd4K3840x2160
     
     let cameraDiscovery = AVCaptureDevice.DiscoverySession(
