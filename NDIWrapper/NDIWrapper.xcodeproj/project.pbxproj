@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		924D2C4725D400A7000F8D80 /* libndi_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 924D2C4625D400A5000F8D80 /* libndi_ios.a */; };
+		924D2C4725D400A7000F8D80 /* libndi_advanced_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 924D2C4625D400A5000F8D80 /* libndi_advanced_ios.a */; };
 		AB05455325442F8D00D770A4 /* NDIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AB05455225442F8D00D770A4 /* NDIWrapper.m */; };
 		AB05455425442F8D00D770A4 /* NDIWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB05455125442F8D00D770A4 /* NDIWrapper.h */; };
 /* End PBXBuildFile section */
@@ -26,7 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		924D2C4625D400A5000F8D80 /* libndi_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libndi_ios.a; path = "../../../../../../../Library/NDI SDK for Apple/lib/iOS/libndi_ios.a"; sourceTree = "<group>"; };
+		924D2C4625D400A5000F8D80 /* libndi_advanced_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libndi_advanced_ios.a; path = "../../../../../../../Library/NDI Advanced SDK for Apple/lib/iOS/libndi_advanced_ios.a"; sourceTree = "<group>"; };
 		AB05454E25442F8D00D770A4 /* libNDIWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNDIWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB05455125442F8D00D770A4 /* NDIWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDIWrapper.h; sourceTree = "<group>"; };
 		AB05455225442F8D00D770A4 /* NDIWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NDIWrapper.m; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				924D2C4725D400A7000F8D80 /* libndi_ios.a in Frameworks */,
+				924D2C4725D400A7000F8D80 /* libndi_advanced_ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +86,7 @@
 		AB05455D254431C900D770A4 /* wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				924D2C4625D400A5000F8D80 /* libndi_ios.a */,
+				924D2C4625D400A5000F8D80 /* libndi_advanced_ios.a */,
 				AB05455E254431C900D770A4 /* include */,
 			);
 			path = wrapper;
@@ -296,7 +296,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NDIWrapper/wrapper",
-					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
+					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -315,7 +315,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NDIWrapper/wrapper",
-					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
+					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
