@@ -15,7 +15,7 @@ class CameraCapture: NSObject {
   
   private let output = AVCaptureVideoDataOutput()
   
-  private var isUsingFilters = true
+  private var isUsingFilters = false
     
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
@@ -62,7 +62,7 @@ class CameraCapture: NSObject {
       session.addInput(input)
     }
     
-    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey :  kCVPixelFormatType_32BGRA] as [String : Any]
+    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
     output.alwaysDiscardsLateVideoFrames = true
     output.setSampleBufferDelegate(self, queue: sampleBufferQueue)
     
