@@ -93,4 +93,8 @@
   NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
 }
 
+- (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample {
+  
+}
+
 @end

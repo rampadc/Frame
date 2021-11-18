@@ -6,7 +6,6 @@
 + (void)initialize;
 - (void)start:(NSString *)name;
 - (void)stop;
-- (void)send:(CMSampleBufferRef)sampleBuffer;
 - (void)sendPixelBuffer:(CVPixelBufferRef)pixelBuffer;
-
+- (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample;
 @end

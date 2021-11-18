@@ -377,12 +377,6 @@ class NDIControls: NSObject {
     ndiWrapper.stop()
   }
   
-  func send(sampleBuffer: CMSampleBuffer) {
-    if isSending {
-      ndiWrapper.send(sampleBuffer)
-    }
-  }
-  
   func send(image: CIImage) {
     if isSending {
       let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
@@ -390,6 +384,16 @@ class NDIControls: NSObject {
         return
       }
       ndiWrapper.send(pixelBuffer!)
+    }
+  }
+  
+  func send(image: CIImage, withAudio audioBuffer: CMSampleBuffer) {
+    if isSending {
+      let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
+      if pixelBuffer == nil {
+        return
+      }
+      ndiWrapper.send(pixelBuffer!, withAudio: audioBuffer)
     }
   }
   
