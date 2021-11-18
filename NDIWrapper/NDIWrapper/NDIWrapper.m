@@ -1,5 +1,5 @@
 #import "NDIWrapper.h"
-#import "Processing.NDI.Lib.h"
+#import "Processing.NDI.Advanced.h"
 
 @implementation NDIWrapper {
   NDIlib_send_instance_t my_ndi_send;
@@ -13,12 +13,14 @@
   if (my_ndi_send) {
     my_ndi_send = nil;
   }
+  
   NDIlib_send_create_t options;
   options.p_ndi_name = [name cStringUsingEncoding: NSUTF8StringEncoding];
   options.p_groups = NULL;
   options.clock_video = true;
   options.clock_audio = false;
   my_ndi_send = NDIlib_send_create(&options);
+  
   if (!my_ndi_send) {
     NSLog(@"ERROR: Failed to create sender");
   } else {
@@ -53,7 +55,7 @@
   video_frame.FourCC = NDIlib_FourCC_type_BGRA;
   video_frame.frame_format_type = NDIlib_frame_format_type_progressive;
   video_frame.picture_aspect_ratio = aspectRatio;
-  video_frame.line_stride_in_bytes = 0;
+  video_frame.line_stride_in_bytes = width * 2;
   video_frame.p_metadata = NULL;
   
   CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
@@ -90,4 +92,9 @@
   
   NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
 }
+
+- (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample {
+  
+}
+
 @end

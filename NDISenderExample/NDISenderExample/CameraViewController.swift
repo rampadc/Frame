@@ -11,10 +11,7 @@ class CameraViewController: UIViewController {
   @IBOutlet weak var metalView: MetalView!
   
   private var cameraCapture: CameraCapture?
-  private var audioCapture: AudioCapture?
-  
-  private var isUsingFilters = false
-  
+
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   
   override func viewDidLoad() {
@@ -41,19 +38,9 @@ class CameraViewController: UIViewController {
       default:
         break
       }
-      
-      if self.isUsingFilters {
-        let filter = CIFilter.colorMonochrome()
-        filter.intensity = 1
-        filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
-        filter.inputImage = image
-        guard let output = filter.outputImage else { return }
-        self.metalView.image = output
-        NDIControls.instance.send(image: output)
-      } else {
-        self.metalView.image = image
-        NDIControls.instance.send(image: image)
-      }
+
+      self.metalView.image = image
+      NDIControls.instance.send(image: image)
       
       if !NDIControls.instance.isSending && Config.shared.bufferPool == nil {
         switch (cameraCapture?.session.sessionPreset) {
@@ -92,7 +79,7 @@ class CameraViewController: UIViewController {
     guard let serverUrl = notification.object as? String else { return }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
     
-    startNDI()
+//    startNDI()
   }
   
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
