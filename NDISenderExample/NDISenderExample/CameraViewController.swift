@@ -25,6 +25,7 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraSetupCompleted(_:)), name: .cameraSetupCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDiscoveryCompleted(_:)), name: .microphoneDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDidSwitch(_:)), name: .microphoneDidSwitch, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onAudioOutputsDiscoveryCompleted(_:)), name: .audioOutputsDiscoveryCompleted, object: nil)
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
@@ -97,7 +98,11 @@ class CameraViewController: UIViewController {
     guard let microphones = notification.object as? [AVAudioSessionPortDescription] else {
       print("Microphones list does not conform to type [AVAudioSessionPortDescription]")
       return }
-    print(microphones)
+    print("\nMicrophones found:")
+    for mic in microphones {
+      print(mic)
+    }
+    print("\n")
   }
   
   @objc private func onMicrophoneDidSwitch(_ notification: Notification) {
@@ -105,6 +110,17 @@ class CameraViewController: UIViewController {
       print("Microphone does not conform to type AVAudioSessionPortDescription")
       return }
     print("Switched to \(microphone.portName)")
+  }
+  
+  @objc private func onAudioOutputsDiscoveryCompleted(_ notification: Notification) {
+    guard let audioOutputs = notification.object as? [AVAudioSessionPortDescription] else {
+      print("Audio outputs list does not conform to type [AVAudioSessionPortDescription]")
+      return }
+    print("\nAudio outputs found:")
+    for output in audioOutputs {
+      print(output)
+    }
+    print("\n")
   }
   
   @IBAction func onSendButtonTapped(_ sender: UIButton) {

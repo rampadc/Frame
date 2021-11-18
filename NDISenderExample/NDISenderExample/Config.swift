@@ -13,6 +13,8 @@ class Config {
   var ciContext: CIContext?
   var cameras: [AVCaptureDevice]?
   var bufferPool: CVPixelBufferPool?
+  var microphones: [AVAudioSessionPortDescription]?
+  var audioOutputs: [AVAudioSessionPortDescription]?
   
   private init() {}
 }
@@ -23,4 +25,5 @@ extension Notification.Name {
   static let cameraSetupCompleted = Notification.Name("cameraSetupCompleted")
   static let microphoneDiscoveryCompleted = Notification.Name("microphoneDiscoveryCompleted")
   static let microphoneDidSwitch = Notification.Name("microphoneDidSwitch")
+  static let audioOutputsDiscoveryCompleted = Notification.Name("audioOutputsDiscoveryCompleted")
 }

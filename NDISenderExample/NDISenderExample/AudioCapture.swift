@@ -7,6 +7,20 @@
 
 import AVFAudio
 
+class AudioPort: Codable {
+  var type = ""
+  var name = ""
+  var uid = ""
+  var selectedDataSource = ""
+  
+  init(descriptor: AVAudioSessionPortDescription) {
+    self.type = descriptor.portType.rawValue
+    self.name = descriptor.portName
+    self.uid = descriptor.uid
+    self.selectedDataSource = descriptor.selectedDataSource?.dataSourceName ?? ""
+  }
+}
+
 class AudioCapture: NSObject {
   typealias AudioBufferProcessingCallback = (AVAudioPCMBuffer, AVAudioTime) -> ()
   
@@ -14,7 +28,7 @@ class AudioCapture: NSObject {
   private var audioEngine: AVAudioEngine?
   private var mic: AVAudioInputNode?
   private var micTapped = false
-  
+  private var connectedAudioOutput: AVAudioSessionPortDescription?
   let processingCallback: AudioBufferProcessingCallback
   
   init(processingCallback: @escaping AudioBufferProcessingCallback) {
@@ -27,18 +41,19 @@ class AudioCapture: NSObject {
   private func prepareSession() {
     session.requestRecordPermission { granted in
       if granted {
-        print("Granted")
+        print("Record permission is granted.")
         // The user granted access
         do {
-          try self.session.setCategory(.record, mode: .measurement, policy: .default, options: .allowBluetooth)
+          //          try self.session.setCategory(.record, mode: .measurement, policy: .default, options: .allowBluetooth)
+          try self.session.setCategory(.playAndRecord, mode: .videoChat, policy: .default, options: .allowBluetooth)
           try self.session.setActive(true)
           
           self.audioEngine = AVAudioEngine()
           self.mic = self.audioEngine!.inputNode
           
-          guard let inputs = self.session.availableInputs else { fatalError() }
-          NotificationCenter.default.post(name: .microphoneDiscoveryCompleted, object: inputs)
-          
+          self.getMicrophones()
+          self.getAudioOutputs()
+
           let defaultInput = self.session.currentRoute.inputs.first
           self.switchMic(to: defaultInput!)
           let _ = self.tapMic()
@@ -46,14 +61,27 @@ class AudioCapture: NSObject {
           print(error)
         }
         
+        // Observe route changes (headphones, microphones connected)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onRouteChanged(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
+        
         
       } else {
-        print("Not Granted")
-        // Present message to user indicating that recording
-        // cannot be performed until they change their
-        // preferences in Settings > Privacy > Microphone
+        print("Record permission is granted.")
+        // TODO: Present message to user indicating that recording cannot be performed until they change their preferences in Settings > Privacy > Microphone
       }
     }
+  }
+  
+  private func getMicrophones() {
+    guard let inputs = self.session.availableInputs else { fatalError() }
+    Config.shared.microphones = inputs
+    NotificationCenter.default.post(name: .microphoneDiscoveryCompleted, object: inputs)
+  }
+  
+  private func getAudioOutputs() {
+    let outputs = self.session.currentRoute.outputs
+    Config.shared.audioOutputs = outputs
+    NotificationCenter.default.post(name: .audioOutputsDiscoveryCompleted, object: outputs)
   }
   
   private func switchMic(to mic: AVAudioSessionPortDescription) {
@@ -113,5 +141,34 @@ class AudioCapture: NSObject {
     }
     
     ae.stop()
+  }
+  
+  @objc func onRouteChanged(_ notification: Notification) {
+    guard let userInfo = notification.userInfo,
+          let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+          let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
+            return
+          }
+    switch reason {
+    case .newDeviceAvailable: // New device found.
+      print("New devices found")
+    case .oldDeviceUnavailable: // Old device removed.
+      print("Old devices removed")
+//      if let previousRoute =
+//          userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
+//        // switch to new inputs/outputs
+//      }
+    case .wakeFromSleep:
+      print("Awaken from sleep")
+    default: ()
+    }
+    
+    self.getMicrophones()
+    self.getAudioOutputs()
+  }
+  
+  func hasHeadphones(in routeDescription: AVAudioSessionRouteDescription) -> Bool {
+      // Filter the outputs to only those with a port type of headphones.
+      return !routeDescription.outputs.filter({$0.portType == .headphones}).isEmpty
   }
 }
