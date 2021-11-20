@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,7 +11,6 @@
 		924C19C825E2835800B73675 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C19C725E2835800B73675 /* Camera.swift */; };
 		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
 		9277E4F02748D8BE00D0F48A /* AudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */; };
-		9277E4F32748D94B00D0F48A /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9277E4F22748D94B00D0F48A /* AudioKit */; };
 		927E37C625E1E47D00916809 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927E37C525E1E47D00916809 /* Config.swift */; };
 		9288397125DFC4E80032692A /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288397025DFC4E80032692A /* CameraCapture.swift */; };
 		AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */; };
@@ -57,7 +56,6 @@
 			files = (
 				AB054599254448CE00D770A4 /* libc++.tbd in Frameworks */,
 				AB054596254448B700D770A4 /* libresolv.9.tbd in Frameworks */,
-				9277E4F32748D94B00D0F48A /* AudioKit in Frameworks */,
 				AB05457C2544386600D770A4 /* libNDIWrapper.a in Frameworks */,
 				D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */,
 			);
@@ -153,7 +151,6 @@
 			);
 			name = NDISenderExample;
 			packageProductDependencies = (
-				9277E4F22748D94B00D0F48A /* AudioKit */,
 			);
 			productName = NDISenderExample;
 			productReference = AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */;
@@ -184,7 +181,6 @@
 			);
 			mainGroup = AB0544A22541D0BA00D770A4;
 			packageReferences = (
-				9277E4F12748D94B00D0F48A /* XCRemoteSwiftPackageReference "AudioKit" */,
 			);
 			productRefGroup = AB0544AC2541D0BA00D770A4 /* Products */;
 			projectDirPath = "";
@@ -486,25 +482,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		9277E4F12748D94B00D0F48A /* XCRemoteSwiftPackageReference "AudioKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AudioKit/AudioKit";
-			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 5.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		9277E4F22748D94B00D0F48A /* AudioKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9277E4F12748D94B00D0F48A /* XCRemoteSwiftPackageReference "AudioKit" */;
-			productName = AudioKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AB0544A32541D0BA00D770A4 /* Project object */;
 }

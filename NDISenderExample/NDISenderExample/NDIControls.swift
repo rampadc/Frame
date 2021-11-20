@@ -24,6 +24,49 @@ class NDIControls: NSObject {
   }
   
   func addWebServerHandlers() {
+    
+    // MARK: - Get list of microphones
+    webServer.addHandler(forMethod: "GET", path: "/audio/inputs", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+      guard let mics = Config.shared.microphones else { return GCDWebServerErrorResponse(statusCode: 500) }
+      
+      var audioPorts: [AudioPort] = []
+      for mic in mics {
+        audioPorts.append(AudioPort(descriptor: mic))
+      }
+      
+      var response: GCDWebServerDataResponse  = GCDWebServerDataResponse(statusCode: 500)
+      do {
+        let data = try JSONEncoder().encode(audioPorts)
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
+    
+    // MARK: - Get list of audio outputs
+    webServer.addHandler(forMethod: "GET", path: "/audio/outputs", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+      guard let outs = Config.shared.audioOutputs else { return GCDWebServerErrorResponse(statusCode: 500) }
+      
+      var audioPorts: [AudioPort] = []
+      for o in outs {
+        audioPorts.append(AudioPort(descriptor: o))
+      }
+      
+      var response: GCDWebServerDataResponse  = GCDWebServerDataResponse(statusCode: 500)
+      do {
+        let data = try JSONEncoder().encode(audioPorts)
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
+    
     // MARK: - Get NDI status
     webServer.addHandler(forMethod: "GET", path: "/ndi/status", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       

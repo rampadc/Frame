@@ -1,22 +1,10 @@
 import UIKit
-import AudioKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
       NDIWrapper.initialize()
-      
-      do {
-        Settings.bufferLength = .short
-        try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(Settings.bufferLength.duration)
-        try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.defaultToSpeaker, .mixWithOthers, .allowBluetooth, .allowBluetoothA2DP])
-        try AVAudioSession.sharedInstance().setActive(true)
-        print("AVAudioSession setup completed")
-      } catch {
-        print(error)
-      }
-      
       return true
     }
 
