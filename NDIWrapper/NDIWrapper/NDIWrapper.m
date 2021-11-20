@@ -35,42 +35,29 @@
   }
 }
 
-- (void)send:(CMSampleBufferRef)sampleBuffer {
-  if (!my_ndi_send) {
-    NSLog(@"ERROR: NDI instance is nil");
-    return;
-  }
-  
-  CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-  
-  int width = (int) CVPixelBufferGetWidth(imageBuffer);
-  int height = (int) CVPixelBufferGetHeight(imageBuffer);
-  float aspectRatio = (float) width / (float) height;
-  
-  NDIlib_video_frame_v2_t video_frame;
-  video_frame.frame_rate_N = 30000;
-  video_frame.frame_rate_D = 1001;
-  video_frame.xres = width;
-  video_frame.yres = height;
-  video_frame.FourCC = NDIlib_FourCC_type_BGRA;
-  video_frame.frame_format_type = NDIlib_frame_format_type_progressive;
-  video_frame.picture_aspect_ratio = aspectRatio;
-  video_frame.line_stride_in_bytes = width * 2;
-  video_frame.p_metadata = NULL;
-  
-  CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-  video_frame.p_data = CVPixelBufferGetBaseAddress(imageBuffer);
-  CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-  
-  NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
-}
-
 - (void)sendPixelBuffer:(CVPixelBufferRef)pixelBuffer {
   if (!my_ndi_send) {
     NSLog(@"ERROR: NDI instance is nil");
     return;
   }
-    
+  
+  // Create a video frame
+  NDIlib_FourCC_type_e fourCC;
+  OSType imageFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
+  switch (imageFormat) {
+    case kCVPixelFormatType_32BGRA:
+      fourCC = NDIlib_FourCC_type_BGRA;
+      break;
+    case kCVPixelFormatType_32RGBA:
+      fourCC = NDIlib_FourCC_type_RGBA;
+      break;
+    case kCVPixelFormatType_422YpCbCr8:
+      fourCC = NDIlib_FourCC_type_UYVY;
+      break;
+    default:
+      fourCC = NDIlib_FourCC_type_BGRA;
+      break;
+  }
   int width = (int) CVPixelBufferGetWidth(pixelBuffer);
   int height = (int) CVPixelBufferGetHeight(pixelBuffer);
   float aspectRatio = (float) width / (float) height;
@@ -80,11 +67,10 @@
   video_frame.frame_rate_D = 1001;
   video_frame.xres = width;
   video_frame.yres = height;
-  video_frame.FourCC = NDIlib_FourCC_type_BGRA;
+  video_frame.FourCC = fourCC;
   video_frame.frame_format_type = NDIlib_frame_format_type_progressive;
   video_frame.picture_aspect_ratio = aspectRatio;
-  video_frame.line_stride_in_bytes = 0;
-//  video_frame.p_metadata = NULL;
+  video_frame.line_stride_in_bytes = (int)CVPixelBufferGetBytesPerRow(pixelBuffer);
   
   CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
   video_frame.p_data = CVPixelBufferGetBaseAddress(pixelBuffer);
@@ -92,7 +78,6 @@
   
   NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
 }
-
 - (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample {
   
 }
