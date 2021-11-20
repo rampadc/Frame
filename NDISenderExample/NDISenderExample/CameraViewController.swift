@@ -11,7 +11,6 @@ class CameraViewController: UIViewController {
   @IBOutlet weak var metalView: MetalView!
   
   private var cameraCapture: CameraCapture?
-  private var audioCapture: AudioCapture?
 
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   
@@ -54,10 +53,6 @@ class CameraViewController: UIViewController {
           break
         }
       }
-    })
-    
-    audioCapture = AudioCapture(processingCallback: { buffer, time in
-      // print out VU
     })
   }
   
