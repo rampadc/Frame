@@ -70,8 +70,15 @@ class AudioCapture: NSObject {
           self.getMicrophones()
           self.getAudioOutputs()
 
-          let defaultInput = self.session.currentRoute.inputs.first
-          self.switchMic(to: defaultInput!)
+          // Assign current input
+          guard let defaultInput = self.session.currentRoute.inputs.first else { fatalError("No microphones available") }
+          Config.shared.currentMicrophone = defaultInput
+          self.switchMic(to: defaultInput)
+          
+          // Get current output
+          Config.shared.currentOutput = AVAudioSession.sharedInstance().currentRoute.outputs.first
+          
+          // Start audio processing
           let _ = self.tapMic()
         } catch {
           print(error)
@@ -87,6 +94,26 @@ class AudioCapture: NSObject {
         // TODO: Present message to user indicating that recording cannot be performed until they change their preferences in Settings > Privacy > Microphone
       }
     }
+  }
+  
+  func switchMic(toUid uid: String) -> Bool {
+    guard let inputs = self.session.availableInputs else { return false }
+    for mic in inputs {
+      if mic.uid == uid {
+        do {
+          try self.session.setPreferredInput(mic)
+          NotificationCenter.default.post(name: .microphoneDidSwitch, object: mic)
+          Config.shared.currentMicrophone = mic
+          return true
+        } catch {
+          print("Cannot set preferred input")
+          print(error)
+          return false
+        }
+      }
+    }
+    
+    return false
   }
   
   private func getMicrophones() {
@@ -158,11 +185,14 @@ class AudioCapture: NSObject {
 
       switch self.stereoMode {
       case .left:
-        print(self.leftAmplitude)
+        Config.shared.amplitude = self.leftAmplitude
+//        print(self.leftAmplitude)
       case .right:
-        print(self.rightAmplitude)
+        Config.shared.amplitude = self.rightAmplitude
+//        print(self.rightAmplitude)
       case .center:
-        print(self.amplitude)
+        Config.shared.amplitude = self.amplitude
+//        print(self.amplitude)
       }
       
       self.processingCallback(buffer, audioTime)

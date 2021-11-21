@@ -255,4 +255,9 @@ extension CameraViewController: NDIControlsDelegate {
     }
     return false
   }
+  
+  func switchMicrophone(uniqueID: String) -> Bool {
+    guard let ac = audioCapture else { return false }
+    return ac.switchMic(toUid: uniqueID)
+  }
 }

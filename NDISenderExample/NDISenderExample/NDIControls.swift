@@ -24,16 +24,75 @@ class NDIControls: NSObject {
   }
   
   func addWebServerHandlers() {
+    // MARK: - Get current audio output
+    webServer.addHandler(forMethod: "GET", path: "/audio/outputs/current", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+      guard let out = Config.shared.currentOutput else { return GCDWebServerErrorResponse(statusCode: 500) }
+
+      let audioPort = AudioPort(descriptor: out)
+
+      var response: GCDWebServerDataResponse  = GCDWebServerDataResponse(statusCode: 500)
+      do {
+        let data = try JSONEncoder().encode(audioPort)
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
+    
+    // MARK: - Switch current audio input
+    webServer.addHandler(forMethod: "POST", path: "/audio/inputs/current", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
+      // GCDWebServerURLEncodedFormRequest expects the body data to be contained in a x-www-form-urlencoded
+      let r = request as! GCDWebServerURLEncodedFormRequest
+      guard let inputUid = r.arguments["uid"] else { return GCDWebServerDataResponse(statusCode: 400) }
+
+      if delegate == nil {
+        print("Delegate nil")
+        return GCDWebServerDataResponse(statusCode: 501)
+      } else {
+        let didSwitch = self.delegate!.switchMicrophone(uniqueID: inputUid)
+
+        var response: GCDWebServerDataResponse
+        if didSwitch {
+          response = GCDWebServerDataResponse(statusCode: 201)
+       } else {
+        response = GCDWebServerDataResponse(statusCode: 500)
+        }
+        response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+        return response
+      }
+    }
+    
+    // MARK: - Get current microphone
+    webServer.addHandler(forMethod: "GET", path: "/audio/inputs/current", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+      guard let mic = Config.shared.currentMicrophone else { return GCDWebServerErrorResponse(statusCode: 500) }
+
+      let audioPort = AudioPort(descriptor: mic)
+
+      var response: GCDWebServerDataResponse  = GCDWebServerDataResponse(statusCode: 500)
+      do {
+        let data = try JSONEncoder().encode(audioPort)
+        response = GCDWebServerDataResponse(data: data, contentType: "application/json")
+      } catch {
+        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        response = GCDWebServerDataResponse(statusCode: 500)
+      }
+      response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
+      return response
+    }
     
     // MARK: - Get list of microphones
     webServer.addHandler(forMethod: "GET", path: "/audio/inputs", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-      guard let mics = Config.shared.microphones else { return GCDWebServerErrorResponse(statusCode: 500) }
       
+      guard let mics = Config.shared.microphones else { return GCDWebServerErrorResponse(statusCode: 500) }
+
       var audioPorts: [AudioPort] = []
       for mic in mics {
         audioPorts.append(AudioPort(descriptor: mic))
       }
-      
+
       var response: GCDWebServerDataResponse  = GCDWebServerDataResponse(statusCode: 500)
       do {
         let data = try JSONEncoder().encode(audioPorts)
@@ -659,4 +718,5 @@ protocol NDIControlsDelegate {
   func setPreset4K() -> Bool
   func setPreset1080() -> Bool
   func setPreset720() -> Bool
+  func switchMicrophone(uniqueID: String) -> Bool
 }

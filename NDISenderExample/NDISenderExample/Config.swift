@@ -15,6 +15,9 @@ class Config {
   var bufferPool: CVPixelBufferPool?
   var microphones: [AVAudioSessionPortDescription]?
   var audioOutputs: [AVAudioSessionPortDescription]?
+  var currentMicrophone: AVAudioSessionPortDescription?
+  var currentOutput: AVAudioSessionPortDescription?
+  var amplitude: Float?
   
   private init() {}
 }
