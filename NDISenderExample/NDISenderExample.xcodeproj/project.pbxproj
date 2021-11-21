@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		922A5844274A2CE4001BFADF /* ColourCube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922A5843274A2CE4001BFADF /* ColourCube.swift */; };
 		922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F5FD625D908DF00AE7266 /* MetalView.swift */; };
 		924C19C825E2835800B73675 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C19C725E2835800B73675 /* Camera.swift */; };
 		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
+		922A5843274A2CE4001BFADF /* ColourCube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourCube.swift; sourceTree = "<group>"; };
 		922F5FD625D908DF00AE7266 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		924C19C725E2835800B73675 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		924D2CC925D41C4B000F8D80 /* NDIControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControls.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				927E37C525E1E47D00916809 /* Config.swift */,
 				924C19C725E2835800B73675 /* Camera.swift */,
 				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
+				922A5843274A2CE4001BFADF /* ColourCube.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922A5844274A2CE4001BFADF /* ColourCube.swift in Sources */,
 				AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */,
 				9277E4F02748D8BE00D0F48A /* AudioCapture.swift in Sources */,
 				9288397125DFC4E80032692A /* CameraCapture.swift in Sources */,

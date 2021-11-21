@@ -15,7 +15,7 @@ class CameraCapture: NSObject {
   
   private let output = AVCaptureVideoDataOutput()
   
-  private var isUsingFilters = false
+  private var isUsingFilters = true
     
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
@@ -82,11 +82,9 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     let image = CIImage(cvImageBuffer: imageBuffer)
   
     if self.isUsingFilters {
-      let filter = CIFilter.colorMonochrome()
-      filter.intensity = 1
-      filter.color = CIColor(red: 0.5, green: 0.5, blue: 0.5)
-      filter.inputImage = image
-      guard let output = filter.outputImage else { return }
+      let chromaCIFilter = self.chromaKeyFilter(fromHue: 0.2, toHue: 0.5)
+      chromaCIFilter?.setValue(image, forKey: kCIInputImageKey)
+      let output = chromaCIFilter?.outputImage
       
       DispatchQueue.main.async {
         self.processingCallback(output)
