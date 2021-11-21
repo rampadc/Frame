@@ -430,13 +430,9 @@ class NDIControls: NSObject {
     }
   }
   
-  func send(image: CIImage, withAudio audioBuffer: CMSampleBuffer) {
+  func send(audioBuffer buffer: AVAudioPCMBuffer) {
     if isSending {
-      let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
-      if pixelBuffer == nil {
-        return
-      }
-      ndiWrapper.send(pixelBuffer!, withAudio: audioBuffer)
+      ndiWrapper.sendAudioBuffer(buffer)
     }
   }
   

@@ -1,6 +1,5 @@
 import AVFAudio
 import Accelerate
-import AudioKit
 
 class AudioPort: Codable {
   var type = ""

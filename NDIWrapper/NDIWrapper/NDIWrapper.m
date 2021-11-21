@@ -78,8 +78,21 @@
   
   NDIlib_send_send_video_async_v2(my_ndi_send, &video_frame);
 }
-- (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample {
+
+- (void)sendAudioBuffer:(AVAudioPCMBuffer *)audioSample {
+  if (!my_ndi_send) {
+    NSLog(@"ERROR: NDI instance is nil");
+    return;
+  }
   
+  NDIlib_audio_frame_v2_t audio_frame;
+  audio_frame.sample_rate = audioSample.format.sampleRate;
+  audio_frame.no_channels = audioSample.format.channelCount;
+  audio_frame.no_samples = audioSample.frameLength;
+  audio_frame.channel_stride_in_bytes = (int)audioSample.stride;
+  audio_frame.p_data = audioSample.floatChannelData[0];
+  
+  NDIlib_send_send_audio_v2(my_ndi_send, &audio_frame);
 }
 
 @end

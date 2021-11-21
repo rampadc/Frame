@@ -57,7 +57,7 @@ class CameraViewController: UIViewController {
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
-      // print out VU
+      NDIControls.instance.send(audioBuffer: buffer)
     })
 
     

@@ -7,5 +7,5 @@
 - (void)start:(NSString *)name;
 - (void)stop;
 - (void)sendPixelBuffer:(CVPixelBufferRef)pixelBuffer;
-- (void)send:(CVPixelBufferRef)videoSample withAudio:(CMSampleBufferRef)audioSample;
+- (void)sendAudioBuffer:(AVAudioPCMBuffer *)audioSample;
 @end
