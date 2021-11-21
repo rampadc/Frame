@@ -19,6 +19,11 @@ Minimum implementation of the NDI SDK that works on the iPhone using Swift, with
 - Start NDI `GET /ndi/start`
 - Stop NDI `GET /ndi/stop` 
 - Change session preset between `1080p`, `720p` and `4K` with `GET /preset/1080p`, `GET /preset/720p` and `GET /preset/4K` respectively
+- Get current microphone `GET /audio/inputs/current`
+- Change current microphone `POST /audio/inputs/current`
+- Get all available microphones `GET /audio/inputs`
+- Get all available audio outputs `GET /audio/outputs`
+- Get current audio output `GET /audio/outputs/current`
 
 POST requests require a body of type `application/x-www-form-urlencoded`. As of Mar/2021, I haven't made a Swagger file for all the endpoints yet. To see what parameters you need to input, have a look at `NDIControls.swift`. For example, to change the white balance temperature and tint, you will need `temperature` and `tint` keys in the POST body, as indicated by the code in `NDIControls.swift` as below:
 
