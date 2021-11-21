@@ -73,7 +73,6 @@ extension NDIControls {
     self.webServer.addHandler(forMethod: "GET", path: "/audio/inputs", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
       
       guard let mics = Config.shared.microphones else { return GCDWebServerErrorResponse(statusCode: 500) }
-      print(mics)
 
       var audioPorts: [AudioPort] = []
       for mic in mics {
