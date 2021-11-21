@@ -91,6 +91,7 @@
   audio_frame.no_samples = audioSample.frameLength;
   audio_frame.channel_stride_in_bytes = (int)audioSample.stride;
   audio_frame.p_data = audioSample.floatChannelData[0];
+  audio_frame.p_metadata = NULL;
   
   NDIlib_send_send_audio_v2(my_ndi_send, &audio_frame);
 }
