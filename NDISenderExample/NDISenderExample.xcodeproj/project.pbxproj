@@ -13,6 +13,10 @@
 		9277E4F02748D8BE00D0F48A /* AudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */; };
 		927E37C625E1E47D00916809 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927E37C525E1E47D00916809 /* Config.swift */; };
 		9288397125DFC4E80032692A /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288397025DFC4E80032692A /* CameraCapture.swift */; };
+		92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB97274A20E600B59B45 /* NDIControls+Audio.swift */; };
+		92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */; };
+		92E0EB9C274A22CB00B59B45 /* NDIControls+NDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */; };
+		92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB9D274A237D00B59B45 /* NDIControls+UI.swift */; };
 		AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */; };
 		AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */; };
 		AB0544B32541D0BA00D770A4 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0544B22541D0BA00D770A4 /* CameraViewController.swift */; };
@@ -33,6 +37,10 @@
 		9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCapture.swift; sourceTree = "<group>"; };
 		927E37C525E1E47D00916809 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		9288397025DFC4E80032692A /* CameraCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCapture.swift; sourceTree = "<group>"; };
+		92E0EB97274A20E600B59B45 /* NDIControls+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Audio.swift"; sourceTree = "<group>"; };
+		92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Camera.swift"; sourceTree = "<group>"; };
+		92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+NDI.swift"; sourceTree = "<group>"; };
+		92E0EB9D274A237D00B59B45 /* NDIControls+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+UI.swift"; sourceTree = "<group>"; };
 		997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.debug.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.debug.xcconfig"; sourceTree = "<group>"; };
 		AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NDISenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +89,18 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		92E0EB9F274A23C500B59B45 /* NDIControls */ = {
+			isa = PBXGroup;
+			children = (
+				924D2CC925D41C4B000F8D80 /* NDIControls.swift */,
+				92E0EB97274A20E600B59B45 /* NDIControls+Audio.swift */,
+				92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */,
+				92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */,
+				92E0EB9D274A237D00B59B45 /* NDIControls+UI.swift */,
+			);
+			path = NDIControls;
+			sourceTree = "<group>";
+		};
 		AB0544A22541D0BA00D770A4 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +122,7 @@
 		AB0544AD2541D0BA00D770A4 /* NDISenderExample */ = {
 			isa = PBXGroup;
 			children = (
+				92E0EB9F274A23C500B59B45 /* NDIControls */,
 				9288396F25DFC3470032692A /* Shaders */,
 				AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */,
 				AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */,
@@ -111,7 +132,6 @@
 				AB0544B92541D0BB00D770A4 /* LaunchScreen.storyboard */,
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
 				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
-				924D2CC925D41C4B000F8D80 /* NDIControls.swift */,
 				922F5FD625D908DF00AE7266 /* MetalView.swift */,
 				9288397025DFC4E80032692A /* CameraCapture.swift */,
 				927E37C525E1E47D00916809 /* Config.swift */,
@@ -256,10 +276,14 @@
 				9288397125DFC4E80032692A /* CameraCapture.swift in Sources */,
 				AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */,
 				927E37C625E1E47D00916809 /* Config.swift in Sources */,
+				92E0EB9C274A22CB00B59B45 /* NDIControls+NDI.swift in Sources */,
 				922F5FD725D908DF00AE7266 /* MetalView.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
+				92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */,
+				92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */,
 				924C19C825E2835800B73675 /* Camera.swift in Sources */,
+				92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
