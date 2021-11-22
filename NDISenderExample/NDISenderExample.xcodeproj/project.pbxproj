@@ -14,6 +14,7 @@
 		927E37C625E1E47D00916809 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927E37C525E1E47D00916809 /* Config.swift */; };
 		9288397125DFC4E80032692A /* CameraCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288397025DFC4E80032692A /* CameraCapture.swift */; };
 		92972EC9274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */; };
+		92972ECC274BA76A00CEEAE6 /* IMG_2021.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 92972ECB274BA76A00CEEAE6 /* IMG_2021.jpg */; };
 		92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB97274A20E600B59B45 /* NDIControls+Audio.swift */; };
 		92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */; };
 		92E0EB9C274A22CB00B59B45 /* NDIControls+NDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */; };
@@ -38,6 +39,7 @@
 		927E37C525E1E47D00916809 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		9288397025DFC4E80032692A /* CameraCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCapture.swift; sourceTree = "<group>"; };
 		92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPoolBackedImageRenderer.swift; sourceTree = "<group>"; };
+		92972ECB274BA76A00CEEAE6 /* IMG_2021.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_2021.jpg; sourceTree = "<group>"; };
 		92E0EB97274A20E600B59B45 /* NDIControls+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Audio.swift"; sourceTree = "<group>"; };
 		92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Camera.swift"; sourceTree = "<group>"; };
 		92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+NDI.swift"; sourceTree = "<group>"; };
@@ -91,6 +93,14 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		92972ECA274BA48200CEEAE6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				92972ECB274BA76A00CEEAE6 /* IMG_2021.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		92E0EB9F274A23C500B59B45 /* NDIControls */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +134,7 @@
 		AB0544AD2541D0BA00D770A4 /* NDISenderExample */ = {
 			isa = PBXGroup;
 			children = (
+				92972ECA274BA48200CEEAE6 /* Resources */,
 				92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */,
 				92E0EB9F274A23C500B59B45 /* NDIControls */,
 				9288396F25DFC3470032692A /* Shaders */,
@@ -220,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92972ECC274BA76A00CEEAE6 /* IMG_2021.jpg in Resources */,
 				AB0544BB2541D0BB00D770A4 /* LaunchScreen.storyboard in Resources */,
 				AB0544B82541D0BB00D770A4 /* Assets.xcassets in Resources */,
 				AB0544B62541D0BA00D770A4 /* Main.storyboard in Resources */,

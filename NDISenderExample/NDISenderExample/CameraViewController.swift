@@ -42,17 +42,28 @@ class CameraViewController: UIViewController {
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
+    // Filter example: Chroma key background image
+    let backgroundImage = MTIImage(
+      ciImage: CIImage(contentsOf: Bundle.main.url(forResource: "IMG_2021", withExtension: "jpg")!)!,
+      isOpaque: true)
+    let filter = MTIChromaKeyBlendFilter()
+    filter.inputBackgroundImage = backgroundImage
+    
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (sampleBuffer: CMSampleBuffer) in
       guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return
       }
       
+      // Chroma key example
       let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
-      DispatchQueue.main.async {
-        self.metalView.image = inputImage
+      filter.inputImage = inputImage
+      if let outputImage = filter.outputImage {
+        DispatchQueue.main.async {
+          self.metalView.image = outputImage
+        }
+        
+        NDIControls.instance.send(image: outputImage)
       }
-      let outputImage = inputImage
-      NDIControls.instance.send(image: outputImage)
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
