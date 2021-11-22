@@ -43,20 +43,6 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (sampleBuffer: CMSampleBuffer) in
-      // Prepare buffer pool for NDI
-      if !NDIControls.instance.isSending && Config.shared.bufferPool == nil {
-        switch (cameraCapture?.session.sessionPreset) {
-        case AVCaptureSession.Preset.hd1920x1080:
-          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1920, heightOfFrame: 1080)
-        case AVCaptureSession.Preset.hd1280x720:
-          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1280, heightOfFrame: 720)
-        case AVCaptureSession.Preset.hd4K3840x2160:
-          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 3840, heightOfFrame: 2160)
-        default:
-          break
-        }
-      }
-      
       guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return
       }
@@ -65,29 +51,13 @@ class CameraViewController: UIViewController {
       DispatchQueue.main.async {
         self.metalView.image = inputImage
       }
-      
-//      guard var image = image else { return }
-//
-//      switch currentOrientation {
-//      case .landscapeLeft:
-//        image = image.oriented(forExifOrientation: 1)
-//      case .landscapeRight:
-//        image = image.oriented(forExifOrientation: 3)
-//      default:
-//        break
-//      }
-//
-//
-//      NDIControls.instance.send(image: image)
-//
-
+      let outputImage = inputImage
+      NDIControls.instance.send(image: outputImage)
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
       NDIControls.instance.send(audioBuffer: buffer)
     })
-
-    
   }
   
   override func viewDidAppear(_ animated: Bool) {

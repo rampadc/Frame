@@ -13,7 +13,6 @@ class Config {
   static var shared = Config()
   var context: MTIContext?
   var cameras: [AVCaptureDevice]?
-  var bufferPool: CVPixelBufferPool?
   var microphones: [AVAudioSessionPortDescription]?
   var audioOutputs: [AVAudioSessionPortDescription]?
   var currentMicrophone: AVAudioSessionPortDescription?

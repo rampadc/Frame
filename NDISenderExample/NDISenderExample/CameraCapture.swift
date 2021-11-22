@@ -62,7 +62,8 @@ class CameraCapture: NSObject {
       session.addInput(input)
     }
     
-    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
+//    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
+    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
     output.alwaysDiscardsLateVideoFrames = true
     output.setSampleBufferDelegate(self, queue: sampleBufferQueue)
     
@@ -78,23 +79,6 @@ class CameraCapture: NSObject {
 extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     self.processingCallback(sampleBuffer)
-  
-//    if self.isUsingFilters {
-//      guard let context = Config.shared.ciContext else { fatalError() }
-//      context.createCGImage(image, from: image.extent)
-//
-//      let chromaCIFilter = self.chromaKeyFilter(fromHue: 0.2, toHue: 0.5)
-//      chromaCIFilter?.setValue(image, forKey: kCIInputImageKey)
-//      let output = chromaCIFilter?.outputImage
-//
-//      DispatchQueue.main.async {
-//        self.processingCallback(output)
-//      }
-//    } else {
-//      DispatchQueue.main.async {
-//        self.processingCallback(image)
-//      }
-//    }
   }
 }
 
