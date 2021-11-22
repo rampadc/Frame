@@ -1,5 +1,6 @@
 import Foundation
 import GCDWebServer
+import MetalPetal
 
 class NDIControls: NSObject {
   
@@ -41,13 +42,19 @@ class NDIControls: NSObject {
     ndiWrapper.stop()
   }
   
-  func send(image: CIImage) {
+//  func send(image: CIImage) {
+//    if isSending {
+//      let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
+//      if pixelBuffer == nil {
+//        return
+//      }
+//      ndiWrapper.send(pixelBuffer!)
+//    }
+//  }
+  
+  func send(image: MTIImage) {
     if isSending {
-      let pixelBuffer: CVImageBuffer? = overwritePixelBufferWithImage(image: image)
-      if pixelBuffer == nil {
-        return
-      }
-      ndiWrapper.send(pixelBuffer!)
+      
     }
   }
   
@@ -135,56 +142,56 @@ class NDIControls: NSObject {
   }
   
   // MARK: Create a brand new pixel buffer from a CIImage
-  func createPixelBufferFrom(image: CIImage) -> CVPixelBuffer? {
-    // based on https://stackoverflow.com/questions/54354138/how-can-you-make-a-cvpixelbuffer-directly-from-a-ciimage-instead-of-a-uiimage-in
-    
-    let attrs = [
-      kCVPixelBufferCGImageCompatibilityKey: false,
-      kCVPixelBufferCGBitmapContextCompatibilityKey: false,
-      kCVPixelBufferWidthKey: Int(image.extent.width),
-      kCVPixelBufferHeightKey: Int(image.extent.height)
-    ] as CFDictionary
-    var pixelBuffer : CVPixelBuffer?
-    let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.extent.width), Int(image.extent.height), kCVPixelFormatType_32BGRA, attrs, &pixelBuffer)
-    
-    if status == kCVReturnInvalidPixelFormat {
-      print("status == kCVReturnInvalidPixelFormat")
-    }
-    if status == kCVReturnInvalidSize {
-      print("status == kCVReturnInvalidSize")
-    }
-    if status == kCVReturnPixelBufferNotMetalCompatible {
-      print("status == kCVReturnPixelBufferNotMetalCompatible")
-    }
-    if status == kCVReturnPixelBufferNotOpenGLCompatible {
-      print("status == kCVReturnPixelBufferNotOpenGLCompatible")
-    }
-    
-    guard (status == kCVReturnSuccess) else {
-      return nil
-    }
-    
-    Config.shared.ciContext?.render(image, to: pixelBuffer!)
-    return pixelBuffer
-  }
+//  func createPixelBufferFrom(image: CIImage) -> CVPixelBuffer? {
+//    // based on https://stackoverflow.com/questions/54354138/how-can-you-make-a-cvpixelbuffer-directly-from-a-ciimage-instead-of-a-uiimage-in
+//
+//    let attrs = [
+//      kCVPixelBufferCGImageCompatibilityKey: false,
+//      kCVPixelBufferCGBitmapContextCompatibilityKey: false,
+//      kCVPixelBufferWidthKey: Int(image.extent.width),
+//      kCVPixelBufferHeightKey: Int(image.extent.height)
+//    ] as CFDictionary
+//    var pixelBuffer : CVPixelBuffer?
+//    let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.extent.width), Int(image.extent.height), kCVPixelFormatType_32BGRA, attrs, &pixelBuffer)
+//
+//    if status == kCVReturnInvalidPixelFormat {
+//      print("status == kCVReturnInvalidPixelFormat")
+//    }
+//    if status == kCVReturnInvalidSize {
+//      print("status == kCVReturnInvalidSize")
+//    }
+//    if status == kCVReturnPixelBufferNotMetalCompatible {
+//      print("status == kCVReturnPixelBufferNotMetalCompatible")
+//    }
+//    if status == kCVReturnPixelBufferNotOpenGLCompatible {
+//      print("status == kCVReturnPixelBufferNotOpenGLCompatible")
+//    }
+//
+//    guard (status == kCVReturnSuccess) else {
+//      return nil
+//    }
+//
+//    Config.shared.context?.render(image, to: pixelBuffer!)
+//    return pixelBuffer
+//  }
   
   // MARK: Use an existing pixel buffer pool
-  func overwritePixelBufferWithImage(image: CIImage) -> CVPixelBuffer? {
-    guard let bufferPool = Config.shared.bufferPool else {
-      return nil
-    }
-    // take a pixel buffer out from pool
-    var pbuf: CVPixelBuffer?
-    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, bufferPool, &pbuf)
-    guard pbuf != nil else {
-      print("Allocation failure")
-      return nil
-    }
-    
-    Config.shared.ciContext?.render(image, to: pbuf!)
-    
-    return pbuf
-  }
+//  func overwritePixelBufferWithImage(image: CIImage) -> CVPixelBuffer? {
+//    guard let bufferPool = Config.shared.bufferPool else {
+//      return nil
+//    }
+//    // take a pixel buffer out from pool
+//    var pbuf: CVPixelBuffer?
+//    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, bufferPool, &pbuf)
+//    guard pbuf != nil else {
+//      print("Allocation failure")
+//      return nil
+//    }
+//    
+//    Config.shared.ciContext?.render(image, to: pbuf!)
+//    
+//    return pbuf
+//  }
   
   // MARK: Create buffer pool
   func preparePixelBufferPool(widthOfFrame width: Int, heightOfFrame height: Int) {

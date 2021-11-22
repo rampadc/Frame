@@ -3,12 +3,13 @@ import AVFoundation
 import GCDWebServer
 import CoreImage
 import CoreImage.CIFilterBuiltins
+import MetalPetal
 
 class CameraViewController: UIViewController {
   // MARK: Properties
   @IBOutlet weak var remoteControlsLabel: UILabel!
   @IBOutlet weak var sendStreamButton: UIButton!
-  @IBOutlet weak var metalView: MetalView!
+  @IBOutlet weak var metalView: MTIImageView!
   
   private var cameraCapture: CameraCapture?
   private var audioCapture: AudioCapture?
@@ -18,6 +19,18 @@ class CameraViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // Initialise MetalPetal's context
+    let options = MTIContextOptions()
+    guard
+      let device = MTLCreateSystemDefaultDevice(),
+      let context = try? MTIContext(device: device, options: options)
+    else {
+      fatalError()
+    }
+    Config.shared.context = context
+    self.metalView.context = context
+    
+    // Instantiate NDI
     NDIControls.instance.delegate = self
     
     NotificationCenter.default.addObserver(self, selector: #selector(onNdiWebSeverDidStart(_:)), name: .ndiWebServerDidStart, object: nil)
@@ -29,31 +42,45 @@ class CameraViewController: UIViewController {
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (image) in
-      guard var image = image else { return }
-      
-      switch currentOrientation {
-      case .landscapeLeft:
-        image = image.oriented(forExifOrientation: 1)
-      case .landscapeRight:
-        image = image.oriented(forExifOrientation: 3)
-      default:
-        break
-      }
-
-      self.metalView.image = image
-      NDIControls.instance.send(image: image)
-      
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (sampleBuffer: CMSampleBuffer) in
+      // Prepare buffer pool for NDI
       if !NDIControls.instance.isSending && Config.shared.bufferPool == nil {
         switch (cameraCapture?.session.sessionPreset) {
         case AVCaptureSession.Preset.hd1920x1080:
           NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1920, heightOfFrame: 1080)
         case AVCaptureSession.Preset.hd1280x720:
           NDIControls.instance.preparePixelBufferPool(widthOfFrame: 1280, heightOfFrame: 720)
+        case AVCaptureSession.Preset.hd4K3840x2160:
+          NDIControls.instance.preparePixelBufferPool(widthOfFrame: 3840, heightOfFrame: 2160)
         default:
           break
         }
       }
+      
+      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+        return
+      }
+      
+      let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
+      DispatchQueue.main.async {
+        self.metalView.image = inputImage
+      }
+      
+//      guard var image = image else { return }
+//
+//      switch currentOrientation {
+//      case .landscapeLeft:
+//        image = image.oriented(forExifOrientation: 1)
+//      case .landscapeRight:
+//        image = image.oriented(forExifOrientation: 3)
+//      default:
+//        break
+//      }
+//
+//
+//      NDIControls.instance.send(image: image)
+//
+
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in

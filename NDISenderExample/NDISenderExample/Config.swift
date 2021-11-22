@@ -7,10 +7,11 @@
 
 import Foundation
 import CoreImage
+import MetalPetal
 
 class Config {
   static var shared = Config()
-  var ciContext: CIContext?
+  var context: MTIContext?
   var cameras: [AVCaptureDevice]?
   var bufferPool: CVPixelBufferPool?
   var microphones: [AVAudioSessionPortDescription]?
