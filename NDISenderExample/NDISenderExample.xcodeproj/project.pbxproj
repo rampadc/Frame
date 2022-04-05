@@ -29,6 +29,7 @@
 		AB054596254448B700D770A4 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054595254448B700D770A4 /* libresolv.9.tbd */; };
 		AB054599254448CE00D770A4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054598254448CE00D770A4 /* libc++.tbd */; };
 		D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */; };
+		F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		AB054595254448B700D770A4 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		AB054598254448CE00D770A4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NDISenderExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
 				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
 				927E37C525E1E47D00916809 /* Config.swift */,
+				F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
 				92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */,
+				F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */,
 				92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */,
 				924C19C825E2835800B73675 /* Camera.swift in Sources */,
 				92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */,

@@ -7,19 +7,20 @@ class CameraCapture: NSObject {
   typealias ProcessingCallback = (CMSampleBuffer) -> ()
   
   let cameraPosition: AVCaptureDevice.Position
-  let processingCallback: ProcessingCallback
   var currentDevice: AVCaptureDevice?
   
   private(set) var session = AVCaptureSession()
-  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated)
+  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated, attributes: .concurrent)
 
   private let output = AVCaptureVideoDataOutput()
   
   private var isUsingFilters = true
+  
+  var delegate: AVCaptureVideoDataOutputSampleBufferDelegate!
     
-  init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
+  init(cameraPosition: AVCaptureDevice.Position, delegate: AVCaptureVideoDataOutputSampleBufferDelegate) {
     self.cameraPosition = cameraPosition
-    self.processingCallback = processingCallback
+    self.delegate = delegate
     
     super.init()
     
@@ -69,7 +70,7 @@ class CameraCapture: NSObject {
 //    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
     output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
     output.alwaysDiscardsLateVideoFrames = true
-    output.setSampleBufferDelegate(self, queue: sampleBufferQueue)
+    output.setSampleBufferDelegate(self.delegate, queue: sampleBufferQueue)
     
     if session.canAddOutput(output) {
       session.addOutput(output)
@@ -77,12 +78,6 @@ class CameraCapture: NSObject {
     session.commitConfiguration()
     
     NotificationCenter.default.post(name: .cameraSetupCompleted, object: nil)
-  }
-}
-
-extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
-  func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    self.processingCallback(sampleBuffer)
   }
 }
 

@@ -69,32 +69,7 @@ class CameraViewController: UIViewController {
     filter.inputBackgroundImage = backgroundImage
     
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (sampleBuffer: CMSampleBuffer) in
-      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-        return
-      }
-      var outputImage: MTIImage? = nil
-      
-      // Chroma key example
-      if Config.shared.chromaKeyEnabled {
-        let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
-        filter.inputImage = inputImage
-        outputImage = filter.outputImage
-      } else {
-        outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
-      }
-      
-      // Render to screen and output
-      guard let outputImage = outputImage else {
-        print("No video")
-        return
-      }
-      DispatchQueue.main.async {
-        self.metalView.image = outputImage
-      }
-      // turn off NDI causes this line to CRASH!!! Need to fix concurrency
-      NDIControls.instance.send(image: outputImage)
-    })
+    cameraCapture = CameraCapture(cameraPosition: .back, delegate: self)
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
       NDIControls.instance.send(audioBuffer: buffer)
@@ -238,9 +213,11 @@ extension CameraViewController: NDIControlsDelegate {
       if NDIControls.instance.isSending {
         self.sendStreamButton.setTitle("Send", for: .normal)
         self.sendStreamButton.backgroundColor = .gray
-        NDIControls.instance.stop()
       }
     }
+    cameraCapture?.stopCapture()
+    NDIControls.instance.stop()
+    cameraCapture?.startCapture()
   }
   
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
@@ -309,5 +286,26 @@ extension CameraViewController: NDIControlsDelegate {
   func switchMicrophone(uniqueID: String) -> Bool {
     guard let ac = audioCapture else { return false }
     return ac.switchMic(toUid: uniqueID)
+  }
+}
+
+extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+  func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+      return
+    }
+    var outputImage: MTIImage? = nil
+    
+    outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
+    // Render to screen and output
+    guard let outputImage = outputImage else {
+      print("No video")
+      return
+    }
+    DispatchQueue.main.async {
+      self.metalView.image = outputImage
+    }
+    
+    NDIControls.instance.send(image: outputImage)
   }
 }
