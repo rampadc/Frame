@@ -4,6 +4,7 @@ import GCDWebServer
 import CoreImage
 import CoreImage.CIFilterBuiltins
 import MetalPetal
+import os
 
 class CameraViewController: UIViewController {
   // MARK: Properties
@@ -13,17 +14,18 @@ class CameraViewController: UIViewController {
   
   private var cameraCapture: CameraCapture?
   private var audioCapture: AudioCapture?
+  
+  private let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraViewController")
 
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   private var userDidStopNDI = false {
     didSet {
-      print("[INFO] User stopped NDI")
+      logger.debug("User stopped NDI")
     }
   }
   
   private var isCameraReady = false {
     didSet {
-      print("[INFO] Camera is ready")
       if isCameraReady && isWebServerReady && !userDidStopNDI {
         self.startNDI()
       }
@@ -32,7 +34,6 @@ class CameraViewController: UIViewController {
   
   private var isWebServerReady = false {
     didSet {
-      print("[INFO] Web server is ready")
       if isCameraReady && isWebServerReady && !userDidStopNDI {
         self.startNDI()
       }
@@ -99,7 +100,12 @@ class CameraViewController: UIViewController {
   }
   
   @objc private func onNdiWebSeverDidStart(_ notification: Notification) {
-    guard let serverUrl = notification.object as? String else { return }
+    logger.debug("Web server is ready.")
+
+    guard let serverUrl = notification.object as? String else {
+      logger.error("Web server does not have a valid URL.")
+      return
+    }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
     
     self.isWebServerReady = true
@@ -107,56 +113,61 @@ class CameraViewController: UIViewController {
   
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
     // Start web server
-    print("Starting web server...")
+    logger.info("Starting web server...")
     NDIControls.instance.startWebServer()
   }
   
   @objc private func onCameraSetupCompleted(_ notification: Notification) {
-    print("Camera setup completed")
+    logger.info("Camera setup completed")
   }
   
   @objc private func onMicrophoneDiscoveryCompleted(_ notification: Notification) {
+    logger.info("Microphone discovery completed")
     guard let microphones = notification.object as? [AVAudioSessionPortDescription] else {
-      print("Microphones list does not conform to type [AVAudioSessionPortDescription]")
+      logger.debug("Microphones list does not conform to type [AVAudioSessionPortDescription]")
       return }
-    print("\nMicrophones found:")
+    logger.info("Microphones found")
     for mic in microphones {
-      print(mic)
+      logger.debug("  > Name: \(mic.portName, privacy: .public)")
+      logger.debug("    > UID: \(mic.uid, privacy: .public)")
+      logger.debug("    > Type: \(mic.portType.rawValue, privacy: .public)")
     }
-    print("\n")
   }
   
   @objc private func onMicrophoneDidSwitch(_ notification: Notification) {
+    logger.info("Microphone switched")
     guard let microphone = notification.object as? AVAudioSessionPortDescription else {
-      print("Microphone does not conform to type AVAudioSessionPortDescription")
+      logger.error("Microphone does not conform to type AVAudioSessionPortDescription")
       return }
-    print("Switched to \(microphone.portName)")
+    logger.info("Switched to \(microphone.portName, privacy: .public)")
   }
   
   @objc private func onAudioOutputsDiscoveryCompleted(_ notification: Notification) {
+    logger.info("Audio output discovery completed")
     guard let audioOutputs = notification.object as? [AVAudioSessionPortDescription] else {
-      print("Audio outputs list does not conform to type [AVAudioSessionPortDescription]")
+      logger.error("Audio outputs list does not conform to type [AVAudioSessionPortDescription]")
       return }
-    print("\nAudio outputs found:")
+    logger.info("Audio outputs found")
     for output in audioOutputs {
-      print(output)
+      logger.debug("  > Name: \(output.portName, privacy: .public)")
+      logger.debug("    > UID: \(output.uid, privacy: .public)")
+      logger.debug("    > Type: \(output.portType.rawValue, privacy: .public)")
     }
-    print("\n")
   }
   
   @objc private func onCameraDidStartRunning(_ notification: Notification) {
-    print("[INFO] Camera is ready")
+    logger.info("Camera is ready")
     self.isCameraReady = true
   }
   
   @objc private func onCameraDidStopRunning(_ notification: Notification) {
-    print("[INFO] Camera is not ready")
+    logger.info("Camera is not ready")
     self.isCameraReady = false
   }
   
   @IBAction func onSendButtonTapped(_ sender: UIButton) {
     let isSending = NDIControls.instance.isSending
-    
+    logger.info("NDI isSending: \(isSending, privacy: .public)")
     if !isSending {
       self.userDidStopNDI = false
       startNDI()
@@ -168,6 +179,18 @@ class CameraViewController: UIViewController {
   
   @objc private func deviceDidRotated(_ notification: Notification) {
     currentOrientation = UIDevice.current.orientation
+    switch (currentOrientation) {
+    case .portrait: logger.info("Device did rotate: portrait")
+    case .portraitUpsideDown: logger.info("Device did rotate: portrait upside down")
+    case .landscapeLeft: logger.info("Device did rotate: landscape left")
+    case .landscapeRight: logger.info("Device did rotate: landscape right")
+    case .faceUp: logger.info("Device did rotate: face up")
+    case .faceDown: logger.info("Device did rotate: face down")
+    case .unknown:
+      logger.error("Device did rotate: UNKNOWN orientation")
+    @unknown default:
+      logger.error("Device did rotate: UNKNOWN default orientation")
+    }
   }
 }
 
@@ -207,11 +230,11 @@ extension CameraViewController: NDIControlsDelegate {
   func startNDI() {
     DispatchQueue.main.async {
       if !NDIControls.instance.isSending {
-        print("[INFO] Starting NDI")
+        self.logger.info("Starting NDI")
         self.sendStreamButton.setTitle("Sending...", for: .normal)
         self.sendStreamButton.backgroundColor = .blue
         NDIControls.instance.start()
-        print("[INFO] NDI Started")
+        self.logger.info("NDI started")
       }
     }
   }
@@ -307,7 +330,7 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
     // Render to screen and output
     guard let outputImage = outputImage else {
-      print("No video")
+      logger.error("Cannot create MTIImage")
       return
     }
     DispatchQueue.main.async {

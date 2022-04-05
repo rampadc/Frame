@@ -20,6 +20,8 @@ class Config {
   var amplitude: Float?
   
   var chromaKeyEnabled = false
+  
+  let subsystem = "rampadc.ndisender"
   private init() {}
 }
 
