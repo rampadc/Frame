@@ -7,15 +7,16 @@ class NDIControls: NSObject {
   // MARK: Properties
   static let instance = NDIControls()
   var delegate: NDIControlsDelegate?
+  
+  let logger = Logger(subsystem: Config.shared.subsystem, category: "NDIControls")
     
   // MARK: - NDI Properties
   private(set) var ndiWrapper: NDIWrapper
   private(set) var isSending: Bool = false {
     didSet {
-      print("[INFO] NDI isSending: \(isSending)")
+      logger.info("NDI isSending: \(self.isSending, privacy: .public)")
     }
   }
-  private let imageQueue = DispatchQueue(label: "ndi.mtiImageQueue", qos: .userInitiated)
   
   // MARK: - Web server properties
   let webServer = GCDWebServer()
@@ -50,7 +51,7 @@ class NDIControls: NSObject {
   func send(image: MTIImage) {
     if isSending {
       guard let context = Config.shared.context else {
-        print("Config.shared.context is nil")
+        logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
         return
       }
       
@@ -58,8 +59,8 @@ class NDIControls: NSObject {
         let renderOutput = try self.pbRenderer.render(image, using: context)
         ndiWrapper.send(renderOutput.pixelBuffer)
       } catch {
-        print("Cannot render image")
-        print(error)
+        logger.error("pixel buffer cannot render MTIImage to pass to NDI Wrapper")
+        logger.error("Error: \(error.localizedDescription, privacy: .public)")
       }
     }
   }
@@ -88,7 +89,7 @@ class NDIControls: NSObject {
 // MARK: GCDWebServerDelegate
 extension NDIControls: GCDWebServerDelegate {
   func webServerDidStart(_ server: GCDWebServer) {
-    print("Web server did start")
+    logger.info("Web server started")
     NotificationCenter.default.post(name: .ndiWebServerDidStart, object: server.serverURL?.absoluteString ?? "Unknown")
   }
 }

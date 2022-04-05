@@ -20,7 +20,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(status)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")

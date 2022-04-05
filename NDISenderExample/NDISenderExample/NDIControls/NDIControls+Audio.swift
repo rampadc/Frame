@@ -7,6 +7,7 @@
 
 import Foundation
 import GCDWebServer
+import os
 
 extension NDIControls {
   func addWebServerHandlersForAudio() {
@@ -21,7 +22,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(audioPort)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
@@ -35,7 +36,7 @@ extension NDIControls {
       guard let inputUid = r.arguments["uid"] else { return GCDWebServerDataResponse(statusCode: 400) }
 
       if delegate == nil {
-        print("Delegate nil")
+        logger.error("Delegate is nil. Cannot switch microphones.")
         return GCDWebServerDataResponse(statusCode: 501)
       } else {
         let didSwitch = self.delegate!.switchMicrophone(uniqueID: inputUid)
@@ -62,7 +63,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(audioPort)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
@@ -84,7 +85,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(audioPorts)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
@@ -105,7 +106,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(audioPorts)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")

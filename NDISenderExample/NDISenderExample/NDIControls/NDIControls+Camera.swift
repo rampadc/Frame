@@ -23,7 +23,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(cameraObjects)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
@@ -44,7 +44,7 @@ extension NDIControls {
         let data = try JSONEncoder().encode(camera)
         response = GCDWebServerDataResponse(data: data, contentType: "application/json")
       } catch {
-        print("Cannot serialise JSON. Error: \(error.localizedDescription)")
+        self.logger.error("Cannot serialise JSON. Error: \(error.localizedDescription, privacy: .public)")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
@@ -161,7 +161,7 @@ extension NDIControls {
         let json = try JSONEncoder().encode(respData)
         response = GCDWebServerDataResponse(data: json, contentType: "application/json")
       } catch {
-        print("Cannot convert to JSON")
+        self.logger.error("Cannot convert temp-tint to JSON")
         response = GCDWebServerDataResponse(statusCode: 500)
       }
       response.setValue("*", forAdditionalHeader: "Access-Control-Allow-Origin")
