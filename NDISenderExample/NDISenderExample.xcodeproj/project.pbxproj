@@ -134,8 +134,8 @@
 		AB0544AD2541D0BA00D770A4 /* NDISenderExample */ = {
 			isa = PBXGroup;
 			children = (
+				F42324C927FC21F900405663 /* IO */,
 				92972ECA274BA48200CEEAE6 /* Resources */,
-				92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */,
 				92E0EB9F274A23C500B59B45 /* NDIControls */,
 				9288396F25DFC3470032692A /* Shaders */,
 				AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */,
@@ -146,10 +146,7 @@
 				AB0544B92541D0BB00D770A4 /* LaunchScreen.storyboard */,
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
 				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
-				9288397025DFC4E80032692A /* CameraCapture.swift */,
 				927E37C525E1E47D00916809 /* Config.swift */,
-				924C19C725E2835800B73675 /* Camera.swift */,
-				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
 			);
 			path = NDISenderExample;
 			sourceTree = "<group>";
@@ -163,6 +160,17 @@
 				ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F42324C927FC21F900405663 /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */,
+				9288397025DFC4E80032692A /* CameraCapture.swift */,
+				924C19C725E2835800B73675 /* Camera.swift */,
+				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
+			);
+			path = IO;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

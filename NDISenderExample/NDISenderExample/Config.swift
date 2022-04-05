@@ -19,6 +19,7 @@ class Config {
   var currentOutput: AVAudioSessionPortDescription?
   var amplitude: Float?
   
+  var chromaKeyEnabled = false
   private init() {}
 }
 
@@ -29,4 +30,6 @@ extension Notification.Name {
   static let microphoneDiscoveryCompleted = Notification.Name("microphoneDiscoveryCompleted")
   static let microphoneDidSwitch = Notification.Name("microphoneDidSwitch")
   static let audioOutputsDiscoveryCompleted = Notification.Name("audioOutputsDiscoveryCompleted")
+  static let cameraDidStartRunning = Notification.Name("cameraDidStartRunning")
+  static let cameraDidStopRunning = Notification.Name("cameraDidStopRunning")
 }

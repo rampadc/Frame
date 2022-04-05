@@ -16,6 +16,23 @@ class CameraViewController: UIViewController {
 
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   
+  private var isCameraReady = false {
+    didSet {
+      if isCameraReady && isWebServerReady {
+        self.startNDI()
+      }
+    }
+  }
+  
+  private var isWebServerReady = false {
+    didSet {
+      print("[INFO] Web server is ready")
+      if isCameraReady && isWebServerReady {
+        self.startNDI()
+      }
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -39,6 +56,8 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDiscoveryCompleted(_:)), name: .microphoneDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onMicrophoneDidSwitch(_:)), name: .microphoneDidSwitch, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onAudioOutputsDiscoveryCompleted(_:)), name: .audioOutputsDiscoveryCompleted, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onCameraDidStartRunning(_:)), name: .cameraDidStartRunning, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onCameraDidStopRunning(_:)), name: .cameraDidStopRunning, object: nil)
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
@@ -55,14 +74,23 @@ class CameraViewController: UIViewController {
       }
       
       // Chroma key example
-      let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
-      filter.inputImage = inputImage
-      if let outputImage = filter.outputImage {
+      if Config.shared.chromaKeyEnabled {
+        let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
+        filter.inputImage = inputImage
+        if let outputImage = filter.outputImage {
+          DispatchQueue.main.async {
+            self.metalView.image = outputImage
+          }
+          
+          NDIControls.instance.send(image: outputImage)
+        }
+      } else {
+        let outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
         DispatchQueue.main.async {
           self.metalView.image = outputImage
         }
-        
         NDIControls.instance.send(image: outputImage)
+        
       }
     })
     
@@ -91,7 +119,7 @@ class CameraViewController: UIViewController {
     guard let serverUrl = notification.object as? String else { return }
     remoteControlsLabel.text = "Controls: \(serverUrl)"
     
-//    startNDI()
+    self.isWebServerReady = true
   }
   
   @objc private func onCameraDiscoveryCompleted(_ notification: Notification) {
@@ -131,6 +159,16 @@ class CameraViewController: UIViewController {
       print(output)
     }
     print("\n")
+  }
+  
+  @objc private func onCameraDidStartRunning(_ notification: Notification) {
+    print("[INFO] Camera is ready")
+    self.isCameraReady = true
+  }
+  
+  @objc private func onCameraDidStopRunning(_ notification: Notification) {
+    print("[INFO] Camera is not ready")
+    self.isCameraReady = false
   }
   
   @IBAction func onSendButtonTapped(_ sender: UIButton) {
@@ -184,9 +222,11 @@ extension CameraViewController: NDIControlsDelegate {
   func startNDI() {
     DispatchQueue.main.async {
       if !NDIControls.instance.isSending {
+        print("[INFO] Starting NDI")
         self.sendStreamButton.setTitle("Sending...", for: .normal)
         self.sendStreamButton.backgroundColor = .blue
         NDIControls.instance.start()
+        print("[INFO] NDI Started")
       }
     }
   }

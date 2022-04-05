@@ -22,15 +22,19 @@ class CameraCapture: NSObject {
     self.processingCallback = processingCallback
     
     super.init()
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(onCaptureSessionError(_:)), name: .AVCaptureSessionRuntimeError, object: nil)
     prepareSession()
   }
   
   func startCapture() {
     session.startRunning()
+    NotificationCenter.default.post(name: .cameraDidStartRunning, object: nil)
   }
   
   func stopCapture() {
     session.stopRunning()
+    NotificationCenter.default.post(name: .cameraDidStopRunning, object: nil)
   }
   
   private func prepareSession() {
@@ -277,6 +281,15 @@ extension CameraCapture {
     } else {
       return false
     }
+  }
+  
+  @objc private func onCaptureSessionError(_ notification: Notification) {
+    // Example: https://github.com/tensorflow/examples/blob/master/lite/examples/object_detection/ios/ObjectDetection/Camera%20Feed/CameraFeedManager.swift
+    guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else {
+      return
+    }
+    
+    print("Capture session runtime error: \(error)")
   }
   
   // MARK: Private functions
