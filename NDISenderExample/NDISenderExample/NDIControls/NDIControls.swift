@@ -10,7 +10,11 @@ class NDIControls: NSObject {
     
   // MARK: - NDI Properties
   private(set) var ndiWrapper: NDIWrapper
-  private(set) var isSending: Bool = false
+  private(set) var isSending: Bool = false {
+    didSet {
+      print("[INFO] NDI isSending: \(isSending)")
+    }
+  }
   private let imageQueue = DispatchQueue(label: "ndi.mtiImageQueue", qos: .userInitiated)
   
   // MARK: - Web server properties

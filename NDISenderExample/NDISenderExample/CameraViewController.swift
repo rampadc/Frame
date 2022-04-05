@@ -15,10 +15,16 @@ class CameraViewController: UIViewController {
   private var audioCapture: AudioCapture?
 
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
+  private var userDidStopNDI = false {
+    didSet {
+      print("[INFO] User stopped NDI")
+    }
+  }
   
   private var isCameraReady = false {
     didSet {
-      if isCameraReady && isWebServerReady {
+      print("[INFO] Camera is ready")
+      if isCameraReady && isWebServerReady && !userDidStopNDI {
         self.startNDI()
       }
     }
@@ -27,7 +33,7 @@ class CameraViewController: UIViewController {
   private var isWebServerReady = false {
     didSet {
       print("[INFO] Web server is ready")
-      if isCameraReady && isWebServerReady {
+      if isCameraReady && isWebServerReady && !userDidStopNDI {
         self.startNDI()
       }
     }
@@ -152,8 +158,10 @@ class CameraViewController: UIViewController {
     let isSending = NDIControls.instance.isSending
     
     if !isSending {
+      self.userDidStopNDI = false
       startNDI()
     } else {
+      self.userDidStopNDI = true
       stopNDI()
     }
   }
@@ -210,13 +218,13 @@ extension CameraViewController: NDIControlsDelegate {
   
   func stopNDI() {
     DispatchQueue.main.async {
-      if NDIControls.instance.isSending {
-        self.sendStreamButton.setTitle("Send", for: .normal)
-        self.sendStreamButton.backgroundColor = .gray
-      }
+      NDIControls.instance.stop()
+
+      self.sendStreamButton.setTitle("Send", for: .normal)
+      self.sendStreamButton.backgroundColor = .gray
     }
+    
     cameraCapture?.stopCapture()
-    NDIControls.instance.stop()
     cameraCapture?.startCapture()
   }
   
