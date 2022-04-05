@@ -11,8 +11,8 @@ class CameraCapture: NSObject {
   var currentDevice: AVCaptureDevice?
   
   private(set) var session = AVCaptureSession()
-  private let sampleBufferQueue = DispatchQueue(label: "realtime.samplebuffer", qos: .userInitiated)
-  
+  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated)
+
   private let output = AVCaptureVideoDataOutput()
   
   private var isUsingFilters = true
@@ -38,8 +38,8 @@ class CameraCapture: NSObject {
   }
   
   private func prepareSession() {
-    session.sessionPreset = .hd1920x1080
-//    session.sessionPreset = .hd1280x720
+//    session.sessionPreset = .hd1920x1080
+    session.sessionPreset = .hd1280x720
 //    session.sessionPreset = .hd4K3840x2160
     
     let cameraDiscovery = AVCaptureDevice.DiscoverySession(

@@ -68,30 +68,32 @@ class CameraViewController: UIViewController {
     let filter = MTIChromaKeyBlendFilter()
     filter.inputBackgroundImage = backgroundImage
     
+    
     cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] (sampleBuffer: CMSampleBuffer) in
       guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return
       }
+      var outputImage: MTIImage? = nil
       
       // Chroma key example
       if Config.shared.chromaKeyEnabled {
         let inputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: MTIAlphaType.alphaIsOne)
         filter.inputImage = inputImage
-        if let outputImage = filter.outputImage {
-          DispatchQueue.main.async {
-            self.metalView.image = outputImage
-          }
-          
-          NDIControls.instance.send(image: outputImage)
-        }
+        outputImage = filter.outputImage
       } else {
-        let outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
-        DispatchQueue.main.async {
-          self.metalView.image = outputImage
-        }
-        NDIControls.instance.send(image: outputImage)
-        
+        outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
       }
+      
+      // Render to screen and output
+      guard let outputImage = outputImage else {
+        print("No video")
+        return
+      }
+      DispatchQueue.main.async {
+        self.metalView.image = outputImage
+      }
+      // turn off NDI causes this line to CRASH!!! Need to fix concurrency
+      NDIControls.instance.send(image: outputImage)
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
