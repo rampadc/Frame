@@ -13,9 +13,9 @@ extension NDIControls {
     // MARK: - Get cameras JSON
     self.webServer.addHandler(forMethod: "GET", path: "/cameras", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
       guard let cameras = Config.shared.cameras else { return GCDWebServerErrorResponse(statusCode: 500) }
-      var cameraObjects: [Camera] = []
+      var cameraObjects: [CameraInformation] = []
       for camera in cameras {
-        cameraObjects.append(Camera(camera: camera))
+        cameraObjects.append(CameraInformation(camera: camera))
       }
       
       var response: GCDWebServerDataResponse

@@ -107,7 +107,7 @@ protocol NDIControlsDelegate {
   func getWhiteBalanceTemp() -> Float
   func getWhiteBalanceTint() -> Float
   func lockGrey() -> Bool
-  func getCurrentCamera() -> Camera?
+  func getCurrentCamera() -> CameraInformation?
   func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool
   func setPreset4K() -> Bool
   func setPreset1080() -> Bool

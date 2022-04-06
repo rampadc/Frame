@@ -275,7 +275,7 @@ extension CameraViewController: NDIControlsDelegate {
     return cc.lockGreyWorld()
   }
   
-  func getCurrentCamera() -> Camera? {
+  func getCurrentCamera() -> CameraInformation? {
     guard let cc = cameraCapture else { return nil }
     return cc.getCurrentCamera()
   }

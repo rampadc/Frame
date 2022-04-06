@@ -91,7 +91,12 @@ class WhiteBalance: Codable {
   var isCustomGainsSupportedInLockedMode: Bool = false
 }
 
-class Camera: Codable {
+class HDR: Codable {
+  var isVideoHDREnabled = false
+  var automaticallyAdjustsVideoHDREnabled = false
+}
+
+class CameraInformation: Codable {
   var properties = DeviceProperties()
   var exposure = Exposure()
   var zoom = Zoom()
@@ -103,7 +108,7 @@ class Camera: Codable {
   var iso = ISO()
   var whiteBalance = WhiteBalance()
   var depth = Depth()
-  //   TODO: HDR
+  var hdr = HDR()
   //   TODO: Tone mapping
   
   init(camera: AVCaptureDevice) {
@@ -200,6 +205,10 @@ class Camera: Codable {
     let whiteBalanceTemperatureAndTint = camera.temperatureAndTintValues(for: whiteBalanceGains)
     self.whiteBalance.currentTemperature = whiteBalanceTemperatureAndTint.temperature
     self.whiteBalance.currentTint = whiteBalanceTemperatureAndTint.tint
+    
+    // MARK: HDR
+    self.hdr.isVideoHDREnabled = camera.isVideoHDREnabled
+    self.hdr.automaticallyAdjustsVideoHDREnabled = camera.automaticallyAdjustsVideoHDREnabled
   }
   
   static func getTemperature(device: AVCaptureDevice) -> Float {

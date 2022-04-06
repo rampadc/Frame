@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		924C19C825E2835800B73675 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C19C725E2835800B73675 /* Camera.swift */; };
+		924C19C825E2835800B73675 /* CameraInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C19C725E2835800B73675 /* CameraInformation.swift */; };
 		924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D2CC925D41C4B000F8D80 /* NDIControls.swift */; };
 		92626A78274B4698009B7F62 /* VideoIO in Frameworks */ = {isa = PBXBuildFile; productRef = 92626A77274B4698009B7F62 /* VideoIO */; };
 		9277E4F02748D8BE00D0F48A /* AudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */; };
@@ -34,7 +34,7 @@
 
 /* Begin PBXFileReference section */
 		46C0587604EB00FFE45C6B7F /* Pods-NDISenderExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.release.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.release.xcconfig"; sourceTree = "<group>"; };
-		924C19C725E2835800B73675 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		924C19C725E2835800B73675 /* CameraInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraInformation.swift; sourceTree = "<group>"; };
 		924D2CC925D41C4B000F8D80 /* NDIControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDIControls.swift; sourceTree = "<group>"; };
 		9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCapture.swift; sourceTree = "<group>"; };
 		927E37C525E1E47D00916809 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 			children = (
 				92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */,
 				9288397025DFC4E80032692A /* CameraCapture.swift */,
-				924C19C725E2835800B73675 /* Camera.swift */,
+				924C19C725E2835800B73675 /* CameraInformation.swift */,
 				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
 			);
 			path = IO;
@@ -310,7 +310,7 @@
 				92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */,
 				F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */,
 				92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */,
-				924C19C825E2835800B73675 /* Camera.swift in Sources */,
+				924C19C825E2835800B73675 /* CameraInformation.swift in Sources */,
 				92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
