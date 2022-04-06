@@ -29,6 +29,7 @@
 		AB054596254448B700D770A4 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054595254448B700D770A4 /* libresolv.9.tbd */; };
 		AB054599254448CE00D770A4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AB054598254448CE00D770A4 /* libc++.tbd */; };
 		D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */; };
+		F412C04B27FDBD31009CC819 /* CameraCapture+Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */; };
 		F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		AB054595254448B700D770A4 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		AB054598254448CE00D770A4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NDISenderExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraCapture+Controls.swift"; sourceTree = "<group>"; };
 		F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,6 +174,7 @@
 				9288397025DFC4E80032692A /* CameraCapture.swift */,
 				924C19C725E2835800B73675 /* CameraInformation.swift */,
 				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
+				F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */,
 			);
 			path = IO;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				9288397125DFC4E80032692A /* CameraCapture.swift in Sources */,
 				AB0544AF2541D0BA00D770A4 /* AppDelegate.swift in Sources */,
 				927E37C625E1E47D00916809 /* Config.swift in Sources */,
+				F412C04B27FDBD31009CC819 /* CameraCapture+Controls.swift in Sources */,
 				92E0EB9C274A22CB00B59B45 /* NDIControls+NDI.swift in Sources */,
 				92972EC9274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
