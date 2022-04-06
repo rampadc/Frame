@@ -15,6 +15,7 @@ class DeviceProperties: Codable {
   var supports1080p: Bool = false
   var supports720p: Bool = false
   var supports4K: Bool = false
+  var deviceType: String = ""
 }
 
 class Exposure: Codable {
@@ -121,6 +122,7 @@ class CameraInformation: Codable {
     self.properties.supports1080p = camera.supportsSessionPreset(.hd1920x1080)
     self.properties.supports720p = camera.supportsSessionPreset(.hd1280x720)
     self.properties.supports4K = camera.supportsSessionPreset(.hd4K3840x2160)
+    self.properties.deviceType = camera.deviceType.rawValue
     
     // MARK: Exposure
     self.exposure.minExposureTargetBias_EV = camera.minExposureTargetBias

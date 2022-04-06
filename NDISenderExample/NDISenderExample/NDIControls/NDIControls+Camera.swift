@@ -55,15 +55,15 @@ extension NDIControls {
     self.webServer.addHandler(forMethod: "POST", path: "/cameras/select", request: GCDWebServerURLEncodedFormRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       // GCDWebServerURLEncodedFormRequest expects the body data to be contained in a x-www-form-urlencoded
       let r = request as! GCDWebServerURLEncodedFormRequest
-      guard let cameraUniqueID = r.arguments["uniqueID"] else { return GCDWebServerDataResponse(statusCode: 400) }
+      guard let deviceType = r.arguments["deviceType"] else { return GCDWebServerDataResponse(statusCode: 400) }
       
       if delegate == nil {
         return GCDWebServerDataResponse(statusCode: 501)
       } else {
-        let hasCameraSwitched = self.delegate!.switchCamera(uniqueID: cameraUniqueID)
+        let cameraDidSwitched = self.delegate!.switchCamera(deviceType: deviceType)
         
         var response: GCDWebServerDataResponse
-        if hasCameraSwitched {
+        if cameraDidSwitched {
           response = GCDWebServerDataResponse(statusCode: 200)
        } else {
         response = GCDWebServerDataResponse(statusCode: 500)

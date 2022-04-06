@@ -9,6 +9,20 @@ import Foundation
 
 
 extension CameraCapture {
+  func switchCamera(deviceType: AVCaptureDevice.DeviceType) -> Bool {
+    logger.info("Switching camera to \(deviceType.rawValue, privacy: .public)")
+    do {
+      try self.camera.switchToVideoCaptureDevice(
+        with: self.cameraPosition,
+        preferredDeviceTypes: [deviceType])
+      logger.info("Switched camera to \(deviceType.rawValue, privacy: .public)")
+      return true
+    } catch {
+      logger.error("Cannot switch camera to \(deviceType.rawValue, privacy: .public). Error: \(error.localizedDescription, privacy: .public)")
+      return false
+    }
+  }
+  
   func switchCamera(uniqueID: String) -> Bool {
     let currentCameraInput = session.inputs[0]
     session.removeInput(currentCameraInput)

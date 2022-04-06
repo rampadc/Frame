@@ -76,7 +76,24 @@ class CameraViewController: UIViewController {
     filter.inputBackgroundImage = backgroundImage
     
     
-    cameraCapture = CameraCapture(cameraPosition: .back, delegate: self)
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] sampleBuffer in
+      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+        return
+      }
+      var outputImage: MTIImage? = nil
+      
+      outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
+      // Render to screen and output
+      guard let outputImage = outputImage else {
+        self.logger.error("Cannot create MTIImage")
+        return
+      }
+      DispatchQueue.main.async {
+        self.metalView.image = outputImage
+      }
+      
+      NDIControls.instance.send(image: outputImage)
+    })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
       NDIControls.instance.send(audioBuffer: buffer)
@@ -195,9 +212,9 @@ class CameraViewController: UIViewController {
 }
 
 extension CameraViewController: NDIControlsDelegate {
-  func switchCamera(uniqueID: String) -> Bool {
+  func switchCamera(deviceType: String) -> Bool {
     guard let cc = cameraCapture else { return false }
-    return cc.switchCamera(uniqueID: uniqueID)
+    return cc.switchCamera(deviceType: AVCaptureDevice.DeviceType(rawValue: deviceType))
   }
   
   func zoom(factor: Float) -> Bool {
@@ -316,26 +333,5 @@ extension CameraViewController: NDIControlsDelegate {
   func switchMicrophone(uniqueID: String) -> Bool {
     guard let ac = audioCapture else { return false }
     return ac.switchMic(toUid: uniqueID)
-  }
-}
-
-extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-  func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-      return
-    }
-    var outputImage: MTIImage? = nil
-    
-    outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
-    // Render to screen and output
-    guard let outputImage = outputImage else {
-      logger.error("Cannot create MTIImage")
-      return
-    }
-    DispatchQueue.main.async {
-      self.metalView.image = outputImage
-    }
-    
-    NDIControls.instance.send(image: outputImage)
   }
 }

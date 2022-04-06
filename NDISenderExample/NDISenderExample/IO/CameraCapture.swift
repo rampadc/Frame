@@ -3,12 +3,14 @@ import AVFoundation
 import CoreImage
 import UIKit
 import os
+import VideoIO
 
 class CameraCapture: NSObject {
   typealias ProcessingCallback = (CMSampleBuffer) -> ()
   
   let cameraPosition: AVCaptureDevice.Position
   var currentDevice: AVCaptureDevice?
+  let processingCallback: ProcessingCallback
   
   private(set) var session = AVCaptureSession()
   private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated, attributes: .concurrent)
@@ -21,14 +23,32 @@ class CameraCapture: NSObject {
   
   let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraCapture")
 
+  var camera: Camera
   
-  init(cameraPosition: AVCaptureDevice.Position, delegate: AVCaptureVideoDataOutputSampleBufferDelegate) {
+  init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
-    self.delegate = delegate
+    self.processingCallback = processingCallback
     
+    // Configure VideoIO camera
+    var configurator = Camera.Configurator()
+    let interfaceOrientation = UIApplication.shared.windows.first(where: { $0.windowScene != nil })?.windowScene?.interfaceOrientation
+    configurator.videoConnectionConfigurator = { camera, connection in
+      switch interfaceOrientation {
+      case .landscapeLeft:
+        connection.videoOrientation = .landscapeLeft
+      case .landscapeRight:
+        connection.videoOrientation = .landscapeRight
+      case .portraitUpsideDown:
+        connection.videoOrientation = .portraitUpsideDown
+      default:
+        connection.videoOrientation = .portrait
+      }
+    }
+    
+    camera = Camera(captureSessionPreset: .hd1280x720, defaultCameraPosition: cameraPosition, configurator: configurator)
+    self.currentDevice = camera.videoDevice
     super.init()
     
-    NotificationCenter.default.addObserver(self, selector: #selector(onCaptureSessionError(_:)), name: .AVCaptureSessionRuntimeError, object: nil)
     prepareSession()
   }
   
@@ -42,11 +62,7 @@ class CameraCapture: NSObject {
     NotificationCenter.default.post(name: .cameraDidStopRunning, object: nil)
   }
   
-  private func prepareSession() {
-//    session.sessionPreset = .hd1920x1080
-    session.sessionPreset = .hd1280x720
-//    session.sessionPreset = .hd4K3840x2160
-    
+  func discoverCameras() {
     let cameraDiscovery = AVCaptureDevice.DiscoverySession(
       deviceTypes: [
         .builtInDualCamera,
@@ -62,25 +78,20 @@ class CameraCapture: NSObject {
     
     NotificationCenter.default.post(name: .cameraDiscoveryCompleted, object: cameraDiscovery.devices)
     Config.shared.cameras = cameraDiscovery.devices
-    
-    guard let camera = cameraDiscovery.devices.first, let input = try? AVCaptureDeviceInput(device: camera) else { fatalError("Cannot use the camera") }
-    
-    self.currentDevice = camera
-    
-    if session.canAddInput(input) {
-      session.addInput(input)
+  }
+  
+  private func prepareSession() {
+    discoverCameras()
+    do {
+      try self.camera.enableVideoDataOutput(on: sampleBufferQueue, delegate: self)
+      
+      sampleBufferQueue.async {
+        self.camera.startRunningCaptureSession()
+        NotificationCenter.default.post(name: .cameraSetupCompleted, object: nil)
+      }
+    } catch {
+      logger.error("Cannot enable video data output. Error: \(error.localizedDescription)")
     }
-    
-    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
-    output.alwaysDiscardsLateVideoFrames = true
-    output.setSampleBufferDelegate(self.delegate, queue: sampleBufferQueue)
-    
-    if session.canAddOutput(output) {
-      session.addOutput(output)
-    }
-    session.commitConfiguration()
-    
-    NotificationCenter.default.post(name: .cameraSetupCompleted, object: nil)
   }
   
   func sampleBufferAsync(actionClosure: @escaping () -> Void) {
@@ -88,13 +99,21 @@ class CameraCapture: NSObject {
       actionClosure()
     }
   }
-  
-  @objc private func onCaptureSessionError(_ notification: Notification) {
-    // Example: https://github.com/tensorflow/examples/blob/master/lite/examples/object_detection/ios/ObjectDetection/Camera%20Feed/CameraFeedManager.swift
-    guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else {
+}
+
+extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
+  func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    guard let formatDescription = sampleBuffer.formatDescription else {
       return
     }
-    
-    self.logger.error("AVCaptureSessionError: \(error.localizedDescription, privacy: .public)")
+    switch formatDescription.mediaType {
+    case .audio:
+      // Ignoring audio buffers as I'm planning to use AudioKit
+      break
+    case .video:
+      processingCallback(sampleBuffer)
+    default:
+      break
+    }
   }
 }
