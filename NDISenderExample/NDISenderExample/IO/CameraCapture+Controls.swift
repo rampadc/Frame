@@ -194,8 +194,8 @@ extension CameraCapture {
   }
   
   func setPreset(preset: AVCaptureSession.Preset) -> Bool {
-    if session.canSetSessionPreset(preset) {
-      session.sessionPreset = preset
+    if self.camera.captureSession.canSetSessionPreset(preset){
+      self.camera.captureSession.sessionPreset = preset
       return true
     } else {
       return false
