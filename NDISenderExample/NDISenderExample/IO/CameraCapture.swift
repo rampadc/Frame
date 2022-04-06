@@ -107,9 +107,9 @@ extension CameraCapture {
     }
   }
   
-  func getCurrentCamera() -> CameraDefinition? {
+  func getCurrentCamera() -> Camera? {
     guard let device = self.currentDevice else { return nil }
-    return CameraDefinition(camera: device)
+    return Camera(camera: device)
   }
   
   func zoom(factor: Float) -> Bool {
@@ -232,12 +232,12 @@ extension CameraCapture {
   
   func getTemperature() -> Float {
     guard let device = self.currentDevice else { return -1 }
-    return CameraDefinition.getTemperature(device: device)
+    return Camera.getTemperature(device: device)
   }
   
   func getTint() -> Float {
     guard let device = self.currentDevice else { return -1 }
-    return CameraDefinition.getTint(device: device)
+    return Camera.getTint(device: device)
   }
   
   func setActiveDepthDataFormat(format: String) -> Bool {
