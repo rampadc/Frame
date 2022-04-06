@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import CoreImage
 import UIKit
+import os
 
 class CameraCapture: NSObject {
   typealias ProcessingCallback = (CMSampleBuffer) -> ()
@@ -17,7 +18,10 @@ class CameraCapture: NSObject {
   private var isUsingFilters = true
   
   var delegate: AVCaptureVideoDataOutputSampleBufferDelegate!
-    
+  
+  private let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraCapture")
+
+  
   init(cameraPosition: AVCaptureDevice.Position, delegate: AVCaptureVideoDataOutputSampleBufferDelegate) {
     self.cameraPosition = cameraPosition
     self.delegate = delegate
@@ -97,14 +101,15 @@ extension CameraCapture {
       try session.addInput(AVCaptureDeviceInput(device: camera))
       return true
     } catch {
-      print("Cannot change camera. Error: \(error.localizedDescription)")
+      logger.error("Cannot change cameras")
+      logger.error("\(error.localizedDescription, privacy: .public)")
       return false
     }
   }
   
-  func getCurrentCamera() -> Camera? {
+  func getCurrentCamera() -> CameraDefinition? {
     guard let device = self.currentDevice else { return nil }
-    return Camera(camera: device)
+    return CameraDefinition(camera: device)
   }
   
   func zoom(factor: Float) -> Bool {
@@ -120,7 +125,7 @@ extension CameraCapture {
       device.unlockForConfiguration()
       return true
     } catch {
-      print("Cannot zoom. Error: \(error.localizedDescription)")
+      logger.error("Cannot zoom. Error: \(error.localizedDescription, privacy: .public)")
       return false
     }
   }
@@ -137,7 +142,7 @@ extension CameraCapture {
       device.setExposureTargetBias(bias, completionHandler: nil)
       device.unlockForConfiguration()
     } catch {
-      print("Cannot set custom exposure time and iso. Error: \(error.localizedDescription)")
+      logger.error("Cannot set custom exposure time and iso. Error: \(error.localizedDescription, privacy: .public)")
       return false
     }
     
@@ -153,12 +158,12 @@ extension CameraCapture {
         device.unlockForConfiguration()
         return true
       } else {
-        print("White balance mode \(mode.description) is not supported. White balance mode is \(device.whiteBalanceMode.description).")
+        logger.error("White balance mode \(mode.description, privacy: .public) is not supported. White balance mode is \(device.whiteBalanceMode.description, privacy: .public).")
         device.unlockForConfiguration()
         return false
       }
     } catch let error {
-      print("Could not lock device for configuration: \(error)")
+      logger.error("Cannot set white balance mode. Error: \(error.localizedDescription, privacy: .public)")
       return false
     }
   }
@@ -170,7 +175,7 @@ extension CameraCapture {
     }
     
     if !device.isLockingWhiteBalanceWithCustomDeviceGainsSupported {
-      print("Device does not support white balance locking with custom gains")
+      logger.error("Device does not support white balance locking with custom gains")
       return false
     }
     
@@ -187,11 +192,11 @@ extension CameraCapture {
     guard let device = self.currentDevice else { return false }
     
     if device.isLockingWhiteBalanceWithCustomDeviceGainsSupported {
-      print("white balance with grey locking is supported")
+      logger.info("White balance with grey locking is supported. Setting to grey white-balance mode.")
       self.setWhiteBalanceGains(device.grayWorldDeviceWhiteBalanceGains)
       return true
     } else {
-      print("white balance with grey locking is not supported")
+      logger.error("White balance with grey locking is not supported")
       return false
     }
   }
@@ -200,37 +205,39 @@ extension CameraCapture {
     guard let device = self.currentDevice else { return false }
     
     if device.isFocusPointOfInterestSupported || device.isExposurePointOfInterestSupported {
-      print("Point of interest focus/exposure is supported")
+      logger.info("Point of interest focus/exposure is supported.")
       do {
         try device.lockForConfiguration()
         if device.isFocusPointOfInterestSupported {
           device.focusPointOfInterest = pointOfInterest
           device.focusMode = .continuousAutoFocus
+          logger.info("Point-of-interest focus mode is enabled with continuous auto-focus.")
         }
         if device.isExposurePointOfInterestSupported {
           device.exposurePointOfInterest = pointOfInterest
           device.exposureMode = .continuousAutoExposure
+          logger.info("Point-of-interest exposure mode is enabled with continuous auto-exposure.")
         }
         device.unlockForConfiguration()
         return true
       } catch let error {
-        print("Could not lock device for configuration: \(error)")
+        logger.error("Cannot activate point of interest with auto-focus and auto-exposure. Error: \(error.localizedDescription, privacy: .public)")
         return false
       }
     } else {
-      print("Point of interest focus/exposure is not supported")
+      logger.info("Point of interest focus/exposure is not supported.")
       return false
     }
   }
   
   func getTemperature() -> Float {
     guard let device = self.currentDevice else { return -1 }
-    return Camera.getTemperature(device: device)
+    return CameraDefinition.getTemperature(device: device)
   }
   
   func getTint() -> Float {
     guard let device = self.currentDevice else { return -1 }
-    return Camera.getTint(device: device)
+    return CameraDefinition.getTint(device: device)
   }
   
   func setActiveDepthDataFormat(format: String) -> Bool {
@@ -250,7 +257,7 @@ extension CameraCapture {
     }
     
     if supportedFormat.isEmpty {
-      print("Device does not support the chosen depth data format")
+      logger.info("Device does not support the chosen depth data format: \(format, privacy: .public)")
       return false
     }
     
@@ -262,9 +269,10 @@ extension CameraCapture {
       try device.lockForConfiguration()
       device.activeDepthDataFormat = selectedFormat
       device.unlockForConfiguration()
+      logger.info("Enabled depth data format")
       return true
     } catch {
-      print("Could not lock device for configuration \(error)")
+      logger.error("Cannot enable depth data format. Error: \(error.localizedDescription, privacy: .public)")
       return false
     }
   }
@@ -284,7 +292,7 @@ extension CameraCapture {
       return
     }
     
-    print("Capture session runtime error: \(error)")
+    logger.error("AVCaptureSessionError: \(error.localizedDescription, privacy: .public)")
   }
   
   // MARK: Private functions
@@ -296,12 +304,13 @@ extension CameraCapture {
       device.setWhiteBalanceModeLocked(with: normalizedGains, completionHandler: nil)
       device.unlockForConfiguration()
     } catch let error {
-      print("Could not lock device for configuration: \(error)")
+      logger.error("Cannot set white balance gains. Error: \(error.localizedDescription, privacy: .public)")
     }
   }
   
   private func normalizedGains(_ gains: AVCaptureDevice.WhiteBalanceGains) -> AVCaptureDevice.WhiteBalanceGains {
     if self.currentDevice == nil {
+      logger.error("No camera active. Cannot normalise gains")
       fatalError("No camera active, cannot normalize gains")
     }
     
