@@ -326,4 +326,10 @@ extension CameraCapture {
     
     return g
   }
+  
+  func sampleBufferAsync(actionClosure: @escaping () -> Void) {
+    sampleBufferQueue.async {
+      actionClosure()
+    }
+  }
 }

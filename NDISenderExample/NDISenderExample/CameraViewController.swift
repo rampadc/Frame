@@ -241,14 +241,13 @@ extension CameraViewController: NDIControlsDelegate {
   
   func stopNDI() {
     DispatchQueue.main.async {
-      NDIControls.instance.stop()
-
       self.sendStreamButton.setTitle("Send", for: .normal)
       self.sendStreamButton.backgroundColor = .gray
     }
     
-    cameraCapture?.stopCapture()
-    cameraCapture?.startCapture()
+    cameraCapture?.sampleBufferAsync {
+      NDIControls.instance.stop()
+    }
   }
   
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
