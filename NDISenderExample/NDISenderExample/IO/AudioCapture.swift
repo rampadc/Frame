@@ -44,6 +44,8 @@ class AudioCapture: NSObject {
   let analysisMode: AnalysisMode = .rms
   let stereoMode: StereoMode = .left
   private var amp: [Float] = Array(repeating: 0, count: 2)
+  
+  private let logger = Logger(subsystem: Config.shared.subsystem, category: "AudioCapture")
 
   init(processingCallback: @escaping AudioBufferProcessingCallback) {
     self.processingCallback = processingCallback
@@ -55,14 +57,14 @@ class AudioCapture: NSObject {
   private func prepareSession() {    
     session.requestRecordPermission { granted in
       if granted {
-        print("Record permission is granted.")
+        self.logger.info("Record permission is granted")
         // The user granted access
         do {
           // AudioKit: buffer length = 128, samplerate = 44100
           try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(128/44100)
           try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.defaultToSpeaker, .mixWithOthers, .allowBluetooth, .allowBluetoothA2DP])
           try AVAudioSession.sharedInstance().setActive(true)
-          print("AVAudioSession setup completed")
+          self.logger.info("AVAudioSession setup completed")
           
           self.audioEngine = AVAudioEngine()
           self.mic = self.audioEngine!.inputNode
@@ -81,8 +83,7 @@ class AudioCapture: NSObject {
           // Start audio processing
           let _ = self.tapMic()
         } catch {
-          print(error)
-          print("AVAudioSession setup failed")
+          self.logger.error("AVAudioSession setup failed. Error: \(error.localizedDescription, privacy: .public)")
         }
         
         // Observe route changes (headphones, microphones connected)
@@ -90,7 +91,7 @@ class AudioCapture: NSObject {
         
         
       } else {
-        print("Record permission is granted.")
+        self.logger.error("Record permission is not granted")
         // TODO: Present message to user indicating that recording cannot be performed until they change their preferences in Settings > Privacy > Microphone
       }
     }
@@ -104,10 +105,10 @@ class AudioCapture: NSObject {
           try self.session.setPreferredInput(mic)
           NotificationCenter.default.post(name: .microphoneDidSwitch, object: mic)
           Config.shared.currentMicrophone = mic
+          logger.info("Changed to mic \(mic.portName)")
           return true
         } catch {
-          print("Cannot set preferred input")
-          print(error)
+          logger.error("Cannot set preferred mic \(error.localizedDescription, privacy: .public)")
           return false
         }
       }
@@ -133,8 +134,7 @@ class AudioCapture: NSObject {
       try self.session.setPreferredInput(mic)
       NotificationCenter.default.post(name: .microphoneDidSwitch, object: mic)
     } catch {
-      print("Cannot set preferred input")
-      print(error)
+      logger.error("Cannot set preferred mic \(error.localizedDescription, privacy: .public)")
     }
   }
   
@@ -155,11 +155,11 @@ class AudioCapture: NSObject {
   
   func tapMic() -> Bool {
     if micTapped {
-      print("Mic is already tapped")
+      logger.info("Mic is already tapped")
       return false
     }
     
-    print("Tapping mic...")
+    logger.info("Tapping mic...")
     let format = mic?.inputFormat(forBus: 0)
     mic?.installTap(onBus: 0, bufferSize: 128, format: format, block: { buffer, audioTime in
       guard let floatData = buffer.floatChannelData else { return }
@@ -199,7 +199,7 @@ class AudioCapture: NSObject {
     })
     micTapped = true
     start()
-    print("Mic tapped")
+    logger.info("Mic tapped")
     return true
   }
   
@@ -223,7 +223,7 @@ class AudioCapture: NSObject {
     do {
       try audioEngine.start()
     } catch {
-      print(error)
+      logger.error("Audio engine failed to start. Error: \(error.localizedDescription)")
     }
   }
   
@@ -243,11 +243,11 @@ class AudioCapture: NSObject {
           }
     switch reason {
     case .newDeviceAvailable: // New device found.
-      print("New devices found")
+      logger.info("New device found")
     case .oldDeviceUnavailable: // Old device removed.
-      print("Old devices removed")
+      logger.info("Old device removed")
     case .wakeFromSleep:
-      print("Awaken from sleep")
+      logger.info("Awoken from sleep")
     default: ()
     }
     
