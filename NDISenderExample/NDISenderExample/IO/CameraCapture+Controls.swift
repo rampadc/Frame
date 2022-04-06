@@ -23,34 +23,13 @@ extension CameraCapture {
     }
   }
   
-  func switchCamera(uniqueID: String) -> Bool {
-    let currentCameraInput = session.inputs[0]
-    session.removeInput(currentCameraInput)
-    
-    let matchingCameras = Config.shared.cameras?.filter({ (c: AVCaptureDevice) -> Bool in
-      return c.uniqueID == uniqueID
-    })
-    guard let camera = matchingCameras?.first else { return false }
-    
-    self.currentDevice = camera
-    
-    do {
-      try session.addInput(AVCaptureDeviceInput(device: camera))
-      return true
-    } catch {
-      self.logger.error("Cannot change cameras")
-      self.logger.error("\(error.localizedDescription, privacy: .public)")
-      return false
-    }
-  }
-  
   func getCurrentCamera() -> CameraInformation? {
-    guard let device = self.currentDevice else { return nil }
+    guard let device = self.camera.videoDevice else { return nil }
     return CameraInformation(camera: device)
   }
   
   func zoom(factor: Float) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     let cgFactor = CGFloat(factor)
     if device.minAvailableVideoZoomFactor > cgFactor || device.maxAvailableVideoZoomFactor < cgFactor {
       return false
@@ -68,7 +47,7 @@ extension CameraCapture {
   }
   
   func setExposureCompensation(bias: Float) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     
     if device.maxExposureTargetBias < bias || device.minExposureTargetBias > bias {
       return false
@@ -87,7 +66,7 @@ extension CameraCapture {
   }
   
   func setWhiteBalanceMode(mode: AVCaptureDevice.WhiteBalanceMode) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     do {
       try device.lockForConfiguration()
       if device.isWhiteBalanceModeSupported(mode) {
@@ -106,7 +85,7 @@ extension CameraCapture {
   }
   
   func setTemperatureAndTint(temperature: Float, tint: Float) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     if device.whiteBalanceMode != .locked {
       return false
     }
@@ -126,7 +105,7 @@ extension CameraCapture {
   }
   
   func lockGreyWorld() -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     
     if device.isLockingWhiteBalanceWithCustomDeviceGainsSupported {
       self.logger.info("White balance with grey locking is supported. Setting to grey white-balance mode.")
@@ -139,7 +118,7 @@ extension CameraCapture {
   }
   
   func highlightPointOfInterest(pointOfInterest: CGPoint) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     
     if device.isFocusPointOfInterestSupported || device.isExposurePointOfInterestSupported {
       self.logger.info("Point of interest focus/exposure is supported.")
@@ -168,17 +147,17 @@ extension CameraCapture {
   }
   
   func getTemperature() -> Float {
-    guard let device = self.currentDevice else { return -1 }
+    guard let device = self.camera.videoDevice else { return -1 }
     return CameraInformation.getTemperature(device: device)
   }
   
   func getTint() -> Float {
-    guard let device = self.currentDevice else { return -1 }
+    guard let device = self.camera.videoDevice else { return -1 }
     return CameraInformation.getTint(device: device)
   }
   
   func setActiveDepthDataFormat(format: String) -> Bool {
-    guard let device = self.currentDevice else { return false }
+    guard let device = self.camera.videoDevice else { return false }
     
     let depthFormats = device.activeFormat.supportedDepthDataFormats
     
@@ -225,7 +204,7 @@ extension CameraCapture {
   
   // MARK: Private functions
   private func setWhiteBalanceGains(_ gains: AVCaptureDevice.WhiteBalanceGains) {
-    guard let device = self.currentDevice else { return }
+    guard let device = self.camera.videoDevice else { return }
     do {
       try device.lockForConfiguration()
       let normalizedGains = self.normalizedGains(gains) // Conversion can yield out-of-bound values, cap to limits
@@ -237,7 +216,7 @@ extension CameraCapture {
   }
   
   private func normalizedGains(_ gains: AVCaptureDevice.WhiteBalanceGains) -> AVCaptureDevice.WhiteBalanceGains {
-    if self.currentDevice == nil {
+    guard let device = self.camera.videoDevice else {
       self.logger.error("No camera active. Cannot normalise gains")
       fatalError("No camera active, cannot normalize gains")
     }
@@ -248,9 +227,9 @@ extension CameraCapture {
     g.greenGain = max(1.0, g.greenGain)
     g.blueGain = max(1.0, g.blueGain)
     
-    g.redGain = min(self.currentDevice!.maxWhiteBalanceGain, g.redGain)
-    g.greenGain = min(self.currentDevice!.maxWhiteBalanceGain, g.greenGain)
-    g.blueGain = min(self.currentDevice!.maxWhiteBalanceGain, g.blueGain)
+    g.redGain = min(device.maxWhiteBalanceGain, g.redGain)
+    g.greenGain = min(device.maxWhiteBalanceGain, g.greenGain)
+    g.blueGain = min(device.maxWhiteBalanceGain, g.blueGain)
     
     return g
   }

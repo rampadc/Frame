@@ -228,7 +228,7 @@ extension NDIControls {
       return response
     }
     
-    // MARK: - swtich session preset
+    // MARK: - switch session preset
     self.webServer.addHandler(forMethod: "GET", pathRegex: "/preset/1080p", request: GCDWebServerRequest.self) { [unowned self] (request) -> GCDWebServerResponse? in
       if self.delegate == nil {
         return GCDWebServerDataResponse(statusCode: 501)
