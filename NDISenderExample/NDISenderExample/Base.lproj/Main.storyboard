@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_7" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,28 +22,20 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Control: waiting for web server to start..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffb-bj-QZA">
-                                <rect key="frame" x="28" y="364" width="391" height="27"/>
+                                <rect key="frame" x="28" y="364" width="854" height="27"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRu-As-Oh1">
-                                <rect key="frame" x="862" y="361" width="36" height="30"/>
-                                <state key="normal" title="Send"/>
-                                <connections>
-                                    <action selector="onSendButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jjH-3w-VGo"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="leading" secondItem="FsI-Sv-3FT" secondAttribute="leading" id="6u1-In-P5h"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ffb-bj-QZA" secondAttribute="bottom" constant="16" id="8Ws-0b-yp2"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ffb-bj-QZA" secondAttribute="trailing" id="cFm-eO-6hP"/>
                             <constraint firstItem="FsI-Sv-3FT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="mCU-yw-ZBI"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hRu-As-Oh1" secondAttribute="bottom" constant="16" id="pM0-35-eV8"/>
                             <constraint firstItem="FsI-Sv-3FT" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="sAJ-5I-iyO"/>
-                            <constraint firstItem="hRu-As-Oh1" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="16" id="txq-2H-iQw"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="leading" secondItem="Ffb-bj-QZA" secondAttribute="leading" constant="16" id="uo8-l1-wi7"/>
                             <constraint firstItem="FsI-Sv-3FT" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="zrk-U9-hls"/>
                         </constraints>
@@ -51,7 +43,6 @@
                     <connections>
                         <outlet property="metalView" destination="FsI-Sv-3FT" id="DM8-4g-CJD"/>
                         <outlet property="remoteControlsLabel" destination="Ffb-bj-QZA" id="vz6-a1-XBE"/>
-                        <outlet property="sendStreamButton" destination="hRu-As-Oh1" id="Nuu-DL-Lpu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

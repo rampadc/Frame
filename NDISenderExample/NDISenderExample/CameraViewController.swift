@@ -9,7 +9,6 @@ import os
 class CameraViewController: UIViewController {
   // MARK: Properties
   @IBOutlet weak var remoteControlsLabel: UILabel!
-  @IBOutlet weak var sendStreamButton: UIButton!
   @IBOutlet weak var metalView: MTIImageView!
   
   private var cameraCapture: CameraCapture?
@@ -229,7 +228,6 @@ extension CameraViewController: NDIControlsDelegate {
   func hideControls() -> Bool {
     DispatchQueue.main.async {
       self.remoteControlsLabel.isHidden = true
-      self.sendStreamButton.isHidden = true
     }
     
     return true
@@ -238,7 +236,6 @@ extension CameraViewController: NDIControlsDelegate {
   func showControls() -> Bool {
     DispatchQueue.main.async {
       self.remoteControlsLabel.isHidden = false
-      self.sendStreamButton.isHidden = false
     }
     return true
   }
@@ -247,8 +244,6 @@ extension CameraViewController: NDIControlsDelegate {
     DispatchQueue.main.async {
       if !NDIControls.instance.isSending {
         self.logger.info("Starting NDI")
-        self.sendStreamButton.setTitle("Sending...", for: .normal)
-        self.sendStreamButton.backgroundColor = .blue
         NDIControls.instance.start()
         self.logger.info("NDI started")
       }
@@ -257,8 +252,6 @@ extension CameraViewController: NDIControlsDelegate {
   
   func stopNDI() {
     DispatchQueue.main.async {
-      self.sendStreamButton.setTitle("Send", for: .normal)
-      self.sendStreamButton.backgroundColor = .gray
     }
     
     cameraCapture?.sampleBufferAsync {
