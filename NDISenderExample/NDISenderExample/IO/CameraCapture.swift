@@ -8,7 +8,7 @@ import VideoIO
 class CameraCapture: NSObject {
   typealias ProcessingCallback = (CMSampleBuffer) -> ()
   
-  let cameraPosition: AVCaptureDevice.Position
+  var cameraPosition: AVCaptureDevice.Position
   var currentDevice: AVCaptureDevice?
   let processingCallback: ProcessingCallback
   
@@ -60,7 +60,7 @@ class CameraCapture: NSObject {
   }
   
   func discoverCameras() {
-    let cameraDiscovery = AVCaptureDevice.DiscoverySession(
+    let backCamerasDiscovery = AVCaptureDevice.DiscoverySession(
       deviceTypes: [
         .builtInDualCamera,
         .builtInTripleCamera,
@@ -68,13 +68,21 @@ class CameraCapture: NSObject {
         .builtInTelephotoCamera,
         .builtInDualWideCamera,
         .builtInUltraWideCamera,
-        .builtInDualWideCamera
+        .builtInDualWideCamera,
+        .builtInTrueDepthCamera
       ],
       mediaType: .video,
-      position: cameraPosition)
+      position: .back)
+    let frontCamerasDiscovery = AVCaptureDevice.DiscoverySession(
+      deviceTypes: [
+        .builtInTrueDepthCamera
+      ],
+      mediaType: .video,
+      position: .front)
     
-    NotificationCenter.default.post(name: .cameraDiscoveryCompleted, object: cameraDiscovery.devices)
-    Config.shared.cameras = cameraDiscovery.devices
+    let allCameras = frontCamerasDiscovery.devices + backCamerasDiscovery.devices
+    NotificationCenter.default.post(name: .cameraDiscoveryCompleted, object: allCameras)
+    Config.shared.cameras = allCameras
   }
   
   private func prepareSession() {

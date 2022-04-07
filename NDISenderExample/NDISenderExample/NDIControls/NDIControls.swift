@@ -56,8 +56,8 @@ class NDIControls: NSObject {
       }
       
       do {
-        let renderOutput = try self.pbRenderer.render(image, using: context)
-        ndiWrapper.send(renderOutput.pixelBuffer)
+        let pb = try self.pbRenderer.render(image, using: context)
+        ndiWrapper.send(pb)
       } catch {
         logger.error("pixel buffer cannot render MTIImage to pass to NDI Wrapper")
         logger.error("Error: \(error.localizedDescription, privacy: .public)")

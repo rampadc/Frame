@@ -12,6 +12,12 @@ extension CameraCapture {
   func switchCamera(deviceType: AVCaptureDevice.DeviceType) -> Bool {
     logger.info("Switching camera to \(deviceType.rawValue, privacy: .public)")
     do {
+      if deviceType == .builtInTrueDepthCamera {
+        // flip
+        self.cameraPosition = .front
+      } else {
+        self.cameraPosition = .back
+      }
       try self.camera.switchToVideoCaptureDevice(
         with: self.cameraPosition,
         preferredDeviceTypes: [deviceType])

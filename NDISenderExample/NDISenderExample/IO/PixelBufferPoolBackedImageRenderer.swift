@@ -18,7 +18,7 @@ class PixelBufferPoolBackedImageRenderer {
         self.renderSemaphore = DispatchSemaphore(value: renderTaskQueueCapacity)
     }
     
-    func render(_ image: MTIImage, using context: MTIContext) throws -> (pixelBuffer: CVPixelBuffer, cgImage: CGImage) {
+  func render(_ image: MTIImage, using context: MTIContext) throws -> (CVPixelBuffer) {
         let pixelBufferPool: MTICVPixelBufferPool
         if let pool = self.pixelBufferPool, pool.pixelBufferWidth == image.dimensions.width, pool.pixelBufferHeight == image.dimensions.height {
             pixelBufferPool = pool
@@ -37,9 +37,7 @@ class PixelBufferPoolBackedImageRenderer {
             self.renderSemaphore.signal()
             throw error
         }
-        
-        var cgImage: CGImage!
-        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
-        return (pixelBuffer, cgImage)
+
+        return pixelBuffer
     }
 }
