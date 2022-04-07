@@ -42,6 +42,8 @@ class CameraViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    reportThermalState()
+    
     // Initialise MetalPetal's context
     let options = MTIContextOptions()
     guard
@@ -64,6 +66,7 @@ class CameraViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(onAudioOutputsDiscoveryCompleted(_:)), name: .audioOutputsDiscoveryCompleted, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDidStartRunning(_:)), name: .cameraDidStartRunning, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(onCameraDidStopRunning(_:)), name: .cameraDidStopRunning, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(onThermalStateChanged(_:)), name: ProcessInfo.thermalStateDidChangeNotification, object: nil)
     
     NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotated(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     
@@ -91,7 +94,9 @@ class CameraViewController: UIViewController {
         self.metalView.image = outputImage
       }
       
-      NDIControls.instance.send(image: outputImage)
+      self.cameraCapture?.sampleBufferAsync {
+        NDIControls.instance.send(image: outputImage)
+      }
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
@@ -207,6 +212,27 @@ class CameraViewController: UIViewController {
       logger.error("Device did rotate: UNKNOWN default orientation")
     }
   }
+  
+  @objc private func onThermalStateChanged(_ notification: Notification) {
+    reportThermalState()
+  }
+  
+  func reportThermalState() {
+    let thermalState = ProcessInfo.processInfo.thermalState
+    
+    var thermalStateString = "UNKNOWN"
+    if thermalState == .nominal {
+      thermalStateString = "NOMINAL"
+    } else if thermalState == .fair {
+      thermalStateString = "FAIR"
+    } else if thermalState == .serious {
+      thermalStateString = "SERIOUS"
+    } else if thermalState == .critical {
+      thermalStateString = "CRITICAL"
+    }
+    
+    logger.info("Thermal state: \(thermalStateString, privacy: .public)")
+  }
 }
 
 extension CameraViewController: NDIControlsDelegate {
@@ -296,30 +322,17 @@ extension CameraViewController: NDIControlsDelegate {
   
   func setPreset4K() -> Bool {
     guard let cc = cameraCapture else { return false }
-    if cc.setPreset(preset: .hd4K3840x2160) {
-      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 3840, heightOfFrame: 2160)
-      return true
-    }
-    return false
-    
+    return cc.setPreset(preset: .hd4K3840x2160)    
   }
   
   func setPreset1080() -> Bool {
     guard let cc = cameraCapture else { return false }
-    if cc.setPreset(preset: .hd1920x1080) {
-      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 1920, heightOfFrame: 1080)
-      return true
-    }
-    return false
+    return cc.setPreset(preset: .hd1920x1080)
   }
   
   func setPreset720() -> Bool {
     guard let cc = cameraCapture else { return false }
-    if cc.setPreset(preset: .hd1280x720) {
-      NDIControls.instance.didPresetChanged_resetNdiPixelBuffer(widthOfFrame: 1280, heightOfFrame: 720)
-      return true
-    }
-    return false
+    return cc.setPreset(preset: .hd1280x720)
   }
   
   func switchMicrophone(uniqueID: String) -> Bool {
