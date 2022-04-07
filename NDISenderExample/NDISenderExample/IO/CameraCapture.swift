@@ -13,7 +13,7 @@ class CameraCapture: NSObject {
   let processingCallback: ProcessingCallback
   
   private(set) var session = AVCaptureSession()
-  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated, attributes: .concurrent)
+  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated)
 
   private let output = AVCaptureVideoDataOutput()
   
@@ -52,14 +52,11 @@ class CameraCapture: NSObject {
     prepareSession()
   }
   
-  func startCapture() {
-    session.startRunning()
-    NotificationCenter.default.post(name: .cameraDidStartRunning, object: nil)
-  }
-  
   func stopCapture() {
-    session.stopRunning()
-    NotificationCenter.default.post(name: .cameraDidStopRunning, object: nil)
+    sampleBufferQueue.async {
+      self.camera.stopRunningCaptureSession()
+      NotificationCenter.default.post(name: .cameraDidStopRunning, object: nil)
+    }
   }
   
   func discoverCameras() {
@@ -88,6 +85,7 @@ class CameraCapture: NSObject {
       sampleBufferQueue.async {
         self.camera.startRunningCaptureSession()
         NotificationCenter.default.post(name: .cameraSetupCompleted, object: nil)
+        NotificationCenter.default.post(name: .cameraDidStartRunning, object: nil)
       }
     } catch {
       logger.error("Cannot enable video data output. Error: \(error.localizedDescription)")

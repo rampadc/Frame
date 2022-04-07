@@ -102,7 +102,6 @@ class CameraViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    cameraCapture?.startCapture()
     
     // stop screen from going to sleep
     UIApplication.shared.isIdleTimerDisabled = true
