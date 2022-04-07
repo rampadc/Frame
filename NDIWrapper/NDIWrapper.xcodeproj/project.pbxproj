@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		AB05455325442F8D00D770A4 /* NDIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AB05455225442F8D00D770A4 /* NDIWrapper.m */; };
 		AB05455425442F8D00D770A4 /* NDIWrapper.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB05455125442F8D00D770A4 /* NDIWrapper.h */; };
-		F432FEE227FF0603008156D4 /* libndi_advanced_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 924D2C4625D400A5000F8D80 /* libndi_advanced_ios.a */; };
+		F432FEE327FF0C78008156D4 /* libndi_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42E726E27F818FD004C1751 /* libndi_ios.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F432FEE227FF0603008156D4 /* libndi_advanced_ios.a in Frameworks */,
+				F432FEE327FF0C78008156D4 /* libndi_ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +317,7 @@
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
+					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -338,6 +339,7 @@
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
 					"$(LOCAL_LIBRARY_DIR)/NDI\\ Advanced\\ SDK\\ for\\ Apple/lib/iOS",
+					"$(LOCAL_LIBRARY_DIR)/NDI\\ SDK\\ for\\ Apple/lib/iOS",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

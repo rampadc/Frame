@@ -1,5 +1,5 @@
 #import "NDIWrapper.h"
-#import "Processing.NDI.Advanced.h"
+#import "Processing.NDI.Lib.h"
 
 @implementation NDIWrapper {
   NDIlib_send_instance_t my_ndi_send;
