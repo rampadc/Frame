@@ -6,7 +6,7 @@ import os
 import VideoIO
 
 class CameraCapture: NSObject {
-  typealias ProcessingCallback = (CMSampleBuffer, CMFormatDescription.MediaType) -> ()
+  typealias ProcessingCallback = (CMSampleBuffer) -> ()
   
   var cameraPosition: AVCaptureDevice.Position
   var currentDevice: AVCaptureDevice?
@@ -89,7 +89,6 @@ class CameraCapture: NSObject {
     discoverCameras()
     do {
       try self.camera.enableVideoDataOutput(on: sampleBufferQueue, delegate: self)
-      try self.camera.enableAudioDataOutput(on: sampleBufferQueue, delegate: self)
       
       sampleBufferQueue.async {
         self.camera.startRunningCaptureSession()
@@ -108,17 +107,17 @@ class CameraCapture: NSObject {
   }
 }
 
-extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
   func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     guard let formatDescription = sampleBuffer.formatDescription else {
       return
     }
     switch formatDescription.mediaType {
     case .audio:
-      processingCallback(sampleBuffer, .audio)
+      // Need to use audioCapture instead
       break
     case .video:
-      processingCallback(sampleBuffer, .video)
+      processingCallback(sampleBuffer)
     default:
       break
     }

@@ -18,7 +18,7 @@ class CameraViewController: UIViewController {
   private let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraViewController")
   
   private let pbRenderer = PixelBufferPoolBackedImageRenderer()
-
+  
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   private var userDidStopNDI = false {
     didSet {
@@ -81,69 +81,68 @@ class CameraViewController: UIViewController {
     filter.inputBackgroundImage = backgroundImage
     
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] sampleBuffer, bufferType in
-      switch bufferType {
-      case .video:
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-          return
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] sampleBuffer in
+      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+        return
+      }
+      var outputImage: MTIImage? = nil
+      
+      outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
+      switch currentOrientation {
+      case .landscapeLeft:
+        outputImage = outputImage?.oriented(.up)
+      case .landscapeRight:
+        outputImage = outputImage?.oriented(.down)
+      default:
+        break
+      }
+      // Render to screen and output
+      guard let outputImage = outputImage else {
+        self.logger.error("Cannot create MTIImage")
+        return
+      }
+      DispatchQueue.main.async {
+        self.metalView.image = outputImage
+      }
+      
+      guard let context = Config.shared.context else {
+        logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
+        return
+      }
+      
+      do {
+        let pb = try self.pbRenderer.render(outputImage, using: context)
+        self.cameraCapture?.sampleBufferAsync {
+          NDIControls.instance.send(pixelBuffer: pb)
         }
-        var outputImage: MTIImage? = nil
         
-        outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
-        switch currentOrientation {
-        case .landscapeLeft:
-          outputImage = outputImage?.oriented(.up)
-        case .landscapeRight:
-          outputImage = outputImage?.oriented(.down)
-        default:
-          break
-        }
-        // Render to screen and output
-        guard let outputImage = outputImage else {
-          self.logger.error("Cannot create MTIImage")
-          return
-        }
-        DispatchQueue.main.async {
-          self.metalView.image = outputImage
-        }
-        
-        guard let context = Config.shared.context else {
-          logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
-          return
-        }
-        
-        do {
-          let pb = try self.pbRenderer.render(outputImage, using: context)
-          self.cameraCapture?.sampleBufferAsync {
-            NDIControls.instance.send(pixelBuffer: pb)
-          }
-          
-          if Recorder.instance.state.isRecording {
-            do {
-              try Recorder.instance.record(
-                SampleBufferUtilities.makeSampleBufferByReplacingImageBuffer(of: sampleBuffer, with: pb)!)
-            } catch {
-              logger.error("Cannot record sample buffer. Error: \(error.localizedDescription)")
-            }
-          }
-        } catch {
-          logger.error("Cannot render MTIImage to pixel buffer")
-          logger.error("Error: \(error.localizedDescription, privacy: .public)")
-        }
-      case .audio:
         if Recorder.instance.state.isRecording {
           do {
-            try Recorder.instance.record(sampleBuffer)
+            try Recorder.instance.record(
+              SampleBufferUtilities.makeSampleBufferByReplacingImageBuffer(of: sampleBuffer, with: pb)!)
           } catch {
             logger.error("Cannot record sample buffer. Error: \(error.localizedDescription)")
           }
         }
-      default:
-        break
+      } catch {
+        logger.error("Cannot render MTIImage to pixel buffer")
+        logger.error("Error: \(error.localizedDescription, privacy: .public)")
       }
+      
     })
     
     audioCapture = AudioCapture(processingCallback: { buffer, time in
+      if Recorder.instance.state.isRecording {
+        if let sb = buffer.toSampleBuffer() {
+          do {
+            try Recorder.instance.record(sb)
+          } catch {
+            print("Cannot record audio sample buffer")
+          }
+        } else {
+          print("Cannot convert to audio buffer to sample buffer")
+        }
+      }
       NDIControls.instance.send(audioBuffer: buffer)
     })
   }
@@ -165,7 +164,7 @@ class CameraViewController: UIViewController {
   
   @objc private func onNdiWebSeverDidStart(_ notification: Notification) {
     logger.debug("Web server is ready.")
-
+    
     guard let serverUrl = notification.object as? String else {
       logger.error("Web server does not have a valid URL.")
       return
@@ -366,7 +365,7 @@ extension CameraViewController: NDIControlsDelegate {
   
   func setPreset4K() -> Bool {
     guard let cc = cameraCapture else { return false }
-    return cc.setPreset(preset: .hd4K3840x2160)    
+    return cc.setPreset(preset: .hd4K3840x2160)
   }
   
   func setPreset1080() -> Bool {
