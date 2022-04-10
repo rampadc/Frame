@@ -63,7 +63,7 @@
   float aspectRatio = (float) width / (float) height;
   
   NDIlib_video_frame_v2_t video_frame;
-  video_frame.frame_rate_N = 30000;
+  video_frame.frame_rate_N = 30100;
   video_frame.frame_rate_D = 1001;
   video_frame.xres = width;
   video_frame.yres = height;
