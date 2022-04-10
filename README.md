@@ -24,6 +24,8 @@ Minimum implementation of the NDI SDK that works on the iPhone using Swift, with
 - Get all available microphones `GET /audio/inputs`
 - Get all available audio outputs `GET /audio/outputs`
 - Get current audio output `GET /audio/outputs/current`
+- Start recording `GET /recording/start`
+- Stop recording `GET /recording/stop`
 
 POST requests require a body of type `application/x-www-form-urlencoded`. As of Mar/2021, I haven't made a Swagger file for all the endpoints yet. To see what parameters you need to input, have a look at `NDIControls.swift`. For example, to change the white balance temperature and tint, you will need `temperature` and `tint` keys in the POST body, as indicated by the code in `NDIControls.swift` as below:
 
@@ -37,6 +39,8 @@ webServer.addHandler(forMethod: "POST", pathRegex: "/camera/white-balance/temp-t
 ## How it works
 
 When the app first starts, it will start the web server on port 80. If the phone is connected to a LAN network, the user can access this endpoint using `http://<PHONE_LAN_HOST>`. Here, a basic and lagging UI (in terms of development in relations to the APIs exposed) is available. To use the APIs directly, you can enter in `http://<PHONE_LAN_HOST>/cameras` to get all the cameras available on the phone. A link to the controls will be shown on the screen and will also be shown in Xcode's Output window if you're building the project.
+
+To download a recording, navigate to `http://<PHONE_LAN_HOST>`.
 
 The app is built with the assumption that Metalkit effects will be added in the future (chroma-key, filters, etc.). In `CameraViewController.swift`, you can find a similar block as below
 

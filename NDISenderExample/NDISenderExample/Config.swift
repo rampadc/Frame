@@ -22,6 +22,7 @@ class Config {
   var chromaKeyEnabled = false
   
   let subsystem = "rampadc.ndisender"
+  let recordingDirectory = FileManager.default.temporaryDirectory
   private init() {}
 }
 

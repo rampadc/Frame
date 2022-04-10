@@ -37,6 +37,7 @@ extension NDIControls {
         case .success(let url):
           print("SUCCESS")
           print(url.absoluteString)
+          
           let recordingUrl = RecordingUrl(absoluteUrl: url.absoluteString)
           print(recordingUrl)
           do {

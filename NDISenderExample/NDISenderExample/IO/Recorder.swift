@@ -50,8 +50,14 @@ class Recorder {
   }
   
   func startRecording() throws {
-    let sessionID = UUID()
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(sessionID.uuidString).mp4")
+    let date = Date()
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.timeZone = TimeZone.current
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    let filename = formatter.string(from: date).replacingOccurrences(of: ":", with: "_")
+    
+    let url = Config.shared.recordingDirectory.appendingPathComponent("\(filename).mp4")
     // record audio when permission is given
     let recorder = try MovieRecorder(url: url, configuration: MovieRecorder.Configuration(hasAudio: false))
     state.isRecording = true
@@ -82,5 +88,12 @@ class Recorder {
     if self.state.isRecording {
       try self.recorder?.appendSampleBuffer(sampleBuffer)
     }
+  }
+}
+
+extension ISO8601DateFormatter {
+  convenience init(_ formatOptions: Options) {
+    self.init()
+    self.formatOptions = formatOptions
   }
 }

@@ -2,7 +2,7 @@ import Foundation
 import GCDWebServer
 import MetalPetal
 
-class NDIControls: NSObject {
+class NDIControls: NSObject, GCDWebUploaderDelegate {
   
   // MARK: Properties
   static let instance = NDIControls()
@@ -19,7 +19,8 @@ class NDIControls: NSObject {
   }
   
   // MARK: - Web server properties
-  let webServer = GCDWebServer()
+//  let webServer = GCDWebServer()
+  let webServer: GCDWebUploader!
     
   // MARK: Web server functions
   func startWebServer() {    
@@ -62,6 +63,7 @@ class NDIControls: NSObject {
   // MARK: Init
   private override init() {
     ndiWrapper = NDIWrapper()
+    self.webServer = GCDWebUploader(uploadDirectory: Config.shared.recordingDirectory.path)
     super.init()
   }
   
