@@ -57,7 +57,7 @@
 		AB0544B72541D0BB00D770A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB0544BA2541D0BB00D770A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB0544BC2541D0BB00D770A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NDISenderExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		AB0544DA2541DE4F00D770A4 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		AB05457B2544386600D770A4 /* libNDIWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libNDIWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB054595254448B700D770A4 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		AB054598254448CE00D770A4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -125,7 +125,7 @@
 		AB0544A22541D0BA00D770A4 = {
 			isa = PBXGroup;
 			children = (
-				AB0544AD2541D0BA00D770A4 /* NDISenderExample */,
+				AB0544AD2541D0BA00D770A4 /* Frame */,
 				AB0544AC2541D0BA00D770A4 /* Products */,
 				AB0544D62541D4EA00D770A4 /* Frameworks */,
 				5E0B2688859A01E5205864AD /* Pods */,
@@ -140,7 +140,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AB0544AD2541D0BA00D770A4 /* NDISenderExample */ = {
+		AB0544AD2541D0BA00D770A4 /* Frame */ = {
 			isa = PBXGroup;
 			children = (
 				F42324C927FC21F900405663 /* IO */,
@@ -154,10 +154,10 @@
 				AB0544B72541D0BB00D770A4 /* Assets.xcassets */,
 				AB0544B92541D0BB00D770A4 /* LaunchScreen.storyboard */,
 				AB0544BC2541D0BB00D770A4 /* Info.plist */,
-				AB0544DA2541DE4F00D770A4 /* NDISenderExample-Bridging-Header.h */,
+				AB0544DA2541DE4F00D770A4 /* Bridging-Header.h */,
 				927E37C525E1E47D00916809 /* Config.swift */,
 			);
-			path = NDISenderExample;
+			path = Frame;
 			sourceTree = "<group>";
 		};
 		AB0544D62541D4EA00D770A4 /* Frameworks */ = {
@@ -478,7 +478,7 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = LQME8JUVXB;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = NDISenderExample/Info.plist;
+				INFOPLIST_FILE = Frame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -490,7 +490,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.congx.Frame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Frame/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -510,7 +510,7 @@
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = LQME8JUVXB;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = NDISenderExample/Info.plist;
+				INFOPLIST_FILE = Frame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -521,7 +521,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.congx.Frame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Frame/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
