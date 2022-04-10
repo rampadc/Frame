@@ -1,0 +1,24 @@
+PODS:
+  - GCDWebServer/Core (3.5.4)
+  - GCDWebServer/WebUploader (3.5.4):
+    - GCDWebServer/Core
+  - MetalPetal (1.24.1):
+    - MetalPetal/Core (= 1.24.1)
+  - MetalPetal/Core (1.24.1)
+
+DEPENDENCIES:
+  - GCDWebServer/WebUploader (~> 3.5.4)
+  - MetalPetal (~> 1.24.1)
+
+SPEC REPOS:
+  trunk:
+    - GCDWebServer
+    - MetalPetal
+
+SPEC CHECKSUMS:
+  GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
+  MetalPetal: 5801c52cb1ce686743f2d1955456bfcaba112832
+
+PODFILE CHECKSUM: 2da4730a16389abe0dcf35f21dbcfed35278c00b
+
+COCOAPODS: 1.11.3

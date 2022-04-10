@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "videoio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MetalPetal/VideoIO",
+      "state" : {
+        "revision" : "22f7c00083b7e16c7e15ace1adcdb90fb5ffe006",
+        "version" : "2.3.1"
+      }
+    }
+  ],
+  "version" : 2
+}
