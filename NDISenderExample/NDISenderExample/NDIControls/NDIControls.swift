@@ -20,9 +20,7 @@ class NDIControls: NSObject {
   
   // MARK: - Web server properties
   let webServer = GCDWebServer()
-  
-  private let pbRenderer = PixelBufferPoolBackedImageRenderer()
-  
+    
   // MARK: Web server functions
   func startWebServer() {    
     addWebServerHandlers()
@@ -35,6 +33,7 @@ class NDIControls: NSObject {
     addWebServerHandlersForCamera()
     addWebServerHandlersForNDI()
     addWebServerHandlersForUI()
+    addWebServerHandlersForRecorder()
   }
   
   // MARK: NDI Wrapper functions
@@ -48,20 +47,9 @@ class NDIControls: NSObject {
     ndiWrapper.stop()
   }
   
-  func send(image: MTIImage) {
+  func send(pixelBuffer buffer: CVPixelBuffer) {
     if isSending {
-      guard let context = Config.shared.context else {
-        logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
-        return
-      }
-      
-      do {
-        let pb = try self.pbRenderer.render(image, using: context)
-        ndiWrapper.send(pb)
-      } catch {
-        logger.error("pixel buffer cannot render MTIImage to pass to NDI Wrapper")
-        logger.error("Error: \(error.localizedDescription, privacy: .public)")
-      }
+      ndiWrapper.send(buffer)
     }
   }
   

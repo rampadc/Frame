@@ -31,6 +31,8 @@
 		D840485139408AA8D8FFC290 /* Pods_NDISenderExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */; };
 		F412C04B27FDBD31009CC819 /* CameraCapture+Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */; };
 		F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */; };
+		F44642642802F3DB0067250F /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44642632802F3DB0067250F /* Recorder.swift */; };
+		F44642662802F4F90067250F /* NDIControls+Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44642652802F4F90067250F /* NDIControls+Recorder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +64,8 @@
 		ED9FEBFC48F1FC30D60CDE04 /* Pods_NDISenderExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NDISenderExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraCapture+Controls.swift"; sourceTree = "<group>"; };
 		F429F1A127FCA3F600BBD1EB /* PixelUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelUtils.swift; sourceTree = "<group>"; };
+		F44642632802F3DB0067250F /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
+		F44642652802F4F90067250F /* NDIControls+Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Recorder.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 				92E0EB99274A214B00B59B45 /* NDIControls+Camera.swift */,
 				92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */,
 				92E0EB9D274A237D00B59B45 /* NDIControls+UI.swift */,
+				F44642652802F4F90067250F /* NDIControls+Recorder.swift */,
 			);
 			path = NDIControls;
 			sourceTree = "<group>";
@@ -175,6 +180,7 @@
 				924C19C725E2835800B73675 /* CameraInformation.swift */,
 				9277E4EF2748D8BE00D0F48A /* AudioCapture.swift */,
 				F412C04A27FDBD31009CC819 /* CameraCapture+Controls.swift */,
+				F44642632802F3DB0067250F /* Recorder.swift */,
 			);
 			path = IO;
 			sourceTree = "<group>";
@@ -310,12 +316,14 @@
 				92E0EB9C274A22CB00B59B45 /* NDIControls+NDI.swift in Sources */,
 				92972EC9274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift in Sources */,
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
+				F44642662802F4F90067250F /* NDIControls+Recorder.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
 				92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */,
 				F429F1A227FCA3F600BBD1EB /* PixelUtils.swift in Sources */,
 				92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */,
 				924C19C825E2835800B73675 /* CameraInformation.swift in Sources */,
 				92E0EB9A274A214B00B59B45 /* NDIControls+Camera.swift in Sources */,
+				F44642642802F3DB0067250F /* Recorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

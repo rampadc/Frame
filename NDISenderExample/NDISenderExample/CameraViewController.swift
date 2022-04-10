@@ -5,6 +5,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 import MetalPetal
 import os
+import VideoIO
 
 class CameraViewController: UIViewController {
   // MARK: Properties
@@ -15,6 +16,8 @@ class CameraViewController: UIViewController {
   private var audioCapture: AudioCapture?
   
   private let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraViewController")
+  
+  private let pbRenderer = PixelBufferPoolBackedImageRenderer()
 
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   private var userDidStopNDI = false {
@@ -101,9 +104,29 @@ class CameraViewController: UIViewController {
       DispatchQueue.main.async {
         self.metalView.image = outputImage
       }
+
+      guard let context = Config.shared.context else {
+        logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
+        return
+      }
       
-      self.cameraCapture?.sampleBufferAsync {
-        NDIControls.instance.send(image: outputImage)
+      do {
+        let pb = try self.pbRenderer.render(outputImage, using: context)
+        self.cameraCapture?.sampleBufferAsync {
+          NDIControls.instance.send(pixelBuffer: pb)
+        }
+        
+        if Recorder.instance.state.isRecording {
+          do {
+            try Recorder.instance.record(
+              SampleBufferUtilities.makeSampleBufferByReplacingImageBuffer(of: sampleBuffer, with: pb)!)
+          } catch {
+            logger.error("Cannot record sample buffer. Error: \(error.localizedDescription)")
+          }
+        }
+      } catch {
+        logger.error("Cannot render MTIImage to pixel buffer")
+        logger.error("Error: \(error.localizedDescription, privacy: .public)")
       }
     })
     
