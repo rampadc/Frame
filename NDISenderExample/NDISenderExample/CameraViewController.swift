@@ -85,6 +85,14 @@ class CameraViewController: UIViewController {
       var outputImage: MTIImage? = nil
       
       outputImage = MTIImage(cvPixelBuffer: pixelBuffer, alphaType: .alphaIsOne)
+      switch currentOrientation {
+      case .landscapeLeft:
+        outputImage = outputImage?.oriented(.up)
+      case .landscapeRight:
+        outputImage = outputImage?.oriented(.down)
+      default:
+        break
+      }
       // Render to screen and output
       guard let outputImage = outputImage else {
         self.logger.error("Cannot create MTIImage")
