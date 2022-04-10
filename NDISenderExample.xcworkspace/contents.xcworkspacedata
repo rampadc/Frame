@@ -5,7 +5,7 @@
       location = "group:NDIWrapper/NDIWrapper.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:NDISenderExample/NDISenderExample.xcodeproj">
+      location = "group:/Users/cong/Dev/Frame/NDISenderExample/Frame.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

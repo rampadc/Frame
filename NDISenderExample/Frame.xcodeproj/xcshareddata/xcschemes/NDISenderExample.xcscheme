@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AB0544AA2541D0BA00D770A4"
                BuildableName = "NDISenderExample.app"
-               BlueprintName = "NDISenderExample"
-               ReferencedContainer = "container:NDISenderExample.xcodeproj">
+               BlueprintName = "Frame"
+               ReferencedContainer = "container:Frame.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,8 +46,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB0544AA2541D0BA00D770A4"
             BuildableName = "NDISenderExample.app"
-            BlueprintName = "NDISenderExample"
-            ReferencedContainer = "container:NDISenderExample.xcodeproj">
+            BlueprintName = "Frame"
+            ReferencedContainer = "container:Frame.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB0544AA2541D0BA00D770A4"
             BuildableName = "NDISenderExample.app"
-            BlueprintName = "NDISenderExample"
-            ReferencedContainer = "container:NDISenderExample.xcodeproj">
+            BlueprintName = "Frame"
+            ReferencedContainer = "container:Frame.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

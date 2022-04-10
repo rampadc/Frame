@@ -49,7 +49,7 @@
 		92E0EB9B274A22CB00B59B45 /* NDIControls+NDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+NDI.swift"; sourceTree = "<group>"; };
 		92E0EB9D274A237D00B59B45 /* NDIControls+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+UI.swift"; sourceTree = "<group>"; };
 		997055A1E752062B0452BB73 /* Pods-NDISenderExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NDISenderExample.debug.xcconfig"; path = "Target Support Files/Pods-NDISenderExample/Pods-NDISenderExample.debug.xcconfig"; sourceTree = "<group>"; };
-		AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NDISenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB0544AB2541D0BA00D770A4 /* Frame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Frame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0544AE2541D0BA00D770A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB0544B02541D0BA00D770A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		AB0544B22541D0BA00D770A4 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		AB0544AC2541D0BA00D770A4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */,
+				AB0544AB2541D0BA00D770A4 /* Frame.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -188,9 +188,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AB0544AA2541D0BA00D770A4 /* NDISenderExample */ = {
+		AB0544AA2541D0BA00D770A4 /* Frame */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AB0544BF2541D0BB00D770A4 /* Build configuration list for PBXNativeTarget "NDISenderExample" */;
+			buildConfigurationList = AB0544BF2541D0BB00D770A4 /* Build configuration list for PBXNativeTarget "Frame" */;
 			buildPhases = (
 				A5A9F0E893D8AFE190BB370C /* [CP] Check Pods Manifest.lock */,
 				AB0544A72541D0BA00D770A4 /* Sources */,
@@ -202,12 +202,12 @@
 			);
 			dependencies = (
 			);
-			name = NDISenderExample;
+			name = Frame;
 			packageProductDependencies = (
 				92626A77274B4698009B7F62 /* VideoIO */,
 			);
 			productName = NDISenderExample;
-			productReference = AB0544AB2541D0BA00D770A4 /* NDISenderExample.app */;
+			productReference = AB0544AB2541D0BA00D770A4 /* Frame.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -225,7 +225,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AB0544A62541D0BA00D770A4 /* Build configuration list for PBXProject "NDISenderExample" */;
+			buildConfigurationList = AB0544A62541D0BA00D770A4 /* Build configuration list for PBXProject "Frame" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -241,7 +241,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AB0544AA2541D0BA00D770A4 /* NDISenderExample */,
+				AB0544AA2541D0BA00D770A4 /* Frame */,
 			);
 		};
 /* End PBXProject section */
@@ -487,7 +487,7 @@
 				MARKETING_VERSION = 0.1.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = rampadc.NDISender;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.congx.Frame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
@@ -518,7 +518,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = rampadc.NDISender;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.congx.Frame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NDISenderExample/NDISenderExample-Bridging-Header.h";
@@ -531,7 +531,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AB0544A62541D0BA00D770A4 /* Build configuration list for PBXProject "NDISenderExample" */ = {
+		AB0544A62541D0BA00D770A4 /* Build configuration list for PBXProject "Frame" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB0544BD2541D0BB00D770A4 /* Debug */,
@@ -540,7 +540,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AB0544BF2541D0BB00D770A4 /* Build configuration list for PBXNativeTarget "NDISenderExample" */ = {
+		AB0544BF2541D0BB00D770A4 /* Build configuration list for PBXNativeTarget "Frame" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB0544C02541D0BB00D770A4 /* Debug */,
