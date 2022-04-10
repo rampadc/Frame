@@ -4,8 +4,7 @@ use_frameworks!
 
 target 'NDISenderExample' do
     platform :ios, '14.0'
-    pod 'GCDWebServer', '~> 3.5.4'
-    pod 'MetalPetal', '~> 1.23.0'
-    pod 'GCDWebServer/WebUploader'
+    pod 'MetalPetal', '~> 1.24.1'
+    pod 'GCDWebServer/WebUploader', '~> 3.5.4'
     project 'NDISenderExample/NDISenderExample'
 end
