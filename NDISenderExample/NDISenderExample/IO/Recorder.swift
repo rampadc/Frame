@@ -59,7 +59,7 @@ class Recorder {
     
     let url = Config.shared.recordingDirectory.appendingPathComponent("\(filename).mp4")
     // record audio when permission is given
-    let recorder = try MovieRecorder(url: url, configuration: MovieRecorder.Configuration(hasAudio: false))
+    let recorder = try MovieRecorder(url: url, configuration: MovieRecorder.Configuration(hasAudio: true))
     state.isRecording = true
     queue.async {
       self.recorder = recorder
