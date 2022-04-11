@@ -98,14 +98,12 @@ class CameraViewController: UIViewController {
       }
       
       if depthPixelBuffer != nil {
-
-        // TODO: Process depth data pixel buffer
         let bokeh = MTIHexagonalBokehBlurFilter()
         let inputDepthMask = MTIImage(cvPixelBuffer: depthPixelBuffer!, alphaType: .alphaIsOne)
         bokeh.inputImage = outputImage
         bokeh.inputMask = MTIMask(content: inputDepthMask, component: .red, mode: .oneMinusMaskValue)
         bokeh.brightness = 0.1
-        bokeh.radius = 7 
+        bokeh.radius = 8
         outputImage = bokeh.outputImage!
       }
       
