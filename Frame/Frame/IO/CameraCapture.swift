@@ -6,7 +6,7 @@ import os
 import VideoIO
 
 class CameraCapture: NSObject {
-  typealias ProcessingCallback = (CMSampleBuffer) -> ()
+  typealias ProcessingCallback = (CMSampleBuffer, CVPixelBuffer?) -> ()
   
   var cameraPosition: AVCaptureDevice.Position
   var currentDevice: AVCaptureDevice?
@@ -129,7 +129,7 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
       // Need to use audioCapture instead
       break
     case .video:
-      processingCallback(sampleBuffer)
+      processingCallback(sampleBuffer, self.currentDepthPixelBuffer)
     default:
       break
     }

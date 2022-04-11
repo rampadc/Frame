@@ -81,7 +81,7 @@ class CameraViewController: UIViewController {
     filter.inputBackgroundImage = backgroundImage
     
     
-    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] sampleBuffer in
+    cameraCapture = CameraCapture(cameraPosition: .back, processingCallback: { [unowned self] sampleBuffer, depthPixelBuffer in
       guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return
       }
@@ -96,6 +96,20 @@ class CameraViewController: UIViewController {
       default:
         break
       }
+      
+      if depthPixelBuffer != nil {
+
+        // TODO: Process depth data pixel buffer
+        let bokeh = MTIHexagonalBokehBlurFilter()
+        let inputDepthMask = MTIImage(cvPixelBuffer: depthPixelBuffer!, alphaType: .alphaIsOne)
+        bokeh.inputImage = outputImage
+        bokeh.inputMask = MTIMask(content: inputDepthMask, component: .red, mode: .oneMinusMaskValue)
+        bokeh.brightness = 0.1
+        bokeh.radius = 20
+        outputImage = bokeh.outputImage!
+      }
+      
+      
       // Render to screen and output
       guard let outputImage = outputImage else {
         self.logger.error("Cannot create MTIImage")
@@ -109,13 +123,13 @@ class CameraViewController: UIViewController {
         logger.error("Config.shared.context is nil. Will not render MTIImage to pixelBuffer")
         return
       }
-      
+
       do {
         let pb = try self.pbRenderer.render(outputImage, using: context)
         self.cameraCapture?.sampleBufferAsync {
           NDIControls.instance.send(pixelBuffer: pb)
         }
-        
+
         if Recorder.instance.state.isRecording {
           do {
             try Recorder.instance.record(
