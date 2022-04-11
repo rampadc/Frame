@@ -17,7 +17,7 @@ extension CameraCapture: AVCaptureDepthDataOutputDelegate {
       session.addOutput(depthDataOutput)
       depthDataOutput.setDelegate(self, callbackQueue: self.sampleBufferQueue)
       depthDataOutput.isFilteringEnabled = false
-      
+      session.commitConfiguration()
     } else {
       print("Could not add depth data output to the session")
       session.commitConfiguration()

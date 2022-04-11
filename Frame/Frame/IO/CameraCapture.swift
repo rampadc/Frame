@@ -52,13 +52,19 @@ class CameraCapture: NSObject {
     self.currentDevice = camera.videoDevice
     
     super.init()
-    
-    if !self.configureFrameRate(30) {
-      self.logger.error("Cannot set frame rate to 30")
-    }
-    
+
     if !self.switchCamera(deviceType: .builtInDualCamera) {
       self.logger.error("Cannot change camera to built in dual")
+    }
+    
+    do {
+      try self.addDepthDataOutput()
+      self.logger.info("Added depth data output")
+    } catch {
+      self.logger.error("Cannot add depth data output")
+    }
+    if !self.configureFrameRate(30) {
+      self.logger.error("Cannot set frame rate to 30")
     }
     
     prepareSession()
