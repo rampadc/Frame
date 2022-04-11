@@ -35,6 +35,7 @@ class NDIControls: NSObject, GCDWebUploaderDelegate {
     addWebServerHandlersForNDI()
     addWebServerHandlersForUI()
     addWebServerHandlersForRecorder()
+    addWebServerHandlersForFilters()
   }
   
   // MARK: NDI Wrapper functions
@@ -103,4 +104,5 @@ protocol NDIControlsDelegate {
   func setPreset1080() -> Bool
   func setPreset720() -> Bool
   func switchMicrophone(uniqueID: String) -> Bool
+  func configureBokeh(radius: Float, brightness: Float)
 }

@@ -19,6 +19,9 @@ class CameraViewController: UIViewController {
   
   private let pbRenderer = PixelBufferPoolBackedImageRenderer()
   
+  var bokehRadius: Float = 8
+  var bokehBrightness: Float = 0.3
+  
   private var currentOrientation: UIDeviceOrientation = .landscapeLeft
   private var userDidStopNDI = false {
     didSet {
@@ -102,8 +105,8 @@ class CameraViewController: UIViewController {
         let inputDepthMask = MTIImage(cvPixelBuffer: depthPixelBuffer!, alphaType: .alphaIsOne)
         bokeh.inputImage = outputImage
         bokeh.inputMask = MTIMask(content: inputDepthMask, component: .red, mode: .oneMinusMaskValue)
-        bokeh.brightness = 0.1
-        bokeh.radius = 8
+        bokeh.brightness = self.bokehBrightness
+        bokeh.radius = self.bokehRadius
         outputImage = bokeh.outputImage!
       }
       
@@ -393,5 +396,10 @@ extension CameraViewController: NDIControlsDelegate {
   func switchMicrophone(uniqueID: String) -> Bool {
     guard let ac = audioCapture else { return false }
     return ac.switchMic(toUid: uniqueID)
+  }
+  
+  func configureBokeh(radius: Float, brightness: Float) {
+    self.bokehRadius = radius
+    self.bokehBrightness = brightness
   }
 }
