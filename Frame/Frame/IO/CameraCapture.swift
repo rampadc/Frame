@@ -54,6 +54,10 @@ class CameraCapture: NSObject {
       self.logger.error("Cannot set frame rate to 30")
     }
     
+    if !self.switchCamera(deviceType: .builtInDualCamera) {
+      self.logger.error("Cannot change camera to built in dual")
+    }
+    
     prepareSession()
   }
   
@@ -68,12 +72,6 @@ class CameraCapture: NSObject {
     let backCamerasDiscovery = AVCaptureDevice.DiscoverySession(
       deviceTypes: [
         .builtInDualCamera,
-        .builtInTripleCamera,
-        .builtInWideAngleCamera,
-        .builtInTelephotoCamera,
-        .builtInDualWideCamera,
-        .builtInUltraWideCamera,
-        .builtInDualWideCamera,
         .builtInTrueDepthCamera
       ],
       mediaType: .video,
