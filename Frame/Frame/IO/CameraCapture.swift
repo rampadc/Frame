@@ -13,7 +13,7 @@ class CameraCapture: NSObject {
   let processingCallback: ProcessingCallback
   
   private(set) var session = AVCaptureSession()
-  private let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated)
+  let sampleBufferQueue = DispatchQueue(label: "camera.sampleBufferQueue", qos: .userInitiated)
 
   private let output = AVCaptureVideoDataOutput()
   
@@ -24,6 +24,9 @@ class CameraCapture: NSObject {
   let logger = Logger(subsystem: Config.shared.subsystem, category: "CameraCapture")
 
   var camera: Camera
+  
+  let depthDataOutput = AVCaptureDepthDataOutput()
+  var currentDepthPixelBuffer: CVPixelBuffer?
   
   init(cameraPosition: AVCaptureDevice.Position, processingCallback: @escaping ProcessingCallback) {
     self.cameraPosition = cameraPosition
@@ -134,7 +137,7 @@ extension CameraCapture {
       return false
     }
     do {
-      try videoDevice.configureDesiredFrameRate(30)
+      try videoDevice.configureDesiredFrameRateForDepth(30)
       return true
     } catch {
       Config.shared.defaultLogger.error("Cannot set desired frame rate. Error: \(error.localizedDescription, privacy: .public)")
