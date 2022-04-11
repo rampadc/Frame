@@ -47,7 +47,12 @@ class CameraCapture: NSObject {
     
     camera = Camera(captureSessionPreset: .hd1280x720, defaultCameraPosition: cameraPosition, configurator: configurator)
     self.currentDevice = camera.videoDevice
+    
     super.init()
+    
+    if !self.configureFrameRate(30) {
+      self.logger.error("Cannot set frame rate to 30")
+    }
     
     prepareSession()
   }
@@ -120,6 +125,22 @@ extension CameraCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
       processingCallback(sampleBuffer)
     default:
       break
+    }
+  }
+}
+
+extension CameraCapture {
+  func configureFrameRate(_ frameRate: Int) -> Bool {
+    guard let videoDevice = camera.videoDevice else {
+      self.logger.error("Camera is not yet initialised. Try again later")
+      return false
+    }
+    do {
+      try videoDevice.configureDesiredFrameRate(30)
+      return true
+    } catch {
+      Config.shared.defaultLogger.error("Cannot set desired frame rate. Error: \(error.localizedDescription, privacy: .public)")
+      return false
     }
   }
 }

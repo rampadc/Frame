@@ -23,6 +23,7 @@ class Config {
   
   let subsystem = "rampadc.ndisender"
   let recordingDirectory = FileManager.default.temporaryDirectory
+  let defaultLogger = Logger(subsystem: "rampadc.ndisender", category: "DefaultLogger")
   private init() {}
 }
 

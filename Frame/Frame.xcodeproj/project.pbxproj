@@ -33,6 +33,7 @@
 		F44642642802F3DB0067250F /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44642632802F3DB0067250F /* Recorder.swift */; };
 		F44642662802F4F90067250F /* NDIControls+Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44642652802F4F90067250F /* NDIControls+Recorder.swift */; };
 		F446426E280339BB0067250F /* AVAudioPCMBuffer+toSampleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F446426D280339BB0067250F /* AVAudioPCMBuffer+toSampleBuffer.swift */; };
+		F4D81307280455DD008DB565 /* AVCaptureDevice+FrameRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D81306280455DD008DB565 /* AVCaptureDevice+FrameRate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		F44642632802F3DB0067250F /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		F44642652802F4F90067250F /* NDIControls+Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NDIControls+Recorder.swift"; sourceTree = "<group>"; };
 		F446426D280339BB0067250F /* AVAudioPCMBuffer+toSampleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPCMBuffer+toSampleBuffer.swift"; sourceTree = "<group>"; };
+		F4D81306280455DD008DB565 /* AVCaptureDevice+FrameRate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+FrameRate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 		F42324C927FC21F900405663 /* IO */ = {
 			isa = PBXGroup;
 			children = (
+				F4D81306280455DD008DB565 /* AVCaptureDevice+FrameRate.swift */,
 				92972EC8274B9FA100CEEAE6 /* PixelBufferPoolBackedImageRenderer.swift */,
 				9288397025DFC4E80032692A /* CameraCapture.swift */,
 				924C19C725E2835800B73675 /* CameraInformation.swift */,
@@ -318,6 +321,7 @@
 				AB0544B12541D0BA00D770A4 /* SceneDelegate.swift in Sources */,
 				F44642662802F4F90067250F /* NDIControls+Recorder.swift in Sources */,
 				924D2CCA25D41C4B000F8D80 /* NDIControls.swift in Sources */,
+				F4D81307280455DD008DB565 /* AVCaptureDevice+FrameRate.swift in Sources */,
 				F446426E280339BB0067250F /* AVAudioPCMBuffer+toSampleBuffer.swift in Sources */,
 				92E0EB9E274A237D00B59B45 /* NDIControls+UI.swift in Sources */,
 				92E0EB98274A20E700B59B45 /* NDIControls+Audio.swift in Sources */,
