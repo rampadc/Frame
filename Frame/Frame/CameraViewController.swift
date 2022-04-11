@@ -105,7 +105,7 @@ class CameraViewController: UIViewController {
         bokeh.inputImage = outputImage
         bokeh.inputMask = MTIMask(content: inputDepthMask, component: .red, mode: .oneMinusMaskValue)
         bokeh.brightness = 0.1
-        bokeh.radius = 20
+        bokeh.radius = 7 
         outputImage = bokeh.outputImage!
       }
       
